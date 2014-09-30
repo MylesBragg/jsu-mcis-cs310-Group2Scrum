@@ -7,7 +7,7 @@ public class ArgumentParserTest
 {
 	private ArgumentParser parser;
 	
-	-h
+	//-h
 	
 	@Before
 	public void testStartNewParse()
@@ -16,7 +16,7 @@ public class ArgumentParserTest
 		myArgs[0] = "MyProg";
 		myArgs[1] = "7";
 		myArgs[2] = "6";
-		myArgs[3] = "-h";
+		myArgs[3] = "3";
 		parser = new ArgumentParser(myArgs);
 	}
 	
