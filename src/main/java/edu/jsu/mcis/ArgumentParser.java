@@ -1,50 +1,52 @@
 package edu.jsu.mcis;
 
-import java.util.Scanner;
 
 public class ArgumentParser
 {
 	private int[] integerArray;
 	private int length, width, heighth;
-	Scanner enteredStringScanner;
-	String parsingString;
+	String[] stringArray;
 	String program;
+	ArgumentValues myValues;
 	
-	public boolean addArguments(String s)
+	public ArgumentParser(String[] passedArgs)
 	{
-		Scanner parsingScanner = new Scanner(s);
-		program = parsingScanner.next();
-		length = parsingScanner.nextInt();
-		width = parsingScanner.nextInt();
-		heighth = parsingScanner.nextInt();
-		return true;
+		stringArray = passedArgs;
+		program = passedArgs[0];//Will change to ** new ArgumentValues(passedArgs[0]);
+		ArgumentValues[] myValues = new ArgumentValues[passedArgs.length-1];
+		for(int i = 1; i < passedArgs.length; i++)
+		{
+			myValues[i-1].setName(passedArgs[i]);
+		}
 	}
 	
-/*	public String readInString(String s)
+	public int getNumberOfArguments()
 	{
-		parsingString = s;
-		return parsingString;
-	}*/
+		return (stringArray.length - 1);
+	}
 	
 	public String getProgramName()
 	{
-		//enteredStringScanner = new Scanner(parsingString);
-		//String program = enteredStringScanner.next();
-		return program;
+		return myValues.getProgram();
 	}
 	
 	public int getLength()
 	{
-		return length;
+		return myValues.getLength();
 	}
 	
 	public int getWidth()
 	{
-		return width;
+		return myValues.getWidth();
 	}
 	
 	public int getHeighth()
 	{
-		return heighth;
+		return myValues.getHeighth();
+	}
+	
+	public static void main(String[] args)// example: java ArgumentParser {7 6 2}
+	{
+		ArgumentParser p = new ArgumentParser(args);
 	}
 }
