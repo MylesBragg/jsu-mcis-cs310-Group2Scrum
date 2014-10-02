@@ -17,24 +17,12 @@ public class ArgumentParser
 		arrayOfNames.add(name);
 		arrayOfValues.add(" ");
 	}
+	
 	public int getNumArguments()
 	{
 		return arrayOfValues.size();
 	}
 
-/*	public void parse(String something)
-	{
-		Scanner p = new Scanner(something);
-		String program = p.next();
-		int count = 0;
-		while(p.hasNext())
-		{
-			String nextValue = p.next();
-			arrayOfValues.set(count, nextValue);
-			count++;
-		}
-		
-	}*/
 	public String parse(String something)
 	{
 		String nextValue = "";
@@ -63,6 +51,7 @@ public class ArgumentParser
 		}
 		return "Good";
 	}
+	
 	public String getArgumentValue(String name)
 	{
 		for(int i = 0; i < arrayOfNames.size(); i++)
