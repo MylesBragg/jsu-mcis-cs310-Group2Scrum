@@ -1,31 +1,30 @@
 package edu.jsu.mcis;
 
-
+import java.util.*;
 
 public class ArgumentValues
 {
-	public void setName(String s)
-	{
+	private List<String> name;
+	private List<String> value;
 	
+	public ArgumentValues() {
+		name = new ArrayList<String>();
+		value = new ArrayList<String>();
+	}
+	public void setName(String name) {
+		this.name.add(name);
 	}
 	
-	public String getProgram()
-	{
-		return "MyProg";
+	public String getName(int position){
+		return name.get(position);
 	}
 	
-	public int getLength()
-	{
-		return 7;
+	public void setValue(String name, String value) {
+		
+		this.value.add(value);
 	}
 	
-	public int getWidth()
-	{
-		return 6;
-	}
-	
-	public int getHeighth()
-	{
-		return 3;
+	public String getValue(String name){
+		return value.get(this.name.indexOf(name));
 	}
 }
