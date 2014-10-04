@@ -13,63 +13,55 @@ private ArgumentValues v;
 		v = new ArgumentValues();
 	}
 
-	@Test
+	//@Test
 	public void testaddNametoValues()
 	{
-		v.setName("length");
+		v.addValueArgument("length", "7");
 		assertEquals(v.getName(1),"length" );
 	}	
 	@Test
 	public void testGetValuefromValues()
 	{
-		v.setName("length");
-		v.setValue("length", "7");
-		assertEquals("7", v.getValue("length"));
+		v.addValueArgument("length", "7");
+		assertEquals("7", v.getValueArgument("length"));
 	
 	}
 	
 	@Test
 	public void testMultiple()
 	{
-		v.setName("length");
-		v.setValue("length", "7");
-		assertEquals("7", v.getValue("length"));
-		v.setName("width");
-		v.setValue("width", "4");
-		assertEquals("4", v.getValue("width"));
-		v.setName("height");
-		v.setValue("height", "6");
-		assertEquals("6", v.getValue("height"));
+		v.addValueArgument("length", "7");
+		assertEquals("7", v.getValueArgument("length"));
+		v.addValueArgument("width", "4");
+		assertEquals("4", v.getValueArgument("width"));
+		v.addValueArgument("height", "6");
+		assertEquals("6", v.getValueArgument("height"));
 	}
 	
-	//@Test
-	public void setFirstArgumentValue() {
-		ArgumentValues valueHolder = new ArgumentValues();
-		valueHolder.setName("length");
-		valueHolder.setValue("7");
-		//assertEquals("length", valueHolder.getName());
-		//assertEquals("7", valueHolder.getValue());
+	
+	@Test
+	public void testAddHelpArgument() {
+		v.addHelpArgument("length", "Please add length as a whole number.");
+		assertEquals("Please add length as a whole number.", v.getHelpArgument("length"));
 	}
-	//@Test
-	public void getFirstArgumentValueAsInt() {
-		ArgumentValues valueHolder = new ArgumentValues();
-		valueHolder.setName("length");
-		valueHolder.setValue("7");
-		//assertEquals("length", valueHolder.getName());
-		//assertEquals(7, Integer.parseInt(valueHolder.getValue()));
+	
+	@Test
+	public void testAddMultipleHelpArguments() {
+		v.addHelpArgument("length", "Please add length as a whole number.");
+		assertEquals("Please add length as a whole number.", v.getHelpArgument("length"));
+		v.addHelpArgument("width", "Please add width as a whole number.");
+		assertEquals("Please add width as a whole number.", v.getHelpArgument("width"));
 	}
 	@Test
-	public void setTwoArguments() {
-		ArgumentValues valueHolder = new ArgumentValues();
-		valueHolder.setName("length");
-		valueHolder.setValue("length", "7");
-		valueHolder.setName("width");
-		valueHolder.setValue("width", "5");
-		assertEquals("length", valueHolder.getName(0));
-		assertEquals("width", valueHolder.getName(1));
-		assertEquals("7", valueHolder.getValue("length"));
-		assertEquals("5", valueHolder.getValue("width"));
-		
-		
+	public void testAddDataTypeArgument() {
+		v.addDataTypeArgument("length", "integer");
+		assertEquals("integer", v.getDataTypeArgument("length"));
+	}
+	@Test
+	public void testAddMultipleDataTypeArguments() {
+		v.addDataTypeArgument("length", "integer");
+		assertEquals("integer", v.getDataTypeArgument("length"));
+		v.addDataTypeArgument("width", "float");
+		assertEquals("float", v.getDataTypeArgument("width"));
 	}
 }
