@@ -89,4 +89,19 @@ public class ArgumentParserTest
 		assertEquals("true", parser.getArgumentValue("rainy"));
 		assertEquals("3.5", parser.getArgumentValue("bathrooms"));
 	}
+	
+	@Test
+	public void testProgramHelp()
+	{
+		parser.parse("Calculator -h");
+		assertEquals("blah", parser.getHelp());
+	}
+	
+	@Test
+	public void testGetProgramName()
+	{
+		parser.parse("Calculator help");
+		assertEquals("Calculator", parser.getProgramName());
+	}
+
 }

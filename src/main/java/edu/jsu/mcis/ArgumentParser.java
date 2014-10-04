@@ -6,6 +6,8 @@ public class ArgumentParser
 {
 	private List<String> arrayOfNames;
 	private List<String> arrayOfValues;
+	String program = "";
+	
 	public ArgumentParser()
 	{
 		arrayOfNames = new ArrayList<String>();
@@ -29,13 +31,24 @@ public class ArgumentParser
 		try
 		{
 			Scanner p = new Scanner(something);
-			String program = p.next();
+			program = p.next();
+			
 			int count = 0;
 			while(p.hasNext())
 			{
 				nextValue = p.next();
-				arrayOfValues.set(count, nextValue);
-				count++;
+				
+				if(nextValue == "-h") 
+				{
+					getHelp();
+				}
+				else
+				{
+					arrayOfValues.set(count, nextValue);
+					count++;
+
+				}
+	
 			}
 			for(int i = 0; i < arrayOfValues.size(); i++)
 			{
@@ -62,5 +75,26 @@ public class ArgumentParser
 			}
 		}
 		return "Invalid Argument Name";
+	}
+	
+	public String getHelp() 
+	{
+		if(program != "")
+		{
+			//this is supposed to return the help info for user program
+			//the idea is to call a method from ArguementValues that takes a 
+			//String program name, finds the help info for that program,
+			//sends it back, and this will output the result
+			//ie return argVals.sendHelpInfo(someProgram)
+			return "blah";
+		}
+		else
+		{
+			return "No program to get help from";
+		}
+	}
+	
+	public String getProgramName() {
+		return program;
 	}
 }
