@@ -30,17 +30,27 @@ public class ArgumentParser
 
 	public void parse(String[] argValues)
 	{
-		for (int i = 0; i < argValues.length; i++) {
-			argValues.addValueAgument(arrayOfName.get(i), argValues[i]);
-		}
+		//if (argValues.length == arrayOfNames.size()) {
+			for (int i = 0; i < argValues.length; i++) {
+				argVals.addValueArgument(arrayOfNames.get(i), argValues[i]);
+			}
+		//}
+		//else if (argValues.length > arrayOfNames.size()) {
+			//System.out.print("You have entered too many arguments.");
+			//System.exit(0);
+		//}
+		//else {
+			//System.out.print("You have entered too few arguments.");
+			//System.exit(0);
+		//}
 	}
 	
 	public String getArgumentValue(String name)
 	{
-		return argValues.getArgumentValue(name);
+		return argVals.getValueArgument(name);
 	}
 	
 	public String getHelpArgumentValue(String name) {
-		return getHelpArgument(name);
+		return argVals.getHelpArgument(name);
 	}
 }

@@ -13,27 +13,26 @@ public class ArgumentParserTest
 		parser = new ArgumentParser();
 	}
 	
-	@Test
-	public void testAddArgument()
-	{
-		parser.addArg("length");
-		assertEquals(1, parser.getNumArguments());	
-	}
 	
 	@Test
 	public void testSingleArgumentParse()
 	{
+		String[] myString = new String[1];
+		myString[0] = "4";
 		parser.addArg("length");
-		parser.parse("Calculator 4");
+		parser.parse(myString);
 		assertEquals("4", parser.getArgumentValue("length"));
 	}
 	
 	@Test
 	public void testDoubleArgumentParse()
 	{
+		String[] myString = new String[2];
+		myString[0] = "4";
+		myString[1] = "7";
 		parser.addArg("length");
 		parser.addArg("width");
-		parser.parse("Calculator 4 7");
+		parser.parse(myString);
 		assertEquals("4", parser.getArgumentValue("length"));
 		assertEquals("7", parser.getArgumentValue("width"));
 	}
@@ -41,90 +40,36 @@ public class ArgumentParserTest
 	@Test
 	public void testMultipleArgumentParse()
 	{
+		String[] myString = new String[3];
+		myString[0] = "4";
+		myString[1] = "7";
+		myString[2] = "9";
 		parser.addArg("length");
 		parser.addArg("width");
 		parser.addArg("height");
-		parser.parse("Calculator 4 7 9");
+		parser.parse(myString);
 		assertEquals("4", parser.getArgumentValue("length"));
 		assertEquals("7", parser.getArgumentValue("width"));
 		assertEquals("9", parser.getArgumentValue("height"));
 	}
 	
-	//@Test
-	public void testInvalidArgumentNameGiven()
-	{
-		parser.addArg("length");
-		parser.parse("Calculator 4");
-		assertEquals("Error", parser.getArgumentValue("width"));
-	}
-	
-	@Test
-	public void testTooManyArguments()
-	{
-		parser.addArg("length");
-		parser.addArg("width");
-		parser.addArg("height");
-		assertEquals("Unrecognized argument 5", parser.parse("Calculator 4 7 9 5"));
-	}
-	
-	@Test
-	public void testTooFewArguments()
-	{
-		parser.addArg("length");
-		parser.addArg("width");
-		parser.addArg("height");
-		assertEquals("height missing", parser.parse("Calculator 4 7"));
-	}
-	
-	@Test
-	public void testPetNumberRainyBathrooms()
-	{
-		parser.addArg("pet");
-		parser.addArg("number");
-		parser.addArg("rainy");
-		parser.addArg("bathrooms");
-		parser.parse("Program dog 2 true 3.5");
-		assertEquals("dog", parser.getArgumentValue("pet"));
-		assertEquals("2", parser.getArgumentValue("number"));
-		assertEquals("true", parser.getArgumentValue("rainy"));
-		assertEquals("3.5", parser.getArgumentValue("bathrooms"));
-	}
 	
 	@Test
 	public void testProgramHelp()
 	{
-		parser.addProgram("Calculator", "Calculate math problems");
-		parser.parse("Calculator -h");
-		assertEquals("Calculate math problems", parser.getHelpMessage());
+		parser.addArgumentHelp("-h", "Calculate math problems");
+		assertEquals("Calculate math problems", parser.getHelpArgumentValue("-h"));
 	}
 	
-	@Test
-	public void testGetProgramName()
-	{
-		parser.parse("Calculator help");
-		assertEquals("Calculator", parser.getProgramName());
-	}
+	
 
 	@Test
 	public void testAddHelpWithArgument() 
 	{
-		parser.addArg("length", "Please enter the length as a whole number");
-		assertEquals("Please enter the length as a whole number", parser.getHelpMessage("length"));
+		parser.addArgumentHelp("length", "Please enter the length as a whole number");
+		assertEquals("Please enter the length as a whole number", parser.getHelpArgumentValue("length"));
 	}
-	@Test
-	public void testaddValueWithArgument() {
-		parser.addArg("length", "help message")
-		parser.parse("Calculator 7")
-		assertEquals("7", parser.getArgumentValue("length"));
-	}
-	@Test
-	public void testAddValuesWithArgumentsWithoutProgramName ()
-		parser.addArg("length", "This is a message.");
-		parser.addArg("width", "This is another message.");
-		parser.addArg("height", "Here is my last message.");
-		parser.addArg("7 5 2");
-		assertEquals("7", parser.getArgumentValue("length"));
-		assertEquals("5", parser.getArgumentValue("width"));
-		assertEquals("2", parser.getArgumentValue("height"));
+	
+	
 	
 }
