@@ -94,13 +94,13 @@ public class ArgumentParserTest
 		//parser.addArg("length", "Please enter the length as a whole number");
 		//assertEquals("Please enter the length as a whole number", parser.getHelpMessage("length"));
 	}
-	//@Test
+	@Test
 	public void testaddValueWithArgument() {
 		parser.addArg("length", "help message")
 		parser.parse("Calculator 7")
 		assertEquals("7", parser.getArgumentValue("length"));
 	}
-	//@Test
+	@Test
 	public void testAddValuesWithArgumentsWithoutProgramName ()
 		parser.addArg("length", "This is a message.");
 		parser.addArg("width", "This is another message.");
