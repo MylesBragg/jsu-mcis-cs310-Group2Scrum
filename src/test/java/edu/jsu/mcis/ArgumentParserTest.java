@@ -7,20 +7,20 @@ public class ArgumentParserTest
 {
 	private ArgumentParser parser;
 	
-	//@Before
+	@Before
 	public void StartUp()
 	{
 		parser = new ArgumentParser();
 	}
 	
-	//@Test
+	@Test
 	public void testAddArgument()
 	{
 		parser.addArg("length");
 		assertEquals(1, parser.getNumArguments());	
 	}
 	
-	//@Test
+	@Test
 	public void testSingleArgumentParse()
 	{
 		parser.addArg("length");
@@ -28,7 +28,7 @@ public class ArgumentParserTest
 		assertEquals("4", parser.getArgumentValue("length"));
 	}
 	
-	//@Test
+	@Test
 	public void testDoubleArgumentParse()
 	{
 		parser.addArg("length");
@@ -38,7 +38,7 @@ public class ArgumentParserTest
 		assertEquals("7", parser.getArgumentValue("width"));
 	}
 	
-	//@Test
+	@Test
 	public void testMultipleArgumentParse()
 	{
 		parser.addArg("length");
@@ -58,7 +58,7 @@ public class ArgumentParserTest
 		assertEquals("Error", parser.getArgumentValue("width"));
 	}
 	
-	//@Test
+	@Test
 	public void testTooManyArguments()
 	{
 		parser.addArg("length");
@@ -67,7 +67,7 @@ public class ArgumentParserTest
 		assertEquals("Unrecognized argument 5", parser.parse("Calculator 4 7 9 5"));
 	}
 	
-	//@Test
+	@Test
 	public void testTooFewArguments()
 	{
 		parser.addArg("length");
@@ -76,7 +76,7 @@ public class ArgumentParserTest
 		assertEquals("height missing", parser.parse("Calculator 4 7"));
 	}
 	
-	//@Test
+	@Test
 	public void testPetNumberRainyBathrooms()
 	{
 		parser.addArg("pet");
@@ -89,13 +89,13 @@ public class ArgumentParserTest
 		assertEquals("true", parser.getArgumentValue("rainy"));
 		assertEquals("3.5", parser.getArgumentValue("bathrooms"));
 	}
-<<<<<<< HEAD
 	
 	@Test
 	public void testProgramHelp()
 	{
+		parser.addProgram("Calculator", "Calculate math problems");
 		parser.parse("Calculator -h");
-		assertEquals("blah", parser.getHelp());
+		assertEquals("Calculate math problems", parser.getHelpMessage());
 	}
 	
 	@Test
@@ -105,12 +105,11 @@ public class ArgumentParserTest
 		assertEquals("Calculator", parser.getProgramName());
 	}
 
-=======
-	//@Test
-	public void testAddHelpWithArgument() {
-		//parser.addArg("length", "Please enter the length as a whole number");
-		//assertEquals("Please enter the length as a whole number", parser.getHelpMessage("length"));
+	@Test
+	public void testAddHelpWithArgument() 
+	{
+		parser.addArg("length", "Please enter the length as a whole number");
+		assertEquals("Please enter the length as a whole number", parser.getHelpMessage("length"));
 	}
 	
->>>>>>> FETCH_HEAD
 }

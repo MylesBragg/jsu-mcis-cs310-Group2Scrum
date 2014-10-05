@@ -4,8 +4,10 @@ import java.util.*;
 
 public class ArgumentParser
 {
+	public ArgumentValues argVals = new ArgumentValues();
 	private List<String> arrayOfNames;
 	private List<String> arrayOfValues;
+	private List<String> arrayOfPrograms;
 	String program = "";
 	
 	public ArgumentParser()
@@ -18,6 +20,20 @@ public class ArgumentParser
 	{
 		arrayOfNames.add(name);
 		arrayOfValues.add(" ");
+	}
+	
+	public void addArg(String name, String help) 
+	{
+		arrayOfNames.add(name);
+		arrayOfValues.add(" ");
+		argVals.addHelpArgument(name, help);
+	}
+	
+	public void addProgram(String name, String help) 
+	{
+		arrayOfNames.add(name);
+		arrayOfValues.add(" ");
+		argVals.addHelpArgument(name, help);
 	}
 	
 	public int getNumArguments()
@@ -40,16 +56,15 @@ public class ArgumentParser
 				
 				if(nextValue == "-h") 
 				{
-					getHelp();
+					getHelpMessage(program);
 				}
 				else
 				{
 					arrayOfValues.set(count, nextValue);
 					count++;
-
 				}
-	
 			}
+			
 			for(int i = 0; i < arrayOfValues.size(); i++)
 			{
 				if(arrayOfValues.get(i) == " ")
@@ -77,21 +92,14 @@ public class ArgumentParser
 		return "Invalid Argument Name";
 	}
 	
-	public String getHelp() 
+	public String getHelpMessage() 
 	{
-		if(program != "")
-		{
-			//this is supposed to return the help info for user program
-			//the idea is to call a method from ArguementValues that takes a 
-			//String program name, finds the help info for that program,
-			//sends it back, and this will output the result
-			//ie return argVals.sendHelpInfo(someProgram)
-			return "blah";
-		}
-		else
-		{
-			return "No program to get help from";
-		}
+		return argVals.getHelpArgument(program);
+	}
+	
+	public String getHelpMessage(String help) 
+	{
+		return argVals.getHelpArgument(help);
 	}
 	
 	public String getProgramName() {
