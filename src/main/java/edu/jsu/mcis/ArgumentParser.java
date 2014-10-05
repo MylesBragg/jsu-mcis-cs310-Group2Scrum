@@ -4,8 +4,12 @@ import java.util.*;
 
 public class ArgumentParser
 {
+	public ArgumentValues argVals = new ArgumentValues();
 	private List<String> arrayOfNames;
 	private List<String> arrayOfValues;
+	private List<String> arrayOfPrograms;
+	String program = "";
+	
 	public ArgumentParser()
 	{
 		arrayOfNames = new ArrayList<String>();
@@ -16,6 +20,20 @@ public class ArgumentParser
 	{
 		arrayOfNames.add(name);
 		arrayOfValues.add(" ");
+	}
+	
+	public void addArg(String name, String help) 
+	{
+		arrayOfNames.add(name);
+		arrayOfValues.add(" ");
+		argVals.addHelpArgument(name, help);
+	}
+	
+	public void addProgram(String name, String help) 
+	{
+		arrayOfNames.add(name);
+		arrayOfValues.add(" ");
+		argVals.addHelpArgument(name, help);
 	}
 	
 	public int getNumArguments()
@@ -29,14 +47,24 @@ public class ArgumentParser
 		try
 		{
 			Scanner p = new Scanner(something);
-			String program = p.next();
+			program = p.next();
+			
 			int count = 0;
 			while(p.hasNext())
 			{
 				nextValue = p.next();
-				arrayOfValues.set(count, nextValue);
-				count++;
+				
+				if(nextValue == "-h") 
+				{
+					getHelpMessage(program);
+				}
+				else
+				{
+					arrayOfValues.set(count, nextValue);
+					count++;
+				}
 			}
+			
 			for(int i = 0; i < arrayOfValues.size(); i++)
 			{
 				if(arrayOfValues.get(i) == " ")
@@ -62,5 +90,19 @@ public class ArgumentParser
 			}
 		}
 		return "Invalid Argument Name";
+	}
+	
+	public String getHelpMessage() 
+	{
+		return argVals.getHelpArgument(program);
+	}
+	
+	public String getHelpMessage(String help) 
+	{
+		return argVals.getHelpArgument(help);
+	}
+	
+	public String getProgramName() {
+		return program;
 	}
 }
