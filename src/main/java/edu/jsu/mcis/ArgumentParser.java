@@ -2,6 +2,7 @@ package edu.jsu.mcis;
 
 import java.util.*;
 
+
 public class ArgumentParser
 {
 	private ArgumentValues argVals;
@@ -23,26 +24,83 @@ public class ArgumentParser
 	{
 		argVals.addHelpArgument(name, help);
 	}
-	public void addArgumentDataType(String name, String dataType) {
+	
+	public void addArgumentDataType(String name, String dataType) 
+	{
 		argVals.addDataTypeArgument(name, dataType);
 	}
 	
-
-	public void parse(String[] argValues)
+	public String parse(String myString)
 	{
-		//if (argValues.length == arrayOfNames.size()) {
-			for (int i = 0; i < argValues.length; i++) {
-				argVals.addValueArgument(arrayOfNames.get(i), argValues[i]);
+		String nextValue = "";
+		try
+		{
+			String[] arguments = new String[1];
+			Scanner argScanner = new Scanner(myString);
+			program = argScanner.next();
+			int count = 0;
+			while (argScanner.hasNext())
+			{
+				nextValue = argScanner.next();
+				if(arguments[0] == null)
+				{
+					arguments[count] = nextValue;
+					count++;
+				}
+				else
+				{
+					String[] temp = new String[arguments.length];
+					for(int i = 0; i < arguments.length; i++)
+					{
+						temp[i] = arguments[i];
+					}
+					arguments = new String[temp.length + 1];
+					for(int i = 0; i < temp.length; i++)
+					{
+						arguments[i] = temp[i];
+					}
+					arguments[count] = nextValue;
+					count++;
+				}
 			}
-		//}
-		//else if (argValues.length > arrayOfNames.size()) {
-			//System.out.print("You have entered too many arguments.");
-			//System.exit(0);
-		//}
-		//else {
-			//System.out.print("You have entered too few arguments.");
-			//System.exit(0);
-		//}
+			adder(arguments);
+			for(int i = 0; i < arrayOfNames.size(); i++)
+			{
+				if(argVals.getValueArgument(arrayOfNames.get(i)) == null)
+				{
+					String errorMessage = "usage: java "	+ program;
+					for(int j = 0; j < arrayOfNames.size(); j++)
+					{
+						errorMessage = errorMessage + " " + arrayOfNames.get(j);
+					}
+					errorMessage = errorMessage + "\n" + program + ".java: error: the following arguments are required:";
+					for(int j = i; j < arrayOfNames.size(); j++)
+					{
+						errorMessage = errorMessage + " " + arrayOfNames.get(j);
+					}
+					return errorMessage;
+				}
+			}
+		}
+		catch (IndexOutOfBoundsException e)
+		{
+			String errorMessage = "usage: java "	+ program;
+			for(int i = 0; i < arrayOfNames.size(); i++)
+			{
+				errorMessage = errorMessage + " " + arrayOfNames.get(i);
+			}
+			errorMessage = errorMessage + "\n" + program + ".java: error: unrecognized arguments: " + nextValue;
+			return errorMessage;
+		}
+		return "Parsing Completed";
+	}
+	
+	public void adder(String[] argValues)
+	{
+		for (int i = 0; i < argValues.length; i++) 
+		{
+			argVals.addValueArgument(arrayOfNames.get(i), argValues[i]);
+		}
 	}
 	
 	public String getArgumentValue(String name)
@@ -50,7 +108,8 @@ public class ArgumentParser
 		return argVals.getValueArgument(name);
 	}
 	
-	public String getHelpArgumentValue(String name) {
-		return argVals.getHelpArgument(name);
+	public String getHelpArgumentValue(String name) 
+	{
+		return "   " + argVals.getHelpArgument(name) + "   ";
 	}
 }
