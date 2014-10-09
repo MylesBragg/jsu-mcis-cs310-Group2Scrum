@@ -68,28 +68,16 @@ public class ArgumentParser
 			{
 				if(argVals.getValueArgument(arrayOfNames.get(i)) == null)
 				{
-					String errorMessage = "usage: java "	+ program;
-					for(int j = 0; j < arrayOfNames.size(); j++)
-					{
-						errorMessage = errorMessage + " " + arrayOfNames.get(j);
-					}
-					errorMessage = errorMessage + "\n" + program + ".java: error: the following arguments are required:";
-					for(int j = i; j < arrayOfNames.size(); j++)
-					{
-						errorMessage = errorMessage + " " + arrayOfNames.get(j);
-					}
+					ArgumentErrorHandler error = new ArgumentErrorHandler();
+					String errorMessage = error.buildStringTooFewArguments(arrayOfNames, program, i);
 					return errorMessage;
 				}
 			}
 		}
 		catch (IndexOutOfBoundsException e)
 		{
-			String errorMessage = "usage: java "	+ program;
-			for(int i = 0; i < arrayOfNames.size(); i++)
-			{
-				errorMessage = errorMessage + " " + arrayOfNames.get(i);
-			}
-			errorMessage = errorMessage + "\n" + program + ".java: error: unrecognized arguments: " + nextValue;
+			ArgumentErrorHandler error = new ArgumentErrorHandler();
+			String errorMessage = error.buildStringTooManyArguments(arrayOfNames, program, nextValue);
 			return errorMessage;
 		}
 		return "Parsing Completed";

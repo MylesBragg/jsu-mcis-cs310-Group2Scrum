@@ -1,9 +1,11 @@
 import edu.jsu.mcis.*;
 
+import java.util.*;
+
 public class ArgumentParserKeywords {
 	private ArgumentParser parser;
 	
-	public void startVolumeCalculator(String vars) {
+	public void startVolumeCalculatorTest(String vars) {
 		parser = new ArgumentParser();
 		parser.addArg("length");
 		parser.addArg("width");
@@ -11,7 +13,7 @@ public class ArgumentParserKeywords {
 		parser.parse("VolumeCalculator " + vars);
 	}
 	
-	public void startGetPetNumberRainyBathrooms(String vars) {
+	public void startPetShowTest(String vars) {
 		parser = new ArgumentParser();
 		parser.addArg("pet");
 		parser.addArg("number");
@@ -19,7 +21,31 @@ public class ArgumentParserKeywords {
 		parser.addArg("bathrooms");
 		parser.parse("GetPetNumberRainyBathrooms " + vars);
 	}
+	
+	public void startProgramWithArguments(String vars) 
+	{
+		parser = new ArgumentParser();
+		Scanner getVar = new Scanner(vars);
+		String firstVar = getVar.next();
 		
+		
+		if (vars == "7 5 2")
+		{
+			parser.addArg("length");
+			parser.addArg("width");
+			parser.addArg("height");
+			parser.parse("VolumeCalculator " + vars);
+		}
+		else
+		{
+			parser.addArg("pet");
+			parser.addArg("number");
+			parser.addArg("rainy");
+			parser.addArg("bathrooms");
+			parser.parse("GetPetNumberRainyBathrooms " + vars);
+		}
+	}
+	
 	public String getLength()
 	{
 		return parser.getArgumentValue("length");
