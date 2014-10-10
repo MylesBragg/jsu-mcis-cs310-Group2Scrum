@@ -32,11 +32,11 @@ public class ArgumentParser
 	
 	public String parse(String myString)
 	{
+		Scanner argScanner = new Scanner(myString);
 		String nextValue = "";
 		try
 		{
 			String[] arguments = new String[1];
-			Scanner argScanner = new Scanner(myString);
 			program = argScanner.next();
 			int count = 0;
 			while (argScanner.hasNext())
@@ -77,7 +77,7 @@ public class ArgumentParser
 		catch (IndexOutOfBoundsException e)
 		{
 			ArgumentErrorHandler error = new ArgumentErrorHandler();
-			String errorMessage = error.buildStringTooManyArguments(arrayOfNames, program, nextValue);
+			String errorMessage = error.buildStringTooManyArguments(arrayOfNames, program, nextValue, argScanner);
 			return errorMessage;
 		}
 		return "Parsing Completed";
