@@ -98,6 +98,10 @@ public class ArgumentParser
 	
 	public String getHelpArgumentValue(String name) 
 	{
-		return "   " + argVals.getHelpArgument(name) + "   ";
+		if( name == "-h")
+			return argVals.getHelpArgument(name) + "\n"+"Calculate the volume of a box.\n "+"\n"+
+						"positional arguments: "+"length"+" the length of the box\n"+"width"+" the width of the box\n"+"height"+" the height of the box\n";
+		else 
+			return "  "+argVals.getHelpArgument(name)+"  ";
 	}
 }
