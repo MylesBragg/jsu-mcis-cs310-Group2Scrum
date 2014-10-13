@@ -86,8 +86,10 @@ public class ArgumentParserTest
 	@Test
 	public void testProgramHelp()
 	{
-		parser.addArgumentHelp("-h", "Calculate math problems");
-		assertEquals("   Calculate math problems   ", parser.getHelpArgumentValue("-h"));
+		parser.addArgumentHelp("-h", "usage: java VolumeCalculator length width height\n");
+		assertEquals("usage: java VolumeCalculator length width height\n" + "\n" +"Calculate the volume of a box.\n "+"\n"+
+						"positional arguments: length the length of the box\n"+"width the width of the box\n"+"height the height of the box\n", 
+							parser.getHelpArgumentValue("-h"));
 	}
 
 	@Test
