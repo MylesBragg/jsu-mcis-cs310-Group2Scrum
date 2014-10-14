@@ -41,8 +41,6 @@ public class ArgumentParserTest
 		assertEquals("closet", parser.getArgumentValue("--type"));
 	}
 	@Test
-<<<<<<< HEAD
-=======
 	public void addOptValAfterPositionalVal() {
 		String myString = "volCal 7 --type closet";
 		parser.addArg("length", "Enter whole number", "integer");
@@ -72,7 +70,6 @@ public class ArgumentParserTest
 		assertTrue(parser.getArgumentValue("width").equals(5));
 	}
 	/*@Test
->>>>>>> 3f3a6a0fff9db5817ac0403355fee9c83f8088db
 	public void testSingleArgumentAdder()
 	{
 		String[] myString = new String[1];
@@ -167,4 +164,21 @@ public class ArgumentParserTest
 		assertEquals("6", parser.getArgumentValue("width"));
 		assertEquals("2", parser.getArgumentValue("height"));
 	}*/
+	
+	@Test
+    public void testAddHelpWithArgument()
+    {
+         parser.addArgumentHelp("length", "Please enter the length as a whole number");
+         assertEquals("Please enter the length as a whole number", parser.getHelpArgumentValue("length"));
+    }
+
+    @Test
+    public void testProgramHelp()
+    {
+        parser.addArgumentHelp("-h", "usage: java VolumeCalculator length width height\n");
+        assertEquals("usage: java VolumeCalculator length width height\n" + "\n" +"Calculate the volume of a box.\n "+"\n"+
+                      "positional arguments: length the length of the box\n"+"width the width of the box\n"+"height the height of the box\n",
+        parser.getHelpArgumentValue("-h"));
+    }
+
 }
