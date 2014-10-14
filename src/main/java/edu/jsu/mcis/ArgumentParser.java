@@ -53,10 +53,17 @@ public class ArgumentParser
 	{
 		String nextValue = "";
 		Scanner argScanner = new Scanner(myString);
+<<<<<<< HEAD
 		
 		try
 		{
 			String[] arguments = new String[1];
+=======
+		try
+		{
+			String[] arguments = new String[1];
+			
+>>>>>>> 3f3a6a0fff9db5817ac0403355fee9c83f8088db
 			program = argScanner.next();
 			int count = 0;
 			while (argScanner.hasNext())
@@ -84,7 +91,10 @@ public class ArgumentParser
 				}
 			}
 			adder(arguments);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3f3a6a0fff9db5817ac0403355fee9c83f8088db
 			if(allArgVals[0].size() < positionalArgNames.size())
 			{
 				int i = allArgVals[0].size();
@@ -104,6 +114,7 @@ public class ArgumentParser
 	
 	public void adder(String[] argValues)
 	{
+		int currPositionArgIndex = 0;
 		for (int i = 0; i < argValues.length; i++) 
 		{
 			if ((argValues[i].contains("--") || argValues[i].contains("-"))) 
@@ -111,10 +122,20 @@ public class ArgumentParser
 				allArgVals[1].addValueArgument(argValues[i], argValues[i + 1]);
 				i++;
 			}
+<<<<<<< HEAD
 			else
 			{
 				allArgVals[0].addValueArgument(positionalArgNames.get(i), argValues[i]);
 			}
+=======
+			else {
+			
+				allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), argValues[i]);
+				currPositionArgIndex++;
+			}
+			
+			
+>>>>>>> 3f3a6a0fff9db5817ac0403355fee9c83f8088db
 		}
 	}
 	
@@ -154,10 +175,7 @@ public class ArgumentParser
 			return allArgVals[0].getDataTypeArgument(name);
 		}
 	}
-	//public String getArgumentValue(String name)
-	//{
-		//return argVals.getValueArgument(name);
-	//}
+	
 	
 	public String getHelpArgumentValue(String name) 
 	{
