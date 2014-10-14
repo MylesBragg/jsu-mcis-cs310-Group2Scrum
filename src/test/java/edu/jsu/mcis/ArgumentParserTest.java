@@ -40,6 +40,35 @@ public class ArgumentParserTest
 		parser.parse(myString);
 		assertEquals("closet", parser.getArgumentValue("--type"));
 	}
+	@Test
+	public void addOptValAfterPositionalVal() {
+		String myString = "volCal 7 --type closet";
+		parser.addArg("length", "Enter whole number", "integer");
+		parser.addArg("--type", "Set Type", "optional");
+		parser.parse(myString);
+		assertTrue(parser.getArgumentValue("length").equals(7));
+		assertEquals("closet", parser.getArgumentValue("--type"));
+	}
+	@Test 
+	public void addOptValBeforePositionalVal() {
+		String myString = "volCal --type closet 7";
+		parser.addArg("--type", "Set Type", "optional");
+		parser.addArg("length", "Enter whole number", "integer");
+		parser.parse(myString);
+		assertEquals("closet", parser.getArgumentValue("--type"));
+		assertTrue(parser.getArgumentValue("length").equals(7));
+	}
+	@Test
+	public void addOptValBetweenPositionalVals() {
+		String myString = "volCal 7 --type closet 5";
+		parser.addArg("--type", "Set Type", "optional");
+		parser.addArg("length", "Enter whole number", "integer");
+		parser.addArg("width", "Enter whole number", "integer");
+		parser.parse(myString);
+		assertEquals("closet", parser.getArgumentValue("--type"));
+		assertTrue(parser.getArgumentValue("length").equals(7));
+		assertTrue(parser.getArgumentValue("width").equals(5));
+	}
 	/*@Test
 	public void testSingleArgumentAdder()
 	{

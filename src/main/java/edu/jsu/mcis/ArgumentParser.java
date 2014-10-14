@@ -52,10 +52,11 @@ public class ArgumentParser
 	public String parse(String myString)
 	{
 		String nextValue = "";
+		Scanner argScanner = new Scanner(myString);
 		try
 		{
 			String[] arguments = new String[1];
-			Scanner argScanner = new Scanner(myString);
+			
 			program = argScanner.next();
 			int count = 0;
 			while (argScanner.hasNext())
@@ -83,20 +84,18 @@ public class ArgumentParser
 				}
 			}
 			adder(arguments);
-			for(int i = 0; i < positionalArgNames.size(); i++)
+			if(allArgVals[0].size() < positionalArgNames.size())
 			{
-				if(positionalArgNames.get(i) == null)
-				{
-					ArgumentErrorHandler error = new ArgumentErrorHandler();
-					String errorMessage = error.buildStringTooFewArguments(positionalArgNames, program, i);
-					return errorMessage;
-				}
+				int i = allArgVals[0].size();
+				ArgumentErrorHandler error = new ArgumentErrorHandler();
+				String errorMessage = error.buildStringTooFewArguments(positionalArgNames, program, i);
+				return errorMessage;
 			}
 		}
 		catch (IndexOutOfBoundsException e)
 		{
 			ArgumentErrorHandler error = new ArgumentErrorHandler();
-			String errorMessage = error.buildStringTooManyArguments(positionalArgNames, program, nextValue);
+			String errorMessage = error.buildStringTooManyArguments(positionalArgNames, program, nextValue, argScanner);
 			return errorMessage;
 		}
 		return "Parsing Completed";
@@ -104,6 +103,7 @@ public class ArgumentParser
 	
 	public void adder(String[] argValues)
 	{
+		int currPositionArgIndex = 0;
 		for (int i = 0; i < argValues.length; i++) 
 		{
 			if ((argValues[i].contains("--") || argValues[i].contains("-"))) {
@@ -114,9 +114,10 @@ public class ArgumentParser
 			}
 			else {
 			
-				allArgVals[0].addValueArgument(positionalArgNames.get(i), argValues[i]);
-			
+				allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), argValues[i]);
+				currPositionArgIndex++;
 			}
+			
 			
 		}
 	}
@@ -157,10 +158,7 @@ public class ArgumentParser
 			return allArgVals[0].getDataTypeArgument(name);
 		}
 	}
-	//public String getArgumentValue(String name)
-	//{
-		//return argVals.getValueArgument(name);
-	//}
+	
 	
 	public String getHelpArgumentValue(String name) 
 	{
