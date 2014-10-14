@@ -69,44 +69,6 @@ public class ArgumentParserTest
 		assertTrue(parser.getArgumentValue("length").equals(7));
 		assertTrue(parser.getArgumentValue("width").equals(5));
 	}
-	/*@Test
-	public void testSingleArgumentAdder()
-	{
-		String[] myString = new String[1];
-		myString[0] = "4";
-		parser.addArg("length", "Enter a whole number as length", "integer");
-		parser.adder(myString);
-		assertEquals(4, parser.getArgumentValue("length"));
-	}
-	
-	@Test
-	public void testDoubleArgumentAdder()
-	{
-		String[] myString = new String[2];
-		myString[0] = "4";
-		myString[1] = "7.5";
-		parser.addArg("length", "Enter a whole number as length", "integer");
-		parser.addArg("width", "Enter a float number as width", "float");
-		parser.adder(myString);
-		assertEquals(4, parser.getArgumentValue("length"));
-		assertEquals(7.5f, parser.getArgumentValue("width"));
-	}
-	
-	@Test
-	public void testMultipleArgumentAdder()
-	{
-		String[] myString = new String[3];
-		myString[0] = "4";
-		myString[1] = "7.3";
-		myString[2] = "9";
-		parser.addArg("length", "Enter a whole number as length", "integer");
-		parser.addArg("width", "Enter a float number as width", "float");
-		parser.addArg("height", "Enter a whole number as height", "integer");
-		parser.adder(myString);
-		assertEquals(4, parser.getArgumentValue("length"));
-		assertEquals(7.3f, parser.getArgumentValue("width"));
-		assertEquals(9, parser.getArgumentValue("height"));
-	}
 	
 	@Test
 	public void testCompleteParsing()
@@ -138,32 +100,6 @@ public class ArgumentParserTest
 					"VolumeCalculator.java: error: unrecognized arguments: 43", 
 					parser.parse("VolumeCalculator 7 5 2 43"));
 	}
-	
-/*	//@Test
-	public void testProgramHelp()
-	{
-		parser.addArgumentHelp("-h", "Calculate math problems");
-		assertEquals("   Calculate math problems   ", parser.getHelpArgumentValue("-h"));
-	}
-
-	//@Test
-	public void testAddHelpWithArgument() 
-	{
-		parser.addArgumentHelp("length", "Please enter the length as a whole number");
-		assertEquals("   Please enter the length as a whole number   ", parser.getHelpArgumentValue("length"));
-	}
-	
-	//@Test
-	public void testParseAString()
-	{	
-		parser.addArg("length");
-		parser.addArg("width");
-		parser.addArg("height");
-		parser.parse("VolumeCalculator 7 6 2");
-		assertEquals("7", parser.getArgumentValue("length"));
-		assertEquals("6", parser.getArgumentValue("width"));
-		assertEquals("2", parser.getArgumentValue("height"));
-	}*/
 	
 	@Test
     public void testAddHelpWithArgument()
