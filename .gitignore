@@ -71,12 +71,3 @@ build/tmp/test/jar_extract_2020276631564701526_tmp
 build/tmp/test/jar_extract_221948863423684904_tmp
 build/tmp/test/jar_extract_2499291763655713986_tmp
 *.gif
-*.class
-build/classes/test/edu/jsu/mcis/ArgumentValuesTest.class
-build/tmp/test/jar_extract_1421807139733106018_tmp
-build/tmp/test/jar_extract_1548984143640761645_tmp
-build/tmp/test/jar_extract_193588163947259153_tmp
-build/tmp/test/jar_extract_2239045070083048934_tmp
-build/tmp/test/jar_extract_2742274604068412121_tmp
-build/tmp/test/jar_extract_2745682173286626634_tmp
-build/tmp/test/jar_extract_2842944680525941766_tmp
