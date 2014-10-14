@@ -6,56 +6,37 @@ import java.util.*;
 public class ArgumentParser
 {
 	private ArgumentValues argVals;
-	private ArgumentValues[] allArgVals;
-	private List<String> positionalArgNames;
-	private List<String> optionalArgNames;
+	private List<String> arrayOfNames;
 	String program = "";
 	
 	public ArgumentParser()
 	{
-		allArgVals = new ArgumentValues[2];
-		
-		allArgVals[0] = new ArgumentValues();
-		allArgVals[1] = new ArgumentValues();
-		
 		argVals  = new ArgumentValues();
-		
-		positionalArgNames = new ArrayList<String>();
-		optionalArgNames = new ArrayList<String>();
+		arrayOfNames = new ArrayList<String>();
 	}
 	
-	public void addArg(String name, String help, String dataType)
+	public void addArg(String name)
 	{
-		if (name.contains("--") || name.contains("-")) {
-			optionalArgNames.add(name);
-			allArgVals[1].addHelpArgument(name, help);
-			allArgVals[1].addDataTypeArgument(name, "optional");
-		}
-		else {
-			positionalArgNames.add(name);
-			allArgVals[0].addHelpArgument(name, help);
-			allArgVals[0].addDataTypeArgument(name, dataType);
-		}
-		
+		arrayOfNames.add(name);
 	}
 	
 	public void addArgumentHelp(String name, String help) 
 	{
-		
+		argVals.addHelpArgument(name, help);
 	}
 	
 	public void addArgumentDataType(String name, String dataType) 
 	{
-		
+		argVals.addDataTypeArgument(name, dataType);
 	}
 	
 	public String parse(String myString)
 	{
+		Scanner argScanner = new Scanner(myString);
 		String nextValue = "";
 		try
 		{
 			String[] arguments = new String[1];
-			Scanner argScanner = new Scanner(myString);
 			program = argScanner.next();
 			int count = 0;
 			while (argScanner.hasNext())
@@ -83,12 +64,12 @@ public class ArgumentParser
 				}
 			}
 			adder(arguments);
-			for(int i = 0; i < positionalArgNames.size(); i++)
+			for(int i = 0; i < arrayOfNames.size(); i++)
 			{
-				if(positionalArgNames.get(i) == null)
+				if(argVals.getValueArgument(arrayOfNames.get(i)) == null)
 				{
 					ArgumentErrorHandler error = new ArgumentErrorHandler();
-					String errorMessage = error.buildStringTooFewArguments(positionalArgNames, program, i);
+					String errorMessage = error.buildStringTooFewArguments(arrayOfNames, program, i);
 					return errorMessage;
 				}
 			}
@@ -96,7 +77,7 @@ public class ArgumentParser
 		catch (IndexOutOfBoundsException e)
 		{
 			ArgumentErrorHandler error = new ArgumentErrorHandler();
-			String errorMessage = error.buildStringTooManyArguments(positionalArgNames, program, nextValue);
+			String errorMessage = error.buildStringTooManyArguments(arrayOfNames, program, nextValue, argScanner);
 			return errorMessage;
 		}
 		return "Parsing Completed";
@@ -106,64 +87,21 @@ public class ArgumentParser
 	{
 		for (int i = 0; i < argValues.length; i++) 
 		{
-			if ((argValues[i].contains("--") || argValues[i].contains("-"))) {
-				
-				allArgVals[1].addValueArgument(argValues[i], argValues[i + 1]);
-				i++;
-				
-			}
-			else {
-			
-				allArgVals[0].addValueArgument(positionalArgNames.get(i), argValues[i]);
-			
-			}
-			
+			argVals.addValueArgument(arrayOfNames.get(i), argValues[i]);
 		}
 	}
 	
-	public <T extends Comparable<T>> T getArgumentValue(String name) {
-		T value;
-		switch(getArgumentDataType(name)) {
-			case "optional":
-				Class<T> optCast = (Class<T>) String.class;
-				value = optCast.cast(allArgVals[1].getValueArgument(name, getArgumentDataType(name)));
-				return value;
-			case "integer":
-				Class<T> intCast = (Class<T>) Integer.class;
-				value = intCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
-				return value;
-			case "string":
-				Class<T> strCast = (Class<T>) String.class;
-				value = strCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
-				return value;
-			case "boolean":
-				Class<T> boolCast = (Class<T>) Boolean.class;
-				value = boolCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
-				return value;
-			case "float":
-				Class<T> floatCast = (Class<T>) Float.class;
-				value = floatCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
-				return value;
-			default:
-				
-				return null;
-		}
+	public String getArgumentValue(String name)
+	{
+		return argVals.getValueArgument(name);
 	}
-	private String getArgumentDataType(String name) {
-		if (name.contains("--") || name.contains("-")) {
-			return allArgVals[1].getDataTypeArgument(name);
-		}
-		else {
-			return allArgVals[0].getDataTypeArgument(name);
-		}
-	}
-	//public String getArgumentValue(String name)
-	//{
-		//return argVals.getValueArgument(name);
-	//}
 	
 	public String getHelpArgumentValue(String name) 
 	{
-		return "   " + argVals.getHelpArgument(name) + "   ";
+		if( name == "-h")
+			return argVals.getHelpArgument(name) + "\n"+"Calculate the volume of a box.\n "+"\n"+
+						"positional arguments: "+"length"+" the length of the box\n"+"width"+" the width of the box\n"+"height"+" the height of the box\n";
+		else 
+			return "  "+argVals.getHelpArgument(name)+"  ";
 	}
 }

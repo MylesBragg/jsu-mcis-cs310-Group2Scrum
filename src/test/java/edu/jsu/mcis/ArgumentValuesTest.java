@@ -13,19 +13,7 @@ private ArgumentValues v;
 		v = new ArgumentValues();
 	}
 
-	@Test
-	public void testgetValueArgument() {
-		v.addValueArgument("length", "7");
-		v.addDataTypeArgument("length", "integer");
-		assertEquals(Integer.parseInt(v.getValueArgument("length", "integer").toString()), 7);
-	}
-	@Test
-	public void testGetOptionalVal() {
-		v.addValueArgument("--closet", "6");
-		v.addDataTypeArgument("--closet", "optional");
-		assertEquals(v.getValueArgument("--closet", "optional"), "6");
-	}
-	/*@Test
+	//@Test
 	public void testaddNametoValues()
 	{
 		v.addValueArgument("length", "7");
@@ -75,5 +63,5 @@ private ArgumentValues v;
 		assertEquals("integer", v.getDataTypeArgument("length"));
 		v.addDataTypeArgument("width", "float");
 		assertEquals("float", v.getDataTypeArgument("width"));
-	}*/
+	}
 }
