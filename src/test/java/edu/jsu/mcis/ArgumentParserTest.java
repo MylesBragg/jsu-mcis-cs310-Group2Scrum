@@ -25,7 +25,7 @@ public class ArgumentParserTest
 	public void testNewAddMultipleArgumentsAndValues() {
 		String myString = "volCal 7 5.0 2";
 		parser.addArg("length", "Enter a whole number as length", "integer");
-		parser.addArg("width", "Enter a whole number as width", "float");
+		parser.addArg("width", "Enter a float number as width", "float");
 		parser.addArg("height", "Enter a whole number as height", "integer");
 		parser.parse(myString);
 		assertTrue(parser.getArgumentValue("length").equals(7));
@@ -40,77 +40,77 @@ public class ArgumentParserTest
 		parser.parse(myString);
 		assertEquals("closet", parser.getArgumentValue("--type"));
 	}
-	/*@Test
+	@Test
 	public void testSingleArgumentAdder()
 	{
 		String[] myString = new String[1];
 		myString[0] = "4";
-		parser.addArg("length");
+		parser.addArg("length", "Enter a whole number as length", "integer");
 		parser.adder(myString);
-		assertEquals("4", parser.getArgumentValue("length"));
+		assertEquals(4, parser.getArgumentValue("length"));
 	}
 	
-	//@Test
+	@Test
 	public void testDoubleArgumentAdder()
 	{
 		String[] myString = new String[2];
 		myString[0] = "4";
-		myString[1] = "7";
-		parser.addArg("length");
-		parser.addArg("width");
+		myString[1] = "7.5";
+		parser.addArg("length", "Enter a whole number as length", "integer");
+		parser.addArg("width", "Enter a float number as width", "float");
 		parser.adder(myString);
-		assertEquals("4", parser.getArgumentValue("length"));
-		assertEquals("7", parser.getArgumentValue("width"));
+		assertEquals(4, parser.getArgumentValue("length"));
+		assertEquals(7.5f, parser.getArgumentValue("width"));
 	}
 	
-	//@Test
+	@Test
 	public void testMultipleArgumentAdder()
 	{
 		String[] myString = new String[3];
 		myString[0] = "4";
-		myString[1] = "7";
+		myString[1] = "7.3";
 		myString[2] = "9";
-		parser.addArg("length");
-		parser.addArg("width");
-		parser.addArg("height");
+		parser.addArg("length", "Enter a whole number as length", "integer");
+		parser.addArg("width", "Enter a float number as width", "float");
+		parser.addArg("height", "Enter a whole number as height", "integer");
 		parser.adder(myString);
-		assertEquals("4", parser.getArgumentValue("length"));
-		assertEquals("7", parser.getArgumentValue("width"));
-		assertEquals("9", parser.getArgumentValue("height"));
+		assertEquals(4, parser.getArgumentValue("length"));
+		assertEquals(7.3f, parser.getArgumentValue("width"));
+		assertEquals(9, parser.getArgumentValue("height"));
 	}
 	
-	//@Test
+	@Test
 	public void testCompleteParsing()
 	{
-		parser.addArg("length");
-		parser.addArg("width");
-		parser.addArg("height");
-		assertEquals("Parsing Completed", parser.parse("VolumeCalculator 7 5 2"));
+		parser.addArg("length", "Enter a whole number as length", "integer");
+		parser.addArg("width", "Enter a float number as width", "float");
+		parser.addArg("height", "Enter a whole number as height", "integer");
+		assertEquals("Parsing Completed", parser.parse("VolumeCalculator 7 5.2 2"));
 	}
 	
-	//@Test
+	@Test
 	public void testTooFewArguments()
 	{
-		parser.addArg("length");
-		parser.addArg("width");
-		parser.addArg("height");
+		parser.addArg("length", "Enter a whole number as length", "integer");
+		parser.addArg("width", "Enter a float number as width", "float");
+		parser.addArg("height", "Enter a whole number as height", "integer");
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: the following arguments are required: height", 
-					parser.parse("VolumeCalculator 7 5"));
+					parser.parse("VolumeCalculator 7 5.2"));
 	}
 	
-	//@Test
+	@Test
 	public void testTooManyArguments()
 	{
-		parser.addArg("length");
-		parser.addArg("width");
-		parser.addArg("height");
+		parser.addArg("length", "Enter a whole number as length", "integer");
+		parser.addArg("width", "Enter a float number as width", "float");
+		parser.addArg("height", "Enter a whole number as height", "integer");
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: unrecognized arguments: 43", 
 					parser.parse("VolumeCalculator 7 5 2 43"));
 	}
 	
-	//@Test
+/*	//@Test
 	public void testProgramHelp()
 	{
 		parser.addArgumentHelp("-h", "Calculate math problems");

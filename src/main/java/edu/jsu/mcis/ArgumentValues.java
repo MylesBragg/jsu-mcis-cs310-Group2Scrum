@@ -78,4 +78,8 @@ public class ArgumentValues
 	public String getDataTypeArgument(String name) {
 		return namedDataType.get(name);
 	}
+	
+	public int size() {
+		return namedValues.size();
+	}
 }

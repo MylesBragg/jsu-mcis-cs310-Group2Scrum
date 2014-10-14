@@ -71,3 +71,4 @@ build/tmp/test/jar_extract_2020276631564701526_tmp
 build/tmp/test/jar_extract_221948863423684904_tmp
 build/tmp/test/jar_extract_2499291763655713986_tmp
 *.gif
+*.class
