@@ -19,7 +19,7 @@ public class ArgumentErrorHandler
 		return errorMessage;
 	}
 	
-	public String buildStringTooManyArguments(List<String> arrayOfNames, String program, String nextValue, Scanner argScanner)
+	public String buildStringTooManyArguments(List<String> arrayOfNames, String program, String nextValue)
 	{
 		String errorMessage = "usage: java "	+ program;
 		for(int i = 0; i < arrayOfNames.size(); i++)
@@ -27,11 +27,6 @@ public class ArgumentErrorHandler
 			errorMessage = errorMessage + " " + arrayOfNames.get(i);
 		}
 		errorMessage = errorMessage + "\n" + program + ".java: error: unrecognized arguments: " + nextValue;
-		while (argScanner.hasNext())
-		{
-			nextValue = argScanner.next();
-			errorMessage = errorMessage + " " + nextValue;
-		}
 		return errorMessage;
 	}
 }
