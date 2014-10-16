@@ -73,7 +73,7 @@ public class ArgumentParserTest
 		assertTrue(parser.getArgumentValue("width").equals(5));
 	}
 	
-	//@Test
+	@Test
 	public void testCompleteParsing()
 	{
 		parser.addArg("length", "Enter a whole number as length", "integer");
@@ -82,7 +82,7 @@ public class ArgumentParserTest
 		assertEquals("Parsing Completed", parser.parse("VolumeCalculator 7 5.2 2"));
 	}
 	
-	//@Test
+	@Test
 	public void testTooFewArguments()
 	{
 		parser.addArg("length", "Enter a whole number as length", "integer");
@@ -93,7 +93,7 @@ public class ArgumentParserTest
 					parser.parse("VolumeCalculator 7 5.2"));
 	}
 	
-	//@Test
+	@Test
 	public void testTooManyArguments()
 	{
 		parser.addArg("length", "Enter a whole number as length", "integer");

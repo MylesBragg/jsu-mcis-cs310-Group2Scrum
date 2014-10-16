@@ -5,6 +5,7 @@ import java.util.*;
 
 public class ArgumentParser
 {
+	private ArgumentValues argVals;
 	private ArgumentValues[] allArgVals;
 	private List<String> positionalArgNames;
 	private List<String> optionalArgNames;
@@ -17,6 +18,7 @@ public class ArgumentParser
 		allArgVals[0] = new ArgumentValues();
 		allArgVals[1] = new ArgumentValues();
 		
+		argVals  = new ArgumentValues();
 		
 		positionalArgNames = new ArrayList<String>();
 		optionalArgNames = new ArrayList<String>();
