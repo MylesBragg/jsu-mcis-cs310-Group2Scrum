@@ -6,40 +6,41 @@ import java.util.*;
 public class Controller
 {
 
-	
 	public static void main(String[] args)
 	{
-		ArgumentParser p = new ArgumentParser();
-		String nameHelpDataTypeString = "";
-		String parseString = "";
+		ArgumentParser p;
+		Scanner scan = new Scanner(System.in);
+        String parseString = "";
+		String lowerCaseStr = "";
+		String myString = "";
+		//String programName;
 		
-		System.out.println("Pressing enter with no parameter exits parameter addition loop.");
-		int count = 1;
-		System.out.println("Enter parameter " + count + " name, dataType, and help information.");
-		System.out.print("(parameter, dataType, help): ");
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		nameHelpDataTypeString = tryCatchFunction(br);
+		//programName = "VolumeCalculator ";
 		
+
 		
-		System.out.print("\n Enter string with program name, required parameters,\n" +
-							"and any optional parameters you wish to parse: ");
-		br = new BufferedReader(new InputStreamReader(System.in));
-		parseString = tryCatchFunction(br);
-		System.out.println(p.parse(parseString));
-	}
-	
-	public static String tryCatchFunction(BufferedReader br)
-	{
-		String stuff = null;
-		try
-		{
-			stuff = br.readLine();
+		for (int i = 0; i < args.length; i++) {
+			myString += args[i] + " ";
 		}
-		catch (IOException e)
+		System.out.print(myString);
+		
+		//System.out.println("Enter string to parse (Type 'Done' to exit):");
+		while (!lowerCaseStr.equals("done"))
 		{
-			System.out.println("I/O error reading parameter list");
-			System.exit(1);
+			p = new ArgumentParser();
+			
+			lowerCaseStr = myString.toLowerCase();
+			if(!lowerCaseStr.equals("done"))
+			{
+				p.addArg("length", "Enter a whole number as length", "integer");
+				p.addArg("width", "Enter a float number as width", "float");
+				p.addArg("height", "Enter a whole number as height", "integer");
+				String response = p.parse(myString);
+				System.out.println(response);
+				myString = scan.nextLine();
+			}
+			
+			
 		}
-		return stuff;
 	}
 }
