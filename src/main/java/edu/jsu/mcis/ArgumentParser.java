@@ -5,7 +5,6 @@ import java.util.*;
 
 public class ArgumentParser
 {
-	private ArgumentValues argVals;
 	private ArgumentValues[] allArgVals;
 	private List<String> positionalArgNames;
 	private List<String> optionalArgNames;
@@ -18,7 +17,6 @@ public class ArgumentParser
 		allArgVals[0] = new ArgumentValues();
 		allArgVals[1] = new ArgumentValues();
 		
-		argVals  = new ArgumentValues();
 		
 		positionalArgNames = new ArrayList<String>();
 		optionalArgNames = new ArrayList<String>();
@@ -42,11 +40,6 @@ public class ArgumentParser
 	public void addArgumentHelp(String name, String help) 
 	{
 		argVals.addHelpArgument(name, help);
-	}
-	
-	public void addArgumentDataType(String name, String dataType) 
-	{
-		
 	}
 	
 	public String parse(String myString)
@@ -128,8 +121,28 @@ public class ArgumentParser
 			}
 			else {
 			
-				allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), argValues[i]);
+				String dataType = getArgumentDataType(positionalArgNames.get(currPositionArgIndex));
+				switch(dataType){
+					case "integer":
+						int intValue = Integer.parseInt(argValues[i]);
+						allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), intValue);
+						break;
+					case "string":
+						String strValue = argValues[i];
+						allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), strValue);
+						break;
+					case "boolean":
+						boolean boolValue = Boolean.parseBoolean(argValues[i]);
+						allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), boolValue);
+						break;
+					case "float":
+						float floatValue = Float.parseFloat(argValues[i]);
+						allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), floatValue);
+						break;
+				}
+				
 				currPositionArgIndex++;
+				
 			}
 		}
 	}

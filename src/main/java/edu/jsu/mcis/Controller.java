@@ -5,6 +5,7 @@ import java.util.*;
 
 public class Controller
 {
+
 	public static void main(String[] args)
 	{
 		ArgumentParser p;
@@ -16,7 +17,7 @@ public class Controller
 		
 		//programName = "VolumeCalculator ";
 		
-		//myString = programName;
+
 		
 		for (int i = 0; i < args.length; i++) {
 			myString += args[i] + " ";

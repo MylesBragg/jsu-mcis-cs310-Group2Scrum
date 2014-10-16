@@ -25,6 +25,15 @@ public class ArgumentValues
 	public void addValueArgument(String name, String value) {
 		namedValues.put(name, value);
 	}
+	public void addValueArgument(String name, int value) {
+		namedValues.put(name, value);
+	}
+	public void addValueArgument(String name, boolean value) {
+		namedValues.put(name, value);
+	}
+	public void addValueArgument(String name, float value) {
+		namedValues.put(name, value);
+	}
 	
 	public String getHelpArgument(String name) {
 		return namedHelp.get(name);
@@ -34,22 +43,22 @@ public class ArgumentValues
 		switch(dataType) {
 			case "optional":
 				namedValues.put(name, namedValues.get(name).toString());
-				return namedValues.get(name);
+				break;
 			case "integer":
 				int intValue = Integer.parseInt(namedValues.get(name).toString());
 				namedValues.put(name, intValue);
-				return namedValues.get(name);
+				break;
 			case "string":
 				namedValues.put(name, namedValues.get(name).toString());
-				return namedValues.get(name);
+				break;
 			case "boolean":
 				boolean boolValue = Boolean.parseBoolean(namedValues.get(name).toString());
 				namedValues.put(name, boolValue);
-				return namedValues.get(name);
+				break;
 			case "float":
 				float floatValue =  Float.parseFloat(namedValues.get(name).toString());
 				namedValues.put(name, floatValue);
-				return namedValues.get(name);
+				break;
 		}
 		return namedValues.get(name);
 	}

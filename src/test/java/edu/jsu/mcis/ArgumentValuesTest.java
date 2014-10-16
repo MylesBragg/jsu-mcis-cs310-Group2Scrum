@@ -19,13 +19,20 @@ public class ArgumentValuesTest
 		v.addDataTypeArgument("length", "integer");
 		assertEquals(Integer.parseInt(v.getValueArgument("length", "integer").toString()), 7);
 	}
-	
 	@Test
 	public void testGetOptionalVal() {
 		v.addValueArgument("--closet", "6");
 		v.addDataTypeArgument("--closet", "optional");
 		assertEquals(v.getValueArgument("--closet", "optional"), "6");
 	}
+	@Test
+	public void testaddNametoValues()
+	{
+		v.addValueArgument("length", "7");
+		v.addDataTypeArgument("length", "integer");
+		assertEquals(Integer.parseInt(v.getValueArgument("length", "integer").toString()), 7);
+	}
+	
 	
 	@Test
 	public void testGetValuefromValues()

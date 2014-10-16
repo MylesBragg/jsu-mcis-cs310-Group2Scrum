@@ -1,13 +1,13 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.7
 version = '1.0'
 jar {
     manifest {
-        attributes 'Implementation-Title': 'ArgumentParser', 
+        attributes 'Implementation-Title': 'GroupTwo', 
                    'Implementation-Version': version, 
-                   'Main-Class': 'edu.jsu.mcis.Group2Scrum'
+                   'Main-Class': 'edu.jsu.mcis.Controller'
     }
 }
 
