@@ -21,25 +21,6 @@ public class ArgumentParserTest
 		assertTrue(parser.getArgumentValue("length").equals(7));
 	}
 	
-	@Test
-	public void testNewAddMultipleArgumentsAndValues() {
-		String myString = "volCal 7 5.0 2";
-		parser.addArg("length", "Enter a whole number as length", "integer");
-		parser.addArg("width", "Enter a whole number as width", "float");
-		parser.addArg("height", "Enter a whole number as height", "integer");
-		parser.parse(myString);
-		assertTrue(parser.getArgumentValue("length").equals(7));
-		assertTrue(parser.getArgumentValue("width").equals(5.0f));
-		assertTrue(parser.getArgumentValue("height").equals(2));
-	}
-	@Test
-	public void addOptVal() {
-		String myString = "volCal --type closet";
-		parser.addArg("length", "Enter whole number", "integer");
-		parser.addArg("--type", "Set Type", "optional");
-		parser.parse(myString);
-		assertEquals("closet", parser.getArgumentValue("--type"));
-	}
 	
 	@Test
 	public void testNewAddMultipleArgumentsAndValues() {
