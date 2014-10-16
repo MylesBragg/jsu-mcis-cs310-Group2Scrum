@@ -52,22 +52,36 @@ public class ArgumentParser
 	public String parse(String myString)
 	{
 		String nextValue = "";
+		String previousValue = "";
 		Scanner argScanner = new Scanner(myString);
+		
 		
 		try
 		{
 			String[] arguments = new String[1];
 			program = argScanner.next();
 			int count = 0;
+			int currPositionArgIndex = 0;
 			while (argScanner.hasNext())
 			{
 				nextValue = argScanner.next();
+				if(!nextValue.contains("--") && !previousValue.contains("--"))
+				{
+					if(positionalArgNames.get(currPositionArgIndex) != null)
+					{
+						currPositionArgIndex++;
+					}
+				}
+				else
+				{
+					previousValue = nextValue;
+				}
 				if(arguments[0] == null)
 				{
 					arguments[count] = nextValue;
 					count++;
 				}
-				else
+				else 
 				{
 					String[] temp = new String[arguments.length];
 					for(int i = 0; i < arguments.length; i++)
@@ -128,7 +142,7 @@ public class ArgumentParser
 				value = optCast.cast(allArgVals[1].getValueArgument(name, getArgumentDataType(name)));
 				return value;
 			case "integer":
-				Class<T> intCast = (Class<T>) Integer.class;
+				Class<T> intCast = (Class<T>) i.class;
 				value = intCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
 				return value;
 			case "string":
@@ -148,7 +162,7 @@ public class ArgumentParser
 				return null;
 		}
 	}
-	private String getArgumentDataType(String name) {
+	public String getArgumentDataType(String name) {
 		if (name.contains("--") || name.contains("-")) {
 			return allArgVals[1].getDataTypeArgument(name);
 		}
