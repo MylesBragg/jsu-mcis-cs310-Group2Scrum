@@ -157,7 +157,7 @@ public class ArgumentParser
 				value = optCast.cast(allArgVals[1].getValueArgument(name, getArgumentDataType(name)));
 				return value;
 			case "integer":
-				Class<T> intCast = (Class<T>) i.class;
+				Class<T> intCast = (Class<T>) Integer.class;
 				value = intCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
 				return value;
 			case "string":
