@@ -9,6 +9,7 @@ public class ArgumentParser
 	private ArgumentValues[] allArgVals;
 	private List<String> positionalArgNames;
 	private List<String> optionalArgNames;
+	private List<String> optionalFlagNames;
 	String program = "";
 	
 	public ArgumentParser()
@@ -22,23 +23,41 @@ public class ArgumentParser
 		
 		positionalArgNames = new ArrayList<String>();
 		optionalArgNames = new ArrayList<String>();
+		optionalFlagNames = new ArrayList<String>();
 	}
 	
 	public void addArg(String name, String help, String dataType)
 	{
-		if (name.contains("--") || name.contains("-")) {
-			optionalArgNames.add(name);
-			allArgVals[1].addHelpArgument(name, help);
-			allArgVals[1].addDataTypeArgument(name, "optional");
-		}
-		else {
-			positionalArgNames.add(name);
-			allArgVals[0].addHelpArgument(name, help);
-			allArgVals[0].addDataTypeArgument(name, dataType);
-		}
+		
+		positionalArgNames.add(name);
+		allArgVals[0].addHelpArgument(name, help);
+		allArgVals[0].addDataTypeArgument(name, dataType);
+		
 		
 	}
-	
+	public void addOptionalArguments(String name, String shortName, String help, String dataType, String defaultVals)
+	{
+		if(dataType.equals("flag")){
+			optionalFlagNames.add(name);
+			optionalFlagNames.add(shortName);
+			allArgVals[1].addHelpArgument(name, help);
+			allArgVals[1].addDataTypeArgument(name, dataType);
+			allArgVals[1].addHelpArgument(shortName, help);
+			allArgVals[1].addDataTypeArgument(shortName, dataType);
+		}
+		else {
+			optionalArgNames.add(name);
+			optionalArgNames.add(shortName);
+			allArgVals[1].addHelpArgument(name, help);
+			allArgVals[1].addDataTypeArgument(name, dataType);
+			allArgVals[1].addHelpArgument(shortName, help);
+			allArgVals[1].addDataTypeArgument(shortName, dataType);
+			if (!defaultVals.equals("")) {
+				allArgVals[1].addValueArgument(name, defaultVals);
+				allArgVals[1].addValueArgument(shortName, defaultVals);
+			}
+		}
+	}
 	public void addArgumentHelp(String name, String help) 
 	{
 		argVals.addHelpArgument(name, help);
@@ -118,8 +137,16 @@ public class ArgumentParser
 		{
 			if ((argValues[i].contains("--") || argValues[i].contains("-"))) 
 			{
-				allArgVals[1].addValueArgument(argValues[i], argValues[i + 1]);
-				i++;
+				
+				if (optionalArgNames.contains(argValues[i])){
+					allArgVals[1].addValueArgument(argValues[i], argValues[i + 1]);
+					i++;
+				}
+				else if (optionalFlagNames.contains(argValues[i])) {
+					allArgVals[1].addValueArgument(argValues[i], true);
+				}
+				
+				
 			}
 			else {
 			
@@ -157,7 +184,7 @@ public class ArgumentParser
 				value = optCast.cast(allArgVals[1].getValueArgument(name, getArgumentDataType(name)));
 				return value;
 			case "integer":
-				Class<T> intCast = (Class<T>) i.class;
+				Class<T> intCast = (Class<T>) Integer.class;
 				value = intCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
 				return value;
 			case "string":
@@ -171,6 +198,10 @@ public class ArgumentParser
 			case "float":
 				Class<T> floatCast = (Class<T>) Float.class;
 				value = floatCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
+				return value;
+			case "flag":
+				Class<T> flagCast = (Class<T>) Boolean.class;
+				value = flagCast.cast(allArgVals[1].getValueArgument(name, getArgumentDataType(name)));
 				return value;
 			default:
 				

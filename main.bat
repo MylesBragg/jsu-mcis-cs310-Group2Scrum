@@ -1,0 +1,1 @@
+call java -jar build\libs\CS310TermProject-1.0.jar VolumeCalculator 7 5 2

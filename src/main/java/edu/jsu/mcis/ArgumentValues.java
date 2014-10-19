@@ -51,7 +51,7 @@ public class ArgumentValues
 			case "string":
 				namedValues.put(name, namedValues.get(name).toString());
 				break;
-			case "boolean":
+			case "boolean":case "flag":
 				boolean boolValue = Boolean.parseBoolean(namedValues.get(name).toString());
 				namedValues.put(name, boolValue);
 				break;
