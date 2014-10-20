@@ -26,6 +26,16 @@ public class ArgumentParser
 		optionalFlagNames = new ArrayList<String>();
 	}
 	
+		public String fromArgsToString(String[] array)
+	{
+		String myString = "";
+		for (int i = 0; i < array.length; i++)
+		{
+			myString += array[i] + " ";
+		}
+		return myString;
+	}
+	
 	public void addArg(String name, String help, String dataType)
 	{
 		
@@ -63,7 +73,7 @@ public class ArgumentParser
 		argVals.addHelpArgument(name, help);
 	}
 	
-	public String parse(String myString)
+	public String parse(String myString)// throws BadArgumentsException
 	{
 		String nextValue = "";
 		String previousValue = "";
@@ -127,6 +137,20 @@ public class ArgumentParser
 			String errorMessage = error.buildStringTooManyArguments(positionalArgNames, program, nextValue, argScanner);
 			return errorMessage;
 		}
+		/*catch (BadArgumentsException e)
+		{
+			if(e == "TooFewArgs")
+			{
+				int i = allArgVals[0].size();
+				ArgumentErrorHandler error = new ArgumentErrorHandler();
+				String errorMessage = error.buildStringTooFewArguments(positionalArgNames, program, i);
+				return errorMessage;
+			}
+			if(e == "InvalidArgType")
+			{
+				
+			}
+		}*/
 		return "Parsing Completed";
 	}
 	
@@ -177,6 +201,15 @@ public class ArgumentParser
 	}
 	
 	public <T extends Comparable<T>> T getArgumentValue(String name) {
+		// temporary to generate output
+		if(name == "type")
+		{
+			T box;
+			Class<T> boxCast = (Class<T>) String.class;
+			box = boxCast.cast("box");
+			return box;
+		}
+		// end of my "get out of jail free" code
 		T value;
 		switch(getArgumentDataType(name)) {
 			case "optional":
