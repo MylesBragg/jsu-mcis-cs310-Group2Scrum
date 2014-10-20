@@ -38,7 +38,7 @@ public class ArgumentParserTest
 	public void addOptVal() {
 		String myString = "volCal --type closet";
 		parser.addArg("length", "Enter whole number", "integer");
-		parser.addArg("--type", "Set Type", "optional");
+		parser.addOptionalArguments("--type", "-t", "Set Type", "optional", "");
 		parser.parse(myString);
 		assertEquals("closet", parser.getArgumentValue("--type"));
 	}
@@ -47,7 +47,7 @@ public class ArgumentParserTest
 	public void addOptValAfterPositionalVal() {
 		String myString = "volCal 7 --type closet";
 		parser.addArg("length", "Enter whole number", "integer");
-		parser.addArg("--type", "Set Type", "optional");
+		parser.addOptionalArguments("--type", "-t", "Set Type", "optional", "");
 		parser.parse(myString);
 		assertTrue(parser.getArgumentValue("length").equals(7));
 		assertEquals("closet", parser.getArgumentValue("--type"));
@@ -55,7 +55,7 @@ public class ArgumentParserTest
 	@Test 
 	public void addOptValBeforePositionalVal() {
 		String myString = "volCal --type closet 7";
-		parser.addArg("--type", "Set Type", "optional");
+		parser.addOptionalArguments("--type", "-t", "Set Type", "optional", "");
 		parser.addArg("length", "Enter whole number", "integer");
 		parser.parse(myString);
 		assertEquals("closet", parser.getArgumentValue("--type"));
@@ -64,13 +64,44 @@ public class ArgumentParserTest
 	@Test
 	public void addOptValBetweenPositionalVals() {
 		String myString = "volCal 7 --type closet 5";
-		parser.addArg("--type", "Set Type", "optional");
+		parser.addOptionalArguments("--type", "-t", "Set Type", "optional", "");
 		parser.addArg("length", "Enter whole number", "integer");
 		parser.addArg("width", "Enter whole number", "integer");
 		parser.parse(myString);
 		assertEquals("closet", parser.getArgumentValue("--type"));
 		assertTrue(parser.getArgumentValue("length").equals(7));
 		assertTrue(parser.getArgumentValue("width").equals(5));
+	}
+	@Test
+	public void testAddOptValDefaultVal() {
+		parser.addOptionalArguments("--type", "-t", "Set Calculation Type", "optional", "box");
+		assertEquals("box", parser.getArgumentValue("--type"));
+	}
+	@Test
+	public void testAddFlagOptVal() {
+	String myString = "volCal --save";
+	parser.addOptionalArguments("--save", "-v", "Save Calculations", "flag", "");
+	parser.parse(myString);
+	assertEquals(true, parser.getArgumentValue("--save"));
+	}
+	
+	@Test
+	public void testShortNameOptArg() {
+		String myString = "volCal 7 -t closet 5";
+		parser.addOptionalArguments("--type", "-t", "Set Type", "optional", "box");
+		parser.addArg("length", "Enter whole number", "integer");
+		parser.addArg("width", "Enter whole number", "integer");
+		parser.parse(myString);
+		assertEquals("closet", parser.getArgumentValue("-t"));
+	}
+	@Test
+	public void testShortNameOptArgWithTwoDashes() {
+		String myString = "volCal 7 --t closet 5";
+		parser.addOptionalArguments("--type", "--t", "Set Type", "optional", "box");
+		parser.addArg("length", "Enter whole number", "integer");
+		parser.addArg("width", "Enter whole number", "integer");
+		parser.parse(myString);
+		assertEquals("closet", parser.getArgumentValue("--t"));
 	}
 	
 	@Test

@@ -13,9 +13,6 @@ public class Controller
         String parseString = "";
 		String lowerCaseStr = "";
 		String myString = "";
-		//String programName;
-		
-		//programName = "VolumeCalculator ";
 		
 
 		

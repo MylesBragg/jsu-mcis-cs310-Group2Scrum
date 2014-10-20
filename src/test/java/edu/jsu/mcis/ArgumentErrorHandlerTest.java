@@ -25,8 +25,26 @@ public class ArgumentErrorHandlerTest
 					errorString);
 	}
 	
-	//@Test
+	@Test
 	public void testTooManyArguments()
+	{
+		ArgumentErrorHandler error = new ArgumentErrorHandler();
+		arrayOfNames = new ArrayList<String>();
+		arrayOfNames.add("length");
+		arrayOfNames.add("width");
+		arrayOfNames.add("height");
+		String program = "VolumeCalculator";
+		String nextValue = "43";
+		Scanner argScanner = new Scanner("99");
+		String errorString = error.buildStringTooManyArguments(arrayOfNames, program, nextValue, argScanner);
+		
+		assertEquals("usage: java VolumeCalculator length width height\n" +
+					"VolumeCalculator.java: error: unrecognized arguments: 43 99", 
+					errorString);
+	}
+	
+	@Test
+	public void testInvalidArgumentType()
 	{
 		ArgumentErrorHandler error = new ArgumentErrorHandler();
 		arrayOfNames = new ArrayList<String>();
