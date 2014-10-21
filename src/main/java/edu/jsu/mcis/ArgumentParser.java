@@ -10,7 +10,8 @@ public class ArgumentParser
 	private List<String> positionalArgNames;
 	private List<String> optionalArgNames;
 	private List<String> optionalFlagNames;
-	String program = "";
+	private String program = "";
+	private String progDesc = "";
 	
 	public ArgumentParser()
 	{
@@ -26,7 +27,12 @@ public class ArgumentParser
 		optionalFlagNames = new ArrayList<String>();
 	}
 	
-		public String fromArgsToString(String[] array)
+	public void addProgramHelpInfo(String helpInfo)
+	{
+		progDesc = helpInfo;
+	}
+	
+	public String fromArgsToString(String[] array)
 	{
 		String myString = "";
 		for (int i = 0; i < array.length; i++)
@@ -38,16 +44,14 @@ public class ArgumentParser
 	
 	public void addArg(String name, String help, String dataType)
 	{
-		
 		positionalArgNames.add(name);
 		allArgVals[0].addHelpArgument(name, help);
 		allArgVals[0].addDataTypeArgument(name, dataType);
-		
-		
 	}
 	public void addOptionalArguments(String name, String shortName, String help, String dataType, String defaultVals)
 	{
-		if(dataType.equals("flag")){
+		if(dataType.equals("flag"))
+		{
 			optionalFlagNames.add(name);
 			optionalFlagNames.add(shortName);
 			allArgVals[1].addHelpArgument(name, help);
@@ -55,7 +59,8 @@ public class ArgumentParser
 			allArgVals[1].addHelpArgument(shortName, help);
 			allArgVals[1].addDataTypeArgument(shortName, dataType);
 		}
-		else {
+		else 
+		{
 			optionalArgNames.add(name);
 			optionalArgNames.add(shortName);
 			allArgVals[1].addHelpArgument(name, help);
@@ -73,131 +78,137 @@ public class ArgumentParser
 		argVals.addHelpArgument(name, help);
 	}
 	
-	public String parse(String myString)// throws BadArgumentsException
+	public String parse(String myString)
 	{
+		String completionString = "";
 		String nextValue = "";
 		String previousValue = "";
 		Scanner argScanner = new Scanner(myString);
+		int currPositionArgIndex = 0;
 		
-		
-		try
+		String[] arguments = new String[1];
+		program = argScanner.next();
+		int count = 0;
+		while (argScanner.hasNext())
 		{
-			String[] arguments = new String[1];
-			program = argScanner.next();
-			int count = 0;
-			int currPositionArgIndex = 0;
-			while (argScanner.hasNext())
+			nextValue = argScanner.next();
+
+			if(!nextValue.contains("--") && !previousValue.contains("--"))
 			{
-				nextValue = argScanner.next();
-				if(!nextValue.contains("--") && !previousValue.contains("--"))
+				try
 				{
 					if(positionalArgNames.get(currPositionArgIndex) != null)
 					{
 						currPositionArgIndex++;
 					}
 				}
-				else
+				catch (IndexOutOfBoundsException e)
 				{
-					previousValue = nextValue;
+					throw new SurplusArgumentsException(positionalArgNames, program, nextValue, argScanner);
 				}
-				if(arguments[0] == null)
+			}
+			else
+			{
+				previousValue = nextValue;
+			}
+			if(arguments[0] == null)
+			{
+				arguments[count] = nextValue;
+				count++;
+			}
+			else 
+			{
+				String[] temp = new String[arguments.length];
+				for(int i = 0; i < arguments.length; i++)
 				{
-					arguments[count] = nextValue;
-					count++;
+					temp[i] = arguments[i];
+				}
+				arguments = new String[temp.length + 1];
+				for(int i = 0; i < temp.length; i++)
+				{
+					arguments[i] = temp[i];
+				}
+				arguments[count] = nextValue;
+				count++;
+			}
+		}
+		completionString = adder(arguments);
+		
+		if(nextValue.equals("-h"))
+		{
+			HelpInfoGenerator h = new HelpInfoGenerator();
+			String helpString = h.getHelpInfo(positionalArgNames, program, allArgVals[0], progDesc);
+			return helpString;
+		}
+		if(allArgVals[0].size() < positionalArgNames.size())
+		{
+			throw new NotEnoughArgsException(positionalArgNames, program, allArgVals[0].size());
+		}
+		/*finally
+		{
+			if (completionString != "Parsing Completed")
+				System.exit(1);
+		}*/
+		return completionString;
+	}
+	
+	public String adder(String[] argValues)
+	{
+		int currPositionArgIndex = 0;
+		int argValuesIndex = 0;
+		try
+		{
+			for (int i = 0; i < argValues.length; i++) 
+			{
+				if ((argValues[i].contains("--") || argValues[i].contains("-"))) 
+				{
+					if (optionalArgNames.contains(argValues[i])){
+						allArgVals[1].addValueArgument(argValues[i], argValues[i + 1]);
+						i++;
+					}
+					else if (optionalFlagNames.contains(argValues[i])) {
+						allArgVals[1].addValueArgument(argValues[i], true);
+					}
 				}
 				else 
 				{
-					String[] temp = new String[arguments.length];
-					for(int i = 0; i < arguments.length; i++)
-					{
-						temp[i] = arguments[i];
+					String dataType = getArgumentDataType(positionalArgNames.get(currPositionArgIndex));
+					switch(dataType){
+						case "integer":
+							int intValue = Integer.parseInt(argValues[i]);
+							allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), intValue);
+							break;
+						case "string":
+							String strValue = argValues[i];
+							allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), strValue);
+							break;
+						case "boolean":
+							String checkValue = argValues[i];
+							if (checkValue == "true" || checkValue == "false")
+							{
+								boolean boolValue = Boolean.parseBoolean(argValues[i]);
+								allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), boolValue);
+							}
+							else throw new NumberFormatException("Invalid Boolean");
+							break;
+						case "float":
+							float floatValue = Float.parseFloat(argValues[i]);
+							allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), floatValue);
+							break;
 					}
-					arguments = new String[temp.length + 1];
-					for(int i = 0; i < temp.length; i++)
-					{
-						arguments[i] = temp[i];
-					}
-					arguments[count] = nextValue;
-					count++;
+					currPositionArgIndex++;
 				}
-			}
-			adder(arguments);
-
-			if(allArgVals[0].size() < positionalArgNames.size())
-			{
-				int i = allArgVals[0].size();
-				ArgumentErrorHandler error = new ArgumentErrorHandler();
-				String errorMessage = error.buildStringTooFewArguments(positionalArgNames, program, i);
-				return errorMessage;
+				argValuesIndex = i;
 			}
 		}
-		catch (IndexOutOfBoundsException e)
+		catch (NumberFormatException e)
 		{
-			ArgumentErrorHandler error = new ArgumentErrorHandler();
-			String errorMessage = error.buildStringTooManyArguments(positionalArgNames, program, nextValue, argScanner);
-			return errorMessage;
+			String argumentName = positionalArgNames.get(currPositionArgIndex);
+			throw new InvalidValueException(positionalArgNames, argumentName, program, getArgumentDataType(argumentName), argValues[argValuesIndex+1]);
 		}
-		/*catch (BadArgumentsException e)
-		{
-			if(e == "TooFewArgs")
-			{
-				int i = allArgVals[0].size();
-				ArgumentErrorHandler error = new ArgumentErrorHandler();
-				String errorMessage = error.buildStringTooFewArguments(positionalArgNames, program, i);
-				return errorMessage;
-			}
-			if(e == "InvalidArgType")
-			{
-				
-			}
-		}*/
+		
+		
 		return "Parsing Completed";
-	}
-	
-	public void adder(String[] argValues)
-	{
-		int currPositionArgIndex = 0;
-		for (int i = 0; i < argValues.length; i++) 
-		{
-			if ((argValues[i].contains("--") || argValues[i].contains("-"))) 
-			{
-				
-				if (optionalArgNames.contains(argValues[i])){
-					allArgVals[1].addValueArgument(argValues[i], argValues[i + 1]);
-					i++;
-				}
-				else if (optionalFlagNames.contains(argValues[i])) {
-					allArgVals[1].addValueArgument(argValues[i], true);
-				}
-				
-				
-			}
-			else {
-			
-				String dataType = getArgumentDataType(positionalArgNames.get(currPositionArgIndex));
-				switch(dataType){
-					case "integer":
-						int intValue = Integer.parseInt(argValues[i]);
-						allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), intValue);
-						break;
-					case "string":
-						String strValue = argValues[i];
-						allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), strValue);
-						break;
-					case "boolean":
-						boolean boolValue = Boolean.parseBoolean(argValues[i]);
-						allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), boolValue);
-						break;
-					case "float":
-						float floatValue = Float.parseFloat(argValues[i]);
-						allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), floatValue);
-						break;
-				}
-				
-				currPositionArgIndex++;
-				
-			}
-		}
 	}
 	
 	public <T extends Comparable<T>> T getArgumentValue(String name) {
@@ -242,7 +253,7 @@ public class ArgumentParser
 		}
 	}
 	public String getArgumentDataType(String name) {
-		if (name.contains("--") || name.contains("-")) {
+		if (name.contains("-") || name.contains("--")) {
 			return allArgVals[1].getDataTypeArgument(name);
 		}
 		else {
