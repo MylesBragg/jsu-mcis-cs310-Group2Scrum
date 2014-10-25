@@ -2,15 +2,22 @@ package edu.jsu.mcis;
 
 import java.util.*;
 
-public class ArgumentValues
+public class ArgValues
 {
+	private Object Xvalue;
+	//private String name;
+	private String Xhelp;
+	private String XdataType;
+	private int XintValue;
+	
+	
 	private HashMap<String, Object> namedValues;
 	private HashMap<String, String> namedHelp;
 	private HashMap<String, String> namedDataType;
 	private List<String> name;
 	private List<String> value;
 	
-	public ArgumentValues() {
+	public ArgValues() {
 		namedValues = new HashMap<String, Object>();
 		namedHelp = new HashMap<String, String>();
 		namedDataType = new HashMap<String, String>();
@@ -18,28 +25,28 @@ public class ArgumentValues
 		value = new ArrayList<String>();
 	}
 		
-	public void addHelpArgument(String name, String helpMessage) {
+	public void addHelpArg(String name, String helpMessage) {
 		namedHelp.put(name, helpMessage);
 	}
 	
-	public void addValueArgument(String name, String value) {
+	public void addValueArg(String name, String value) {
 		namedValues.put(name, value);
 	}
-	public void addValueArgument(String name, int value) {
+	public void addValueArg(String name, int value) {
 		namedValues.put(name, value);
 	}
-	public void addValueArgument(String name, boolean value) {
+	public void addValueArg(String name, boolean value) {
 		namedValues.put(name, value);
 	}
-	public void addValueArgument(String name, float value) {
+	public void addValueArg(String name, float value) {
 		namedValues.put(name, value);
 	}
 	
-	public String getHelpArgument(String name) {
+	public String getHelpArg(String name) {
 		return namedHelp.get(name);
 	}
 	
-	public Object getValueArgument(String name, String dataType) {
+	public Object getValueArg(String name, String dataType) {
 		switch(dataType) {
 			case "optional":
 				namedValues.put(name, namedValues.get(name).toString());
@@ -64,11 +71,11 @@ public class ArgumentValues
 	}
 	
 	
-	public void addDataTypeArgument(String name, String dataType) {
+	public void addDataTypeArg(String name, String dataType) {
 		namedDataType.put(name, dataType);
 	}
 	
-	public String getDataTypeArgument(String name) {
+	public String getDataTypeArg(String name) {
 		return namedDataType.get(name);
 	}
 	

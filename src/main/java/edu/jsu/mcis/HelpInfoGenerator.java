@@ -4,7 +4,7 @@ import java.util.*;
 
 public class HelpInfoGenerator
 {
-	public String getHelpInfo(List<String> arrayOfNames, String program, ArgumentValues allArgVals, String progDesc)
+	public String getHelpInfo(List<String> arrayOfNames, String program, ArgValues allArgVals, String progDesc)
 	{
 		String helpMessage = getUsageLine(arrayOfNames, program) + "\n\n";
 		helpMessage = helpMessage + progDesc + "\n\n";
@@ -22,14 +22,14 @@ public class HelpInfoGenerator
 		return helpMessage;
 	}
 	
-	public String getPosArgsInfo(List<String> arrayOfNames, ArgumentValues allArgVals)
+	public String getPosArgsInfo(List<String> arrayOfNames, ArgValues allArgVals)
 	{
 		String name = "";
 		String posArgsHelp = "positional arguments: ";
 		for(int i = 0; i < arrayOfNames.size(); i++)
 		{
 			name = arrayOfNames.get(i);
-			posArgsHelp = posArgsHelp + name + " " + allArgVals.getHelpArgument(name) + "\n";
+			posArgsHelp = posArgsHelp + name + " " + allArgVals.getHelpArg(name) + "\n";
 		}
 		posArgsHelp = posArgsHelp.trim();
 		return posArgsHelp;

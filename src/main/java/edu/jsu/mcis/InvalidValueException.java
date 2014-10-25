@@ -5,26 +5,25 @@ import java.util.*;
 public class InvalidValueException extends RuntimeException
 {
 	String usage;
+	String program;
 	String argName;
-	String prog;
 	String argDataType;
-	String currValue;
+	String currentValue;
 	
-	public InvalidValueException(List<String> arrayOfNames, String argumentName, String program, String argDT, String currentValue)
+	public InvalidValueException(String helpUsage, String prog, String argN, String argDT, String currValue)
 	{
-		HelpInfoGenerator h = new HelpInfoGenerator();
-		usage = h.getUsageLine(arrayOfNames, program);
-		argName = argumentName;
-		prog = program;
+		usage = helpUsage;
+		program = prog;
+		argName = argN;
 		argDataType = argDT;
-		currValue = currentValue;
+		currentValue = currValue;
 	}
 	
 	public String toString()
 	{
-		String errorMessage = usage;
-		errorMessage = errorMessage + "\n" + prog + ".java: error: argument " + argName + ": invalid ";
-		errorMessage = errorMessage + argDataType + " value: " + currValue;
+		String errorMessage = usage + "\n";
+		errorMessage = errorMessage + program + ".java: error: argument " + argName;
+		errorMessage = errorMessage + ": invalid " + argDataType + " value: " + currentValue;
 		return errorMessage;
 	}
 }

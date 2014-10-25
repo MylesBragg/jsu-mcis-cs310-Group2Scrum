@@ -3,24 +3,25 @@ package edu.jsu.mcis;
 import java.util.*;
 
 
-public class ArgumentParser
+public class ArgParser
 {
-	private ArgumentValues argVals;
-	private ArgumentValues[] allArgVals;
+	private ArgValues argVals;
+	private ArgValues[] allArgVals;
 	private List<String> positionalArgNames;
 	private List<String> optionalArgNames;
 	private List<String> optionalFlagNames;
 	private String program = "";
 	private String progDesc = "";
 	
-	public ArgumentParser()
+	public ArgParser(String prog)
 	{
-		allArgVals = new ArgumentValues[2];
+		program = prog;
+		allArgVals = new ArgValues[2];
 		
-		allArgVals[0] = new ArgumentValues();
-		allArgVals[1] = new ArgumentValues();
+		allArgVals[0] = new ArgValues();
+		allArgVals[1] = new ArgValues();
 		
-		argVals  = new ArgumentValues();
+		argVals  = new ArgValues();	//needs to go bye-bye
 		
 		positionalArgNames = new ArrayList<String>();
 		optionalArgNames = new ArrayList<String>();
@@ -45,40 +46,41 @@ public class ArgumentParser
 	public void addArg(String name, String help, String dataType)
 	{
 		positionalArgNames.add(name);
-		allArgVals[0].addHelpArgument(name, help);
-		allArgVals[0].addDataTypeArgument(name, dataType);
+		allArgVals[0].addHelpArg(name, help);
+		allArgVals[0].addDataTypeArg(name, dataType);
 	}
-	public void addOptionalArguments(String name, String shortName, String help, String dataType, String defaultVals)
+	//overload this stuffs 
+	public void addOptionalArg(String name, String shortName, String help, String dataType, String defaultVals)
 	{
 		if(dataType.equals("flag"))
 		{
 			optionalFlagNames.add(name);
 			optionalFlagNames.add(shortName);
-			allArgVals[1].addHelpArgument(name, help);
-			allArgVals[1].addDataTypeArgument(name, dataType);
-			allArgVals[1].addHelpArgument(shortName, help);
-			allArgVals[1].addDataTypeArgument(shortName, dataType);
+			allArgVals[1].addHelpArg(name, help);
+			allArgVals[1].addDataTypeArg(name, dataType);
+			allArgVals[1].addHelpArg(shortName, help);
+			allArgVals[1].addDataTypeArg(shortName, dataType);
 		}
 		else 
 		{
 			optionalArgNames.add(name);
 			optionalArgNames.add(shortName);
-			allArgVals[1].addHelpArgument(name, help);
-			allArgVals[1].addDataTypeArgument(name, dataType);
-			allArgVals[1].addHelpArgument(shortName, help);
-			allArgVals[1].addDataTypeArgument(shortName, dataType);
+			allArgVals[1].addHelpArg(name, help);
+			allArgVals[1].addDataTypeArg(name, dataType);
+			allArgVals[1].addHelpArg(shortName, help);
+			allArgVals[1].addDataTypeArg(shortName, dataType);
 			if (!defaultVals.equals("")) {
-				allArgVals[1].addValueArgument(name, defaultVals);
-				allArgVals[1].addValueArgument(shortName, defaultVals);
+				allArgVals[1].addValueArg(name, defaultVals);
+				allArgVals[1].addValueArg(shortName, defaultVals);
 			}
 		}
 	}
-	public void addArgumentHelp(String name, String help) 
+	public void addArgHelp(String name, String help) // needs to go bye-bye
 	{
-		argVals.addHelpArgument(name, help);
+		argVals.addHelpArg(name, help);
 	}
 	
-	public String parse(String myString)
+	public void parse(String myString)
 	{
 		String completionString = "";
 		String nextValue = "";
@@ -86,8 +88,8 @@ public class ArgumentParser
 		Scanner argScanner = new Scanner(myString);
 		int currPositionArgIndex = 0;
 		
-		String[] arguments = new String[1];
-		program = argScanner.next();
+		String[] args = new String[1];
+		//program = argScanner.next();
 		int count = 0;
 		while (argScanner.hasNext())
 		{
@@ -104,55 +106,51 @@ public class ArgumentParser
 				}
 				catch (IndexOutOfBoundsException e)
 				{
-					throw new SurplusArgumentsException(positionalArgNames, program, nextValue, argScanner);
+					String usageLine = getHelpUsageText();
+					throw new TooManyArgsException(usageLine, program, nextValue, argScanner);
 				}
 			}
 			else
 			{
 				previousValue = nextValue;
 			}
-			if(arguments[0] == null)
+			if(args[0] == null)
 			{
-				arguments[count] = nextValue;
+				args[count] = nextValue;
 				count++;
 			}
 			else 
 			{
-				String[] temp = new String[arguments.length];
-				for(int i = 0; i < arguments.length; i++)
+				String[] temp = new String[args.length];
+				for(int i = 0; i < args.length; i++)
 				{
-					temp[i] = arguments[i];
+					temp[i] = args[i];
 				}
-				arguments = new String[temp.length + 1];
+				args = new String[temp.length + 1];
 				for(int i = 0; i < temp.length; i++)
 				{
-					arguments[i] = temp[i];
+					args[i] = temp[i];
 				}
-				arguments[count] = nextValue;
+				args[count] = nextValue;
 				count++;
 			}
 		}
-		completionString = adder(arguments);
+		adder(args);
 		
 		if(nextValue.equals("-h"))
 		{
 			HelpInfoGenerator h = new HelpInfoGenerator();
 			String helpString = h.getHelpInfo(positionalArgNames, program, allArgVals[0], progDesc);
-			return helpString;
+			System.out.println(helpString);
 		}
 		if(allArgVals[0].size() < positionalArgNames.size())
 		{
-			throw new NotEnoughArgsException(positionalArgNames, program, allArgVals[0].size());
+			String helpUsage = getHelpUsageText();
+			throw new NotEnoughArgsException(helpUsage, program, positionalArgNames, allArgVals[0].size());
 		}
-		/*finally
-		{
-			if (completionString != "Parsing Completed")
-				System.exit(1);
-		}*/
-		return completionString;
 	}
 	
-	public String adder(String[] argValues)
+	public void adder(String[] argValues)
 	{
 		int currPositionArgIndex = 0;
 		int argValuesIndex = 0;
@@ -163,37 +161,37 @@ public class ArgumentParser
 				if ((argValues[i].contains("--") || argValues[i].contains("-"))) 
 				{
 					if (optionalArgNames.contains(argValues[i])){
-						allArgVals[1].addValueArgument(argValues[i], argValues[i + 1]);
+						allArgVals[1].addValueArg(argValues[i], argValues[i + 1]);
 						i++;
 					}
 					else if (optionalFlagNames.contains(argValues[i])) {
-						allArgVals[1].addValueArgument(argValues[i], true);
+						allArgVals[1].addValueArg(argValues[i], true);
 					}
 				}
 				else 
 				{
-					String dataType = getArgumentDataType(positionalArgNames.get(currPositionArgIndex));
+					String dataType = getArgDataType(positionalArgNames.get(currPositionArgIndex));
 					switch(dataType){
 						case "integer":
 							int intValue = Integer.parseInt(argValues[i]);
-							allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), intValue);
+							allArgVals[0].addValueArg(positionalArgNames.get(currPositionArgIndex), intValue);
 							break;
 						case "string":
 							String strValue = argValues[i];
-							allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), strValue);
+							allArgVals[0].addValueArg(positionalArgNames.get(currPositionArgIndex), strValue);
 							break;
 						case "boolean":
 							String checkValue = argValues[i];
 							if (checkValue == "true" || checkValue == "false")
 							{
 								boolean boolValue = Boolean.parseBoolean(argValues[i]);
-								allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), boolValue);
+								allArgVals[0].addValueArg(positionalArgNames.get(currPositionArgIndex), boolValue);
 							}
 							else throw new NumberFormatException("Invalid Boolean");
 							break;
 						case "float":
 							float floatValue = Float.parseFloat(argValues[i]);
-							allArgVals[0].addValueArgument(positionalArgNames.get(currPositionArgIndex), floatValue);
+							allArgVals[0].addValueArg(positionalArgNames.get(currPositionArgIndex), floatValue);
 							break;
 					}
 					currPositionArgIndex++;
@@ -203,16 +201,19 @@ public class ArgumentParser
 		}
 		catch (NumberFormatException e)
 		{
-			String argumentName = positionalArgNames.get(currPositionArgIndex);
-			throw new InvalidValueException(positionalArgNames, argumentName, program, getArgumentDataType(argumentName), argValues[argValuesIndex+1]);
+			String argName = positionalArgNames.get(currPositionArgIndex);
+			String usageLine = getHelpUsageText();
+			throw new InvalidValueException(usageLine, program, argName, getArgDataType(argName), argValues[argValuesIndex+1]);
 		}
-		
-		
-		return "Parsing Completed";
 	}
 	
-	public <T extends Comparable<T>> T getArgumentValue(String name) {
-		// temporary to generate output
+	public String getHelpUsageText()
+	{
+		HelpInfoGenerator h = new HelpInfoGenerator();
+		return h.getUsageLine(positionalArgNames, program);
+	}
+	
+	public <T extends Comparable<T>> T getArgValue(String name) {
 		if(name == "type")
 		{
 			T box;
@@ -220,53 +221,51 @@ public class ArgumentParser
 			box = boxCast.cast("box");
 			return box;
 		}
-		// end of my "get out of jail free" code
 		T value;
-		switch(getArgumentDataType(name)) {
+		switch(getArgDataType(name)) {
 			case "optional":
 				Class<T> optCast = (Class<T>) String.class;
-				value = optCast.cast(allArgVals[1].getValueArgument(name, getArgumentDataType(name)));
+				value = optCast.cast(allArgVals[1].getValueArg(name, getArgDataType(name)));
 				return value;
 			case "integer":
 				Class<T> intCast = (Class<T>) Integer.class;
-				value = intCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
+				value = intCast.cast(allArgVals[0].getValueArg(name, getArgDataType(name)));
 				return value;
 			case "string":
 				Class<T> strCast = (Class<T>) String.class;
-				value = strCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
+				value = strCast.cast(allArgVals[0].getValueArg(name, getArgDataType(name)));
 				return value;
 			case "boolean":
 				Class<T> boolCast = (Class<T>) Boolean.class;
-				value = boolCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
+				value = boolCast.cast(allArgVals[0].getValueArg(name, getArgDataType(name)));
 				return value;
 			case "float":
 				Class<T> floatCast = (Class<T>) Float.class;
-				value = floatCast.cast(allArgVals[0].getValueArgument(name, getArgumentDataType(name)));
+				value = floatCast.cast(allArgVals[0].getValueArg(name, getArgDataType(name)));
 				return value;
 			case "flag":
 				Class<T> flagCast = (Class<T>) Boolean.class;
-				value = flagCast.cast(allArgVals[1].getValueArgument(name, getArgumentDataType(name)));
+				value = flagCast.cast(allArgVals[1].getValueArg(name, getArgDataType(name)));
 				return value;
 			default:
-				
 				return null;
 		}
 	}
-	public String getArgumentDataType(String name) {
+	public String getArgDataType(String name) {
 		if (name.contains("-") || name.contains("--")) {
-			return allArgVals[1].getDataTypeArgument(name);
+			return allArgVals[1].getDataTypeArg(name);
 		}
 		else {
-			return allArgVals[0].getDataTypeArgument(name);
+			return allArgVals[0].getDataTypeArg(name);
 		}
 	}
 	
-	public String getHelpArgumentValue(String name)
+	public String getHelpArgValue(String name)
     {
         if(name == "-h")
-            return argVals.getHelpArgument(name) + "\n"+"Calculate the volume of a box.\n "+"\n"+
+            return argVals.getHelpArg(name) + "\n"+"Calculate the volume of a box.\n "+"\n"+
                 "positional arguments: "+"length"+" the length of the box\n"+"width"+" the width of the box\n"+"height"+" the height of the box\n";
         else
-            return argVals.getHelpArgument(name);
+            return argVals.getHelpArg(name);
     }
 }
