@@ -7,7 +7,6 @@ import java.util.*;
 public class HelpInfoGeneratorTest
 {
 	private List<String> arrayOfNames;
-		// array faker
 	
 	@Test
 	public void testgetUsageLine()
@@ -29,10 +28,10 @@ public class HelpInfoGeneratorTest
 		arrayOfNames.add("length");
 		arrayOfNames.add("width");
 		arrayOfNames.add("height");
-		ArgumentValues allArgVals = new ArgumentValues();
-		allArgVals.addHelpArgument("length", "the length of the box");
-		allArgVals.addHelpArgument("width", "the width of the box");
-		allArgVals.addHelpArgument("height", "the height of the box");
+		ArgValues allArgVals = new ArgValues();
+		allArgVals.addHelpArg("length", "the length of the box");
+		allArgVals.addHelpArg("width", "the width of the box");
+		allArgVals.addHelpArg("height", "the height of the box");
 		HelpInfoGenerator h = new HelpInfoGenerator();
 		String posArgs = h.getPosArgsInfo(arrayOfNames, allArgVals);
 		assertEquals(posArgs, "positional arguments: length the length of the box\n" + 
@@ -49,10 +48,10 @@ public class HelpInfoGeneratorTest
 		arrayOfNames.add("length");
 		arrayOfNames.add("width");
 		arrayOfNames.add("height");
-		ArgumentValues allArgVals = new ArgumentValues();
-		allArgVals.addHelpArgument("length", "the length of the box");
-		allArgVals.addHelpArgument("width", "the width of the box");
-		allArgVals.addHelpArgument("height", "the height of the box");
+		ArgValues allArgVals = new ArgValues();
+		allArgVals.addHelpArg("length", "the length of the box");
+		allArgVals.addHelpArg("width", "the width of the box");
+		allArgVals.addHelpArg("height", "the height of the box");
 		HelpInfoGenerator h = new HelpInfoGenerator();
 		String completeHelp = h.getHelpInfo(arrayOfNames, program, allArgVals, progDesc);
 		assertEquals(completeHelp, "usage: java VolumeCalculator length width height\n\n" +

@@ -4,28 +4,27 @@ import java.util.*;
 
 public class NotEnoughArgsException extends RuntimeException
 {
-	List<String> namesArray;
 	String usage;
-	String prog;
+	String program;
+	List<String> namesArray;
 	int index = 0;
 	
-	public NotEnoughArgsException(List<String> arrayOfNames, String program, int i)
+	public NotEnoughArgsException(String helpUsage, String prog, List<String> arrayOfNames, int i)
 	{
+		usage = helpUsage;
+		program = prog;
 		namesArray = new ArrayList<String>();
-		HelpInfoGenerator h = new HelpInfoGenerator();
 		for(int j = 0; j < arrayOfNames.size(); j++)
 		{
 			namesArray.add(arrayOfNames.get(j));
 		}
-		usage = h.getUsageLine(arrayOfNames, program);
-		prog = program;
 		index = i;
 	}
 	
 	public String toString()
 	{
-		String errorMessage = usage;
-		errorMessage = errorMessage + "\n" + prog + ".java: error: the following arguments are required:";
+		String errorMessage = usage + "\n";
+		errorMessage = errorMessage + program + ".java: error: the following arguments are required:";
 		for(int j = index; j < namesArray.size(); j++)
 		{
 			errorMessage = errorMessage + " " + namesArray.get(j);
