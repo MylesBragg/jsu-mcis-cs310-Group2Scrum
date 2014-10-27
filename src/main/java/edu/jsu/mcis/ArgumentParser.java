@@ -144,11 +144,6 @@ public class ArgumentParser
 		{
 			throw new NotEnoughArgsException(positionalArgNames, program, allArgVals[0].size());
 		}
-		/*finally
-		{
-			if (completionString != "Parsing Completed")
-				System.exit(1);
-		}*/
 		return completionString;
 	}
 	
