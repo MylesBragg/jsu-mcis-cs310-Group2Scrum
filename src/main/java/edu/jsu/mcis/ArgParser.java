@@ -2,35 +2,30 @@ package edu.jsu.mcis;
 
 import java.util.*;
 
-
-public class ArgParser
-{
-	private ArgValues argVals;
-	private ArgValues[] allArgVals;
-	private List<String> positionalArgNames;
-	private List<String> optionalArgNames;
-	private List<String> optionalFlagNames;
-	private String program = "";
-	private String progDesc = "";
+public class ArgParser {
 	
-	public ArgParser(String prog)
-	{
-		program = prog;
-		allArgVals = new ArgValues[2];
+	private HashMap<String, ArgValues> argValueHolder;
+	private HashMap<String, OptArgValues> optArgValueHolder;
+	private List<String> posArgNames;
+	private List<String> optArgNames;
+	private String program;
+	private String progDesc;
+	
+	public ArgParser(String progName) {
 		
-		allArgVals[0] = new ArgValues();
-		allArgVals[1] = new ArgValues();
+		program = progName;
 		
-		argVals  = new ArgValues();	//needs to go bye-bye
+		argValueHolder = new HashMap<String, ArgValues>;
+		optArgValueHolder = new HashMap<String OptArgValues>;
 		
-		positionalArgNames = new ArrayList<String>();
-		optionalArgNames = new ArrayList<String>();
-		optionalFlagNames = new ArrayList<String>();
+		posArgNames = new ArrayList<String>();
+		optArgNames = new ArrayList<String>();
+		
 	}
 	
-	public void addProgramHelpInfo(String helpInfo)
+	public void addProgramHelpInfo(String progHelp)
 	{
-		progDesc = helpInfo;
+		progDesc = progHelp;
 	}
 	
 	public String fromArgsToString(String[] array)
@@ -43,229 +38,117 @@ public class ArgParser
 		return myString;
 	}
 	
-	public void addArg(String name, String help, String dataType)
-	{
-		positionalArgNames.add(name);
-		allArgVals[0].addHelpArg(name, help);
-		allArgVals[0].addDataTypeArg(name, dataType);
-	}
-	//overload this stuffs 
-	public void addOptionalArg(String name, String shortName, String help, String dataType, String defaultVals)
-	{
-		if(dataType.equals("flag"))
-		{
-			optionalFlagNames.add(name);
-			optionalFlagNames.add(shortName);
-			allArgVals[1].addHelpArg(name, help);
-			allArgVals[1].addDataTypeArg(name, dataType);
-			allArgVals[1].addHelpArg(shortName, help);
-			allArgVals[1].addDataTypeArg(shortName, dataType);
-		}
-		else 
-		{
-			optionalArgNames.add(name);
-			optionalArgNames.add(shortName);
-			allArgVals[1].addHelpArg(name, help);
-			allArgVals[1].addDataTypeArg(name, dataType);
-			allArgVals[1].addHelpArg(shortName, help);
-			allArgVals[1].addDataTypeArg(shortName, dataType);
-			if (!defaultVals.equals("")) {
-				allArgVals[1].addValueArg(name, defaultVals);
-				allArgVals[1].addValueArg(shortName, defaultVals);
-			}
-		}
-	}
-	public void addArgHelp(String name, String help) // needs to go bye-bye
-	{
-		argVals.addHelpArg(name, help);
+	public void addArg(String name, String help, String dataType) {
+		argValueHolder.put(name, new ArgValues(name, help, dataType));
+		posArgNames.add(name);
 	}
 	
-	public void parse(String myString)
-	{
-		String completionString = "";
+	public void addOptionalArg(String name, String help, String dataType) {
+		optArgValueHolder.put(name, new OptArgValues(name, help, dataType);
+		optArgNames.add(name);
+	}
+	public void addOptionalArg(String name, String help, String dataType, String defaultVal) {
+		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultType);
+		optArgNames.add(name);
+	}
+	public void addOptionalArg(String name, String help, String dataType, int defaultVal) {
+		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultType);
+		optArgNames.add(name);
+	}
+	public void addOptionalArg(String name, String help, String dataType, float defaultVal) {
+		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultType);
+		optArgNames.add(name);
+	}
+	public void addOptionalArg(String name, String help, String dataType, boolean defaultVal) {
+		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultType);
+		optArgNames.add(name);
+	}
+	public void addOptionalArg(String name, String shortName, String help, String dataType) {
+		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType);
+		optArgNames.add(name);
+	}
+	public void addOptionalArg(String name, String shortName, String help, string dataType, String defaultType) {
+		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultType);
+		optArgNames.add(name);
+	}
+	public void addOptionalArg(String name, String shortName, String help, string dataType, int defaultType) {
+		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultType);
+		optArgNames.add(name);
+	}
+	public void addOptionalArg(String name, String shortName, String help, string dataType, float defaultType) {
+		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultType);
+		optArgNames.add(name);
+	}
+	public void addOptionalArg(String name, String shortName, String help, string dataType, boolean defaultType) {
+		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultType);
+		optArgNames.add(name);
+	}
+	
+	public void parse(String argumentsToParse) {
+	
 		String nextValue = "";
 		String previousValue = "";
-		Scanner argScanner = new Scanner(myString);
-		int currPositionArgIndex = 0;
-		
+		Scanner argScanner = new Scanner(argumentsToParse);
 		String[] args = new String[1];
-		//program = argScanner.next();
-		int count = 0;
-		while (argScanner.hasNext())
-		{
+		int currentPosArgIndex = 0;
+		
+		while (argScanner.hasNext()) {
+		
 			nextValue = argScanner.next();
-
-			if(!nextValue.contains("--") && !previousValue.contains("--"))
-			{
-				try
-				{
-					if(positionalArgNames.get(currPositionArgIndex) != null)
-					{
-						currPositionArgIndex++;
+			if (nextValue.equals("-h")) {
+				HelpInfoGenerator h = new HelpInfoGenerator();
+				String helpString = h.getHelpInfo(posArgNames, program, allArgVals[0], progDesc);
+				System.out.println(helpString);
+			}
+			else {
+				try {
+					if (currentPosArgIndex < argValueHolder.size()) {
+						if (nextValue.contains("--")) {
+							if (optArgNames.contains(nextValue.substring(2)) {
+								addOptArgValue(nextValue.substring(2), argScanner.next());
+							}
+						}
+						else if (nextValue.contains("-")) {
+							if (optArgNames.contains(nextValue.substring(1)) {
+								addOptArgValue(nextValue.substring(1), argScanner.next());
+							}
+						}
+						else {
+							addArgValue(posArgNames.get(currentPosArgIndex), nextValue);
+							currentPosArgIndex++;
+						}
 					}
 				}
-				catch (IndexOutOfBoundsException e)
-				{
+				catch (IndexOutOfBoundsException e) {
 					String usageLine = getHelpUsageText();
 					throw new TooManyArgsException(usageLine, program, nextValue, argScanner);
 				}
-			}
-			else
-			{
-				previousValue = nextValue;
-			}
-			if(args[0] == null)
-			{
-				args[count] = nextValue;
-				count++;
-			}
-			else 
-			{
-				String[] temp = new String[args.length];
-				for(int i = 0; i < args.length; i++)
-				{
-					temp[i] = args[i];
+				
+				if (currentPosArgIndex < argValueHolder.size()) {
+					String helpUsage = getHelpUsageText();
+					throw new NotEnoughArgsException(helpUsage, program, posArgNames, argValueHolder.size());
 				}
-				args = new String[temp.length + 1];
-				for(int i = 0; i < temp.length; i++)
-				{
-					args[i] = temp[i];
-				}
-				args[count] = nextValue;
-				count++;
 			}
 		}
-		adder(args);
+	}
+	
+	public void addArgValue(String argName, String argValue) {
 		
-		if(nextValue.equals("-h"))
-		{
-			HelpInfoGenerator h = new HelpInfoGenerator();
-			String helpString = h.getHelpInfo(positionalArgNames, program, allArgVals[0], progDesc);
-			System.out.println(helpString);
-		}
-		if(allArgVals[0].size() < positionalArgNames.size())
-		{
-			String helpUsage = getHelpUsageText();
-			throw new NotEnoughArgsException(helpUsage, program, positionalArgNames, allArgVals[0].size());
-		}
+		argValueHolder.get(argName).addValueArg(argValue);
 	}
 	
-	public void adder(String[] argValues)
-	{
-		int currPositionArgIndex = 0;
-		int argValuesIndex = 0;
-		try
-		{
-			for (int i = 0; i < argValues.length; i++) 
-			{
-				if ((argValues[i].contains("--") || argValues[i].contains("-"))) 
-				{
-					if (optionalArgNames.contains(argValues[i])){
-						allArgVals[1].addValueArg(argValues[i], argValues[i + 1]);
-						i++;
-					}
-					else if (optionalFlagNames.contains(argValues[i])) {
-						allArgVals[1].addValueArg(argValues[i], true);
-					}
-				}
-				else 
-				{
-					String dataType = getArgDataType(positionalArgNames.get(currPositionArgIndex));
-					switch(dataType){
-						case "integer":
-							int intValue = Integer.parseInt(argValues[i]);
-							allArgVals[0].addValueArg(positionalArgNames.get(currPositionArgIndex), intValue);
-							break;
-						case "string":
-							String strValue = argValues[i];
-							allArgVals[0].addValueArg(positionalArgNames.get(currPositionArgIndex), strValue);
-							break;
-						case "boolean":
-							String checkValue = argValues[i];
-							if (checkValue == "true" || checkValue == "false")
-							{
-								boolean boolValue = Boolean.parseBoolean(argValues[i]);
-								allArgVals[0].addValueArg(positionalArgNames.get(currPositionArgIndex), boolValue);
-							}
-							else throw new NumberFormatException("Invalid Boolean");
-							break;
-						case "float":
-							float floatValue = Float.parseFloat(argValues[i]);
-							allArgVals[0].addValueArg(positionalArgNames.get(currPositionArgIndex), floatValue);
-							break;
-					}
-					currPositionArgIndex++;
-				}
-				argValuesIndex = i;
-			}
-		}
-		catch (NumberFormatException e)
-		{
-			String argName = positionalArgNames.get(currPositionArgIndex);
-			String usageLine = getHelpUsageText();
-			throw new InvalidValueException(usageLine, program, argName, getArgDataType(argName), argValues[argValuesIndex+1]);
-		}
+	public void addOptArgValue(String optArgName, String optArgValue) {
+		optArgValueHolder.get(optArgName).addValueArg(optArgValue);
 	}
 	
-	public String getHelpUsageText()
-	{
+	public String getHelpUsageText() {
 		HelpInfoGenerator h = new HelpInfoGenerator();
 		return h.getUsageLine(positionalArgNames, program);
 	}
 	
-	public <T extends Comparable<T>> T getArgValue(String name) {
-		if(name == "type")
-		{
-			T box;
-			Class<T> boxCast = (Class<T>) String.class;
-			box = boxCast.cast("box");
-			return box;
-		}
-		T value;
-		switch(getArgDataType(name)) {
-			case "optional":
-				Class<T> optCast = (Class<T>) String.class;
-				value = optCast.cast(allArgVals[1].getValueArg(name, getArgDataType(name)));
-				return value;
-			case "integer":
-				Class<T> intCast = (Class<T>) Integer.class;
-				value = intCast.cast(allArgVals[0].getValueArg(name, getArgDataType(name)));
-				return value;
-			case "string":
-				Class<T> strCast = (Class<T>) String.class;
-				value = strCast.cast(allArgVals[0].getValueArg(name, getArgDataType(name)));
-				return value;
-			case "boolean":
-				Class<T> boolCast = (Class<T>) Boolean.class;
-				value = boolCast.cast(allArgVals[0].getValueArg(name, getArgDataType(name)));
-				return value;
-			case "float":
-				Class<T> floatCast = (Class<T>) Float.class;
-				value = floatCast.cast(allArgVals[0].getValueArg(name, getArgDataType(name)));
-				return value;
-			case "flag":
-				Class<T> flagCast = (Class<T>) Boolean.class;
-				value = flagCast.cast(allArgVals[1].getValueArg(name, getArgDataType(name)));
-				return value;
-			default:
-				return null;
-		}
-	}
-	public String getArgDataType(String name) {
-		if (name.contains("-") || name.contains("--")) {
-			return allArgVals[1].getDataTypeArg(name);
-		}
-		else {
-			return allArgVals[0].getDataTypeArg(name);
-		}
+	public ArgValues getArgumentValue(String name) {
+	
 	}
 	
-	public String getHelpArgValue(String name)
-    {
-        if(name == "-h")
-            return argVals.getHelpArg(name) + "\n"+"Calculate the volume of a box.\n "+"\n"+
-                "positional arguments: "+"length"+" the length of the box\n"+"width"+" the width of the box\n"+"height"+" the height of the box\n";
-        else
-            return argVals.getHelpArg(name);
-    }
+	
 }
