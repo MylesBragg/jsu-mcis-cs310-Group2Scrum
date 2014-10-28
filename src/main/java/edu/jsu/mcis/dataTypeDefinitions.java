@@ -1,3 +1,2 @@
-public class dataTypeDefinitions {
-	public enum dataTypes { STRING, INT, FLOAT, BOOLEAN}
-}
+package edu.jsu.mcis;
+public enum dataTypeDefinitions {STRING, INT, FLOAT, BOOLEAN}
