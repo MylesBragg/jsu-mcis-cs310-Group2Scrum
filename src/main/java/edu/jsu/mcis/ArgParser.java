@@ -96,7 +96,7 @@ public class ArgParser {
 			nextValue = argScanner.next();
 			if (nextValue.equals("-h")) {
 				HelpInfoGenerator h = new HelpInfoGenerator();
-				String helpString = "";//h.getHelpInfo(posArgNames, program, argValueHolder, progDesc);
+				String helpString = h.getHelpInfo(argValueHolder, program, progDesc);
 				System.out.println(helpString);
 			}
 			else {
@@ -125,7 +125,7 @@ public class ArgParser {
 				
 				if (currentPosArgIndex < argValueHolder.size()) {
 					String helpUsage = getHelpUsageText();
-					throw new NotEnoughArgsException(helpUsage, program, posArgNames, argValueHolder.size());
+					throw new NotEnoughArgsException(helpUsage, program, argValueHolder, argValueHolder.size());
 				}
 			}
 		}
@@ -142,7 +142,7 @@ public class ArgParser {
 	
 	public String getHelpUsageText() {
 		HelpInfoGenerator h = new HelpInfoGenerator();
-		return "oops";//h.getUsageLine(positionalArgNames, program);
+		return h.getUsageLine(argValueHolder, program);
 	}
 	
 	public <T> T getArgValue(String name) {

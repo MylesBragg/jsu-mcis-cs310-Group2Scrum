@@ -4,32 +4,36 @@ import java.util.*;
 
 public class HelpInfoGenerator
 {
-	public String getHelpInfo(List<String> arrayOfNames, String program, ArgValues allArgVals, String progDesc)
+	public String getHelpInfo(HashMap<String, ArgValues> hash, String program, String progDesc)
 	{
-		String helpMessage = getUsageLine(arrayOfNames, program) + "\n\n";
+		String helpMessage = getUsageLine(hash, program) + "\n\n";
 		helpMessage = helpMessage + progDesc + "\n\n";
-		helpMessage = helpMessage + getPosArgsInfo(arrayOfNames, allArgVals);
+		helpMessage = helpMessage + getPosArgsInfo(hash);
 		return helpMessage;
 	}
 	
-	public String getUsageLine(List<String> arrayOfNames, String program)
+	public String getUsageLine(HashMap<String, ArgValues> hash, String program)
 	{
-		String helpMessage = "usage: java "	+ program;
-		for(int i = 0; i < arrayOfNames.size(); i++)
+		String helpMessage = "usage: java " + program;
+		Iterator<String> hashKeys = hash.keySet().iterator();
+		String currentKey = "";
+		while (hashKeys.hasNext())
 		{
-			helpMessage = helpMessage + " " + arrayOfNames.get(i);
+			currentKey = hashKeys.next();
+			helpMessage = helpMessage + " " + currentKey;
 		}
 		return helpMessage;
 	}
 	
-	public String getPosArgsInfo(List<String> arrayOfNames, ArgValues allArgVals)
+	public String getPosArgsInfo(HashMap<String, ArgValues> hash)
 	{
-		String name = "";
 		String posArgsHelp = "positional arguments: ";
-		for(int i = 0; i < arrayOfNames.size(); i++)
+		Iterator<String> hashKeys = hash.keySet().iterator();
+		String currentKey = "";
+		while (hashKeys.hasNext())
 		{
-			name = arrayOfNames.get(i);
-			posArgsHelp = posArgsHelp + name + " " + allArgVals.getHelpArg(name) + "\n";
+			currentKey = hashKeys.next();
+			posArgsHelp = posArgsHelp + currentKey + " " + hash.get(currentKey).getHelpArg(currentKey) + "\n";
 		}
 		posArgsHelp = posArgsHelp.trim();
 		return posArgsHelp;

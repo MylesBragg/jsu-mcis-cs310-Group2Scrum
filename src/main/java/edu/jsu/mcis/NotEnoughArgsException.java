@@ -9,18 +9,19 @@ public class NotEnoughArgsException extends RuntimeException
 	List<String> namesArray;
 	int index = 0;
 	
-	public NotEnoughArgsException(String helpUsage, String prog, List<String> arrayOfNames, int i)
+	public NotEnoughArgsException(String helpUsage, String prog, HashMap<String, ArgValues> hash, int i)
 	{
 		usage = helpUsage;
 		program = prog;
+		Iterator<String> hashKeys = hash.keySet().iterator();
 		namesArray = new ArrayList<String>();
-		for(int j = 0; j < arrayOfNames.size(); j++)
+		while (hashKeys.hasNext())
 		{
-			namesArray.add(arrayOfNames.get(j));
+			namesArray.add(hashKeys.next());
 		}
 		index = i;
 	}
-	
+
 	public String toString()
 	{
 		String errorMessage = usage + "\n";

@@ -24,7 +24,12 @@ public class ArgValues
 		name = new ArrayList<String>();
 		value = new ArrayList<String>();
 	}
+	
+	public ArgValues(String nameStr, String helpStr, dataTypeDefinitions dType)
+	{
 		
+	}
+	
 	public void addHelpArg(String name, String helpMessage) {
 		namedHelp.put(name, helpMessage);
 	}
