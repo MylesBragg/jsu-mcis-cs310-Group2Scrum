@@ -4,87 +4,44 @@ import java.util.*;
 
 public class ArgValues
 {
-	private Object Xvalue;
-	//private String name;
-	private String Xhelp;
-	private String XdataType;
-	private int XintValue;
-	
-	
-	private HashMap<String, Object> namedValues;
-	private HashMap<String, String> namedHelp;
-	private HashMap<String, String> namedDataType;
-	private List<String> name;
-	private List<String> value;
-	
-	public ArgValues() {
-		namedValues = new HashMap<String, Object>();
-		namedHelp = new HashMap<String, String>();
-		namedDataType = new HashMap<String, String>();
-		name = new ArrayList<String>();
-		value = new ArrayList<String>();
+	private Object argValue;
+	private String name;
+	private String help;
+	private dataTypeDefinitions values;
+
+	public ArgValues(String name,String help,dataTypeDefinitions dataType) {
+		this.name = name;
+		this.help = help;
+		values = dataType;
+
+	}
+
+	public String getHelpArg() {
+		return help;
 	}
 	
-	public ArgValues(String nameStr, String helpStr, dataTypeDefinitions dType)
-	{
-		
+	public <T extends Object> T getValueArg() {
+		return (T) argValue;
 	}
 	
-	public void addHelpArg(String name, String helpMessage) {
-		namedHelp.put(name, helpMessage);
-	}
-	
-	public void addValueArg(String name, String value) {
-		namedValues.put(name, value);
-	}
-	public void addValueArg(String name, int value) {
-		namedValues.put(name, value);
-	}
-	public void addValueArg(String name, boolean value) {
-		namedValues.put(name, value);
-	}
-	public void addValueArg(String name, float value) {
-		namedValues.put(name, value);
-	}
-	
-	public String getHelpArg(String name) {
-		return namedHelp.get(name);
-	}
-	
-	public Object getValueArg(String name, String dataType) {
-		switch(dataType) {
-			case "optional":
-				namedValues.put(name, namedValues.get(name).toString());
-				break;
-			case "integer":
-				int intValue = Integer.parseInt(namedValues.get(name).toString());
-				namedValues.put(name, intValue);
-				break;
-			case "string":
-				namedValues.put(name, namedValues.get(name).toString());
-				break;
-			case "boolean":case "flag":
-				boolean boolValue = Boolean.parseBoolean(namedValues.get(name).toString());
-				namedValues.put(name, boolValue);
-				break;
-			case "float":
-				float floatValue =  Float.parseFloat(namedValues.get(name).toString());
-				namedValues.put(name, floatValue);
-				break;
+	public void addValueArg(String v){
+		switch(values){
+		case INT:
+			argValue = Integer.parseInt(v);
+			break;
+		case FLOAT:
+			argValue = Float.parseFloat(v);
+			break;
+		case BOOLEAN:
+			if(v.equals("true") || v.equals("false")){
+				argValue = Boolean.parseBoolean(v);
+			break;
+		default:
+			argValue = v;
 		}
-		return namedValues.get(name);
 	}
-	
-	
-	public void addDataTypeArg(String name, String dataType) {
-		namedDataType.put(name, dataType);
-	}
-	
-	public String getDataTypeArg(String name) {
-		return namedDataType.get(name);
-	}
-	
-	public int size() {
-		return namedValues.size();
+
+	public dataTypeDefinitions getDataTypeArg() {
+		return values;
 	}
 }
