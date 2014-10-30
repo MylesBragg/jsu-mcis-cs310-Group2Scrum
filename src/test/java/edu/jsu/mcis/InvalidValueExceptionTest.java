@@ -7,7 +7,7 @@ import java.util.*;
 public class InvalidValueExceptionTest
 {
 	private List<String> arrayOfNames;
-	
+/*	
 	@Test
 	public void testInvalidValueException()
 	{
@@ -26,5 +26,5 @@ public class InvalidValueExceptionTest
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: argument width: invalid float value: something", 
 					errorString);
-	}
+	}*/
 }

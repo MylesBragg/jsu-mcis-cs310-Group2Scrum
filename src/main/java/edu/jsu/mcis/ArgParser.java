@@ -10,6 +10,7 @@ public class ArgParser {
 	private List<String> optArgNames;
 	private String program;
 	private String progDesc;
+	private String helpString;
 	
 	public ArgParser(String progName) {
 		
@@ -96,44 +97,47 @@ public class ArgParser {
 			nextValue = argScanner.next();
 			if (nextValue.equals("-h")) {
 				HelpInfoGenerator h = new HelpInfoGenerator();
-				String helpString = h.getHelpInfo(argValueHolder, program, progDesc);
+				helpString = h.getHelpInfo(argValueHolder, program, progDesc);
 				System.out.println(helpString);
 			}
 			else {
 				try {
-					if (currentPosArgIndex < argValueHolder.size()) {
-						if (nextValue.contains("--")) {
-							if (optArgNames.contains(nextValue.substring(2))) {
-								addOptArgValue(nextValue.substring(2), argScanner.next());
-							}
+					if (nextValue.contains("--")) {
+						if (optArgNames.contains(nextValue.substring(2))) {
+							addOptArgValue(nextValue.substring(2), argScanner.next());
 						}
-						else if (nextValue.contains("-")) {
-							if (optArgNames.contains(nextValue.substring(1))) {
-								addOptArgValue(nextValue.substring(1), argScanner.next());
-							}
+					}
+					else if (nextValue.contains("-")) {
+						if (optArgNames.contains(nextValue.substring(1))) {
+							addOptArgValue(nextValue.substring(1), argScanner.next());
 						}
-						else {
-							addArgValue(posArgNames.get(currentPosArgIndex), nextValue);
-							currentPosArgIndex++;
-						}
+					}
+					else {
+						addArgValue(posArgNames.get(currentPosArgIndex), nextValue);
+						currentPosArgIndex++;
 					}
 				}
 				catch (IndexOutOfBoundsException e) {
 					String usageLine = getHelpUsageText();
 					throw new TooManyArgsException(usageLine, program, nextValue, argScanner);
 				}
-				
-				if (currentPosArgIndex < argValueHolder.size()) {
-					String helpUsage = getHelpUsageText();
-					throw new NotEnoughArgsException(helpUsage, program, argValueHolder, argValueHolder.size());
-				}
 			}
+		}
+		if (!nextValue.equals("-h") && currentPosArgIndex < argValueHolder.size()) {
+			String helpUsage = getHelpUsageText();
+			throw new NotEnoughArgsException(helpUsage, program, argValueHolder, argValueHolder.size());
 		}
 	}
 	
 	public void addArgValue(String argName, String argValue) {
-		
-		//argValueHolder.get(argName).addValueArg(argValue);
+		try {
+			argValueHolder.get(argName).addValueArg(argValue);
+		}
+		catch(NumberFormatException nfe)
+		{
+			String helpUsage = getHelpUsageText();
+			throw new InvalidValueException(helpUsage, program, argName, argValueHolder.get(argName).getDataTypeArg(), argValue);
+		}
 	}
 	
 	public void addOptArgValue(String optArgName, String optArgValue) {
@@ -145,8 +149,11 @@ public class ArgParser {
 		return h.getUsageLine(argValueHolder, program);
 	}
 	
+	public String getHelpString() {
+		return helpString;
+	}
+	
 	public <T> T getArgValue(String name) {
-		String dataType = argValueHolder.get(name).getDataTypeArg(name);
-		return argValueHolder.get(name).getValueArg(name, dataType);
+		return argValueHolder.get(name).getValueArg();
 	}
 }

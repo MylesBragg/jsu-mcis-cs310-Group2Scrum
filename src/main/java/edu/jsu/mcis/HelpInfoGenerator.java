@@ -16,12 +16,14 @@ public class HelpInfoGenerator
 	{
 		String helpMessage = "usage: java " + program;
 		Iterator<String> hashKeys = hash.keySet().iterator();
-		String currentKey = "";
+		String argList = "";
 		while (hashKeys.hasNext())
 		{
-			currentKey = hashKeys.next();
-			helpMessage = helpMessage + " " + currentKey;
+			argList = hashKeys.next() + " " + argList;
 		}
+		argList = argList.trim();
+		helpMessage = helpMessage + " " + argList;
+		helpMessage = helpMessage.trim();
 		return helpMessage;
 	}
 	
@@ -30,11 +32,14 @@ public class HelpInfoGenerator
 		String posArgsHelp = "positional arguments: ";
 		Iterator<String> hashKeys = hash.keySet().iterator();
 		String currentKey = "";
+		String argsHelp = "";
 		while (hashKeys.hasNext())
 		{
 			currentKey = hashKeys.next();
-			posArgsHelp = posArgsHelp + currentKey + " " + hash.get(currentKey).getHelpArg(currentKey) + "\n";
+			argsHelp = currentKey + " " + hash.get(currentKey).getHelpArg() + "\n" + argsHelp;
 		}
+		argsHelp = argsHelp.trim();
+		posArgsHelp = posArgsHelp + argsHelp;
 		posArgsHelp = posArgsHelp.trim();
 		return posArgsHelp;
 	}

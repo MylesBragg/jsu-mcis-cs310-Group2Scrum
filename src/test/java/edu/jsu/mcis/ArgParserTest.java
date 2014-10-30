@@ -17,25 +17,25 @@ public class ArgParserTest
 	public void testNewAddArgAndValue()
 	{
 		String myString = "7";
-		parser.addArg("length", "Enter a whole number", "integer");
+		parser.addArg("length", "Enter a whole number", dataTypeDefinitions.INT);
 		parser.parse(myString);
-		assertTrue(parser.getArgValue("length").equals(7));
+		assertEquals(7, parser.getArgValue("length"));
 	}
 	
 	@Test
 	public void testNewAddMultipleArgsAndValues()
 	{
-		String myString = "7 5.0 2";
-		parser.addArg("length", "Enter a whole number as length", "integer");
-		parser.addArg("width", "Enter a float number as width", "float");
-		parser.addArg("height", "Enter a whole number as height", "integer");
+		String myString = "7 false 2";
+		parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
+		parser.addArg("width", "Enter a boolean value for width", dataTypeDefinitions.BOOLEAN);
+		parser.addArg("height", "Enter a float number as height", dataTypeDefinitions.FLOAT);
 		parser.parse(myString);
-		assertTrue(parser.getArgValue("length").equals(7));
-		assertTrue(parser.getArgValue("width").equals(5.0f));
-		assertTrue(parser.getArgValue("height").equals(2));
+		assertEquals(7, parser.getArgValue("length"));
+		assertEquals(false, parser.getArgValue("width"));
+		assertEquals(2f, parser.getArgValue("height"));
 	}
 	
-	@Test
+	/*@Test
 	public void addOptVal()
 	{
 		String myString = "7 --type closet";
@@ -105,7 +105,7 @@ public class ArgParserTest
 		parser.addArg("width", "Enter whole number", "integer");
 		parser.parse(myString);
 		assertEquals("closet", parser.getArgValue("-t"));
-	}
+	}*/
 
 	@Test
 	public void testInvalidArgInt()
@@ -113,9 +113,9 @@ public class ArgParserTest
 		try
 		{
 			String myString = "7 something 2";
-			parser.addArg("length", "Enter a whole number as length", "float");
-			parser.addArg("width", "Enter a float number as width", "integer");
-			parser.addArg("height", "Enter a whole number as height", "float");
+			parser.addArg("length", "Enter a float number as length", dataTypeDefinitions.FLOAT);
+			parser.addArg("width", "Enter a whole number as width", dataTypeDefinitions.INT);
+			parser.addArg("height", "Enter a float number as height", dataTypeDefinitions.FLOAT);
 			parser.parse(myString);
 			assert false;
 		}
@@ -131,9 +131,9 @@ public class ArgParserTest
 		try
 		{
 			String myString = "7 something 2";
-			parser.addArg("length", "Enter a whole number as length", "float");
-			parser.addArg("width", "Enter a float number as width", "float");
-			parser.addArg("height", "Enter a whole number as height", "float");
+			parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
+			parser.addArg("width", "Enter a float number as width", dataTypeDefinitions.FLOAT);
+			parser.addArg("height", "Enter a whole number as height", dataTypeDefinitions.INT);
 			parser.parse(myString);
 			assert false;
 		}
@@ -149,9 +149,9 @@ public class ArgParserTest
 		try
 		{
 			String myString = "7 something 2";
-			parser.addArg("length", "Enter a whole number as length", "float");
-			parser.addArg("width", "Enter a float number as width", "boolean");
-			parser.addArg("height", "Enter a whole number as height", "float");
+			parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
+			parser.addArg("width", "Enter a float number as width", dataTypeDefinitions.BOOLEAN);
+			parser.addArg("height", "Enter a whole number as height", dataTypeDefinitions.INT);
 			parser.parse(myString);
 			assert false;
 		}
@@ -161,14 +161,14 @@ public class ArgParserTest
 		}
 	}
 	
-	@Test
+	@Test // programmer should just tell us float, int, boolean and we set the DTDef accordingly!!!
 	public void testTooFewArgs()
 	{
 		try
 		{
-			parser.addArg("length", "Enter a whole number as length", "float");
-			parser.addArg("width", "Enter a float number as width", "float");
-			parser.addArg("height", "Enter a whole number as height", "float");
+			parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
+			parser.addArg("width", "Enter a float number as width", dataTypeDefinitions.FLOAT);
+			parser.addArg("height", "Enter a whole number as height", dataTypeDefinitions.INT);
 			parser.parse("7 5.2");
 			assert false;
 		}
@@ -183,9 +183,9 @@ public class ArgParserTest
 	{
 		try
 		{
-			parser.addArg("length", "Enter a whole number as length", "float");
-			parser.addArg("width", "Enter a float number as width", "float");
-			parser.addArg("height", "Enter a whole number as height", "float");
+			parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
+			parser.addArg("width", "Enter a float number as width", dataTypeDefinitions.FLOAT);
+			parser.addArg("height", "Enter a whole number as height", dataTypeDefinitions.INT);
 			parser.parse("7 5 2 43");
 			assert false;
 		}
@@ -194,20 +194,17 @@ public class ArgParserTest
 			assert true;
 		}
 	}
-	
-	@Test
-    public void testAddHelpWithArg()
-    {
-         parser.addArgHelp("length", "Please enter the length as a whole number");
-         assertEquals("Please enter the length as a whole number", parser.getHelpArgValue("length"));
-    }
 
     @Test
     public void testProgramHelp()
     {
-        parser.addArgHelp("-h", "usage: java VolumeCalculator length width height\n");
-        assertEquals("usage: java VolumeCalculator length width height\n" + "\n" +"Calculate the volume of a box.\n "+"\n"+
-                      "positional arguments: length the length of the box\n"+"width the width of the box\n"+"height the height of the box\n",
-        parser.getHelpArgValue("-h"));
+		parser.addProgramHelpInfo("Calculate the volume of a box.");
+        parser.addArg("length", "the length of the box", dataTypeDefinitions.INT);
+		parser.addArg("width", "the width of the box", dataTypeDefinitions.FLOAT);
+		parser.addArg("height", "the height of the box", dataTypeDefinitions.INT);
+		parser.parse("-h");
+        assertEquals("usage: java VolumeCalculator length width height\n" + "\n" + "Calculate the volume of a box.\n" +
+					"\n" + "positional arguments: length the length of the box\n" + "width the width of the box\n" + 
+					"height the height of the box", parser.getHelpString());
     }
 }

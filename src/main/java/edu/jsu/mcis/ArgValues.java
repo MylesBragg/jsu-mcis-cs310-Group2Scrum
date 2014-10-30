@@ -13,7 +13,6 @@ public class ArgValues
 		this.name = name;
 		this.help = help;
 		values = dataType;
-
 	}
 
 	public String getHelpArg() {
@@ -24,7 +23,7 @@ public class ArgValues
 		return (T) argValue;
 	}
 	
-	public void addValueArg(String v){
+	public void addValueArg(String v) throws NumberFormatException {
 		switch(values){
 		case INT:
 			argValue = Integer.parseInt(v);
@@ -35,6 +34,8 @@ public class ArgValues
 		case BOOLEAN:
 			if(v.equals("true") || v.equals("false")){
 				argValue = Boolean.parseBoolean(v);
+			}
+			else throw new NumberFormatException("Invalid Argument");
 			break;
 		default:
 			argValue = v;
