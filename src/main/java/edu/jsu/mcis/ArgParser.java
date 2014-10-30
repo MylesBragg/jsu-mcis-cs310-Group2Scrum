@@ -95,7 +95,7 @@ public class ArgParser {
 		while (argScanner.hasNext()) {
 		
 			nextValue = argScanner.next();
-			if (nextValue.equals("-h")) {
+			if (nextValue.equals("-h")) {			//getHelpInfo
 				HelpInfoGenerator h = new HelpInfoGenerator();
 				String helpString = h.getHelpInfo(posArgNames, program, allArgVals[0], progDesc);
 				System.out.println(helpString);
