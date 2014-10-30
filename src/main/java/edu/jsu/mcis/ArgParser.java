@@ -7,7 +7,6 @@ public class ArgParser {
 	private HashMap<String, ArgValues> argValueHolder;
 	private HashMap<String, OptArgValues> optArgValueHolder;
 	private List<String> posArgNames;
-	private List<String> optArgNames;
 	private String program;
 	private String progDesc;
 	private String helpString;
@@ -20,7 +19,6 @@ public class ArgParser {
 		optArgValueHolder = new HashMap<String, OptArgValues>();
 		
 		posArgNames = new ArrayList<String>();
-		optArgNames = new ArrayList<String>();
 		
 	}
 	
@@ -45,43 +43,33 @@ public class ArgParser {
 	}
 	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType));
-		optArgNames.add(name);
 	}
 	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType, String defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
-		optArgNames.add(name);
 	}
 	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType, int defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
-		optArgNames.add(name);
 	}
 	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType, float defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
-		optArgNames.add(name);
 	}
 	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType, boolean defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
-		optArgNames.add(name);
 	}
 	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType));
-		optArgNames.add(name);
 	}
 	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType, String defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
-		optArgNames.add(name);
 	}
 	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType, int defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
-		optArgNames.add(name);
 	}
 	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType, float defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
-		optArgNames.add(name);
 	}
 	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType, boolean defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
-		optArgNames.add(name);
 	}
 	
 	public void parse(String argsToParse) {
@@ -103,12 +91,12 @@ public class ArgParser {
 			else {
 				try {
 					if (nextValue.contains("--")) {
-						if (optArgNames.contains(nextValue.substring(2))) {
+						if (optArgValueHolder.containsKey(nextValue.substring(2))) {
 							addOptArgValue(nextValue.substring(2), argScanner.next());
 						}
 					}
 					else if (nextValue.contains("-")) {
-						if (optArgNames.contains(nextValue.substring(1))) {
+						if (optArgValueHolder.containsKey(nextValue.substring(1))) {
 							addOptArgValue(nextValue.substring(1), argScanner.next());
 						}
 					}

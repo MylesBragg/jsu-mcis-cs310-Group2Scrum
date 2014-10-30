@@ -3,9 +3,9 @@ package edu.jsu.mcis;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class ArgValuesTest 
+public class OptArgValuesTest 
 {
-	private ArgValues v;
+	private OptArgValues v;
 	
 	@Test
 	public void testGetOptionalVal() {
