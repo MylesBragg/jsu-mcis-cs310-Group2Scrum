@@ -7,77 +7,67 @@ public class ArgValuesTest
 {
 	private ArgValues v;
 
-	@Before
-	public void testCreateInstanceofArgValues()
-	{
-		v = new ArgValues();
-	}
-
 	@Test
 	public void testgetValueArg() {
-		v.addValueArg("length", "7");
-		v.addDataTypeArg("length", "integer");
-		assertEquals(Integer.parseInt(v.getValueArg("length", "integer").toString()), 7);
+		v = new ArgValues("length", "This is length help", dataTypeDefinitions.FLOAT);
+		v.addValueArg("7");
+		assertEquals(v.getValueArg(), 7f);
 	}
-	@Test
+	
+	/*@Test
 	public void testGetOptionalVal() {
+		v = new ArgValues("length", "This is length help", dataTypeDefinitions.FLOAT);
 		v.addValueArg("--closet", "6");
 		v.addDataTypeArg("--closet", "optional");
-		assertEquals(v.getValueArg("--closet", "optional"), "6");
-	}
-	@Test
-	public void testaddNametoValues()
-	{
-		v.addValueArg("length", "7");
-		v.addDataTypeArg("length", "integer");
-		assertEquals(Integer.parseInt(v.getValueArg("length", "integer").toString()), 7);
-	}
-	
-	
-	@Test
-	public void testGetValuefromValues()
-	{
-		v.addValueArg("length", "7");
-		assertEquals(7, v.getValueArg("length", "integer"));
-	
-	}
+		assertEquals(v.getValueArg(), "6");
+	}*/
 	
 	@Test
 	public void testMultiple()
 	{
-		v.addValueArg("length", "7");
-		assertEquals(7, v.getValueArg("length", "integer"));
-		v.addValueArg("width", "4.3");
-		assertEquals(4.3f, v.getValueArg("width", "float"));
-		v.addValueArg("height", "6");
-		assertEquals(6, v.getValueArg("height", "integer"));
+		ArgValues v, w, x;
+		v = new ArgValues("length", "This is length help", dataTypeDefinitions.INT);
+		w = new ArgValues("width", "This is width help", dataTypeDefinitions.FLOAT);
+		x = new ArgValues("height", "This is height help", dataTypeDefinitions.BOOLEAN);
+		v.addValueArg("7");
+		assertEquals(7, v.getValueArg());
+		w.addValueArg("4.3");
+		assertEquals(4.3f, w.getValueArg());
+		x.addValueArg("true");
+		assertEquals(true, x.getValueArg());
 	}
 	
 	@Test
 	public void testAddHelpArg() {
-		v.addHelpArg("length", "Please add length as a whole number.");
-		assertEquals("Please add length as a whole number.", v.getHelpArg("length"));
+		v = new ArgValues("length", "This is length help", dataTypeDefinitions.FLOAT);
+		assertEquals(v.getHelpArg(), "This is length help");
 	}
 	
 	@Test
 	public void testAddMultipleHelpArgs() {
-		v.addHelpArg("length", "Please add length as a whole number.");
-		assertEquals("Please add length as a whole number.", v.getHelpArg("length"));
-		v.addHelpArg("width", "Please add width as a whole number.");
-		assertEquals("Please add width as a whole number.", v.getHelpArg("width"));
+		ArgValues v, w, x;
+		v = new ArgValues("length", "This is length help", dataTypeDefinitions.INT);
+		w = new ArgValues("width", "This is width help", dataTypeDefinitions.FLOAT);
+		x = new ArgValues("height", "This is height help", dataTypeDefinitions.BOOLEAN);
+		assertEquals("This is length help", v.getHelpArg());
+		assertEquals("This is width help", w.getHelpArg());
+		assertEquals("This is height help", x.getHelpArg());
 	}
 	
 	@Test
 	public void testAddDataTypeArg() {
-		v.addDataTypeArg("length", "integer");
-		assertEquals("integer", v.getDataTypeArg("length"));
+		v = new ArgValues("length", "This is length help", dataTypeDefinitions.FLOAT);
+		assertEquals(v.getDataTypeArg(), dataTypeDefinitions.FLOAT);
 	}
 	
 	@Test
 	public void testAddMultipleDataTypeArgs() {
-		v.addDataTypeArg("length", "integer");
-		assertEquals("integer", v.getDataTypeArg("length"));
-		v.addDataTypeArg("width", "float");
-		assertEquals("float", v.getDataTypeArg("width"));
+		ArgValues v, w, x;
+		v = new ArgValues("length", "This is length help", dataTypeDefinitions.INT);
+		w = new ArgValues("width", "This is width help", dataTypeDefinitions.FLOAT);
+		x = new ArgValues("height", "This is height help", dataTypeDefinitions.BOOLEAN);
+		assertEquals(dataTypeDefinitions.INT, v.getDataTypeArg());
+		assertEquals(dataTypeDefinitions.FLOAT, w.getDataTypeArg());
+		assertEquals(dataTypeDefinitions.BOOLEAN, x.getDataTypeArg());
 	}
 }

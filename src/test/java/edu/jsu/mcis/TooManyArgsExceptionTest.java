@@ -7,7 +7,7 @@ import java.util.*;
 public class TooManyArgsExceptionTest
 {
 	private List<String> arrayOfNames;
-	
+/*	
 	@Test
 	public void testTooManyArgs()
 	{
@@ -25,5 +25,5 @@ public class TooManyArgsExceptionTest
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: unrecognized arguments: 43 99", 
 					errorString);
-	}
+	}*/
 }
