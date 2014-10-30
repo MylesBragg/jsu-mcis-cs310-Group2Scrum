@@ -1,15 +1,16 @@
 package edu.jsu.mcis;
 
 import java.util.*;
-
+@SuppressWarnings("unchecked")
 public class ArgValues
 {
+	public enum Type{STRING, INT, BOOLEAN, FLOAT}
 	private Object argValue;
 	private String name;
 	private String help;
-	private dataTypeDefinitions values;
+	private Type values;
 
-	public ArgValues(String name,String help,dataTypeDefinitions dataType) {
+	public ArgValues(String name,String help,Type dataType) {
 		this.name = name;
 		this.help = help;
 		values = dataType;
@@ -20,7 +21,7 @@ public class ArgValues
 	}
 	
 	public <T extends Object> T getValueArg() {
-		return (T) argValue;
+		return (T)argValue;
 	}
 	
 	public void addValueArg(String v) throws NumberFormatException {
@@ -42,7 +43,7 @@ public class ArgValues
 		}
 	}
 
-	public dataTypeDefinitions getDataTypeArg() {
+	public Type getDataTypeArg() {
 		return values;
 	}
 }

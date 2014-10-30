@@ -37,38 +37,38 @@ public class ArgParser {
 		return myString;
 	}
 	
-	public void addArg(String name, String help, dataTypeDefinitions dataType) {
+	public void addArg(String name, String help, ArgValues.Type dataType) {
 		argValueHolder.put(name, new ArgValues(name, help, dataType));
 		posArgNames.add(name);
 	}
-	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType) {
+	public void addOptionalArg(String name, String help, ArgValues.Type dataType) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType));
 	}
-	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType, String defaultVal) {
+	public void addOptionalArg(String name, String help, ArgValues.Type dataType, String defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType, int defaultVal) {
+	public void addOptionalArg(String name, String help, ArgValues.Type dataType, int defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType, float defaultVal) {
+	public void addOptionalArg(String name, String help, ArgValues.Type dataType, float defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String help, dataTypeDefinitions dataType, boolean defaultVal) {
+	public void addOptionalArg(String name, String help, ArgValues.Type dataType, boolean defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType) {
+	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType));
 	}
-	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType, String defaultVal) {
+	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType, String defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType, int defaultVal) {
+	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType, int defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType, float defaultVal) {
+	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType, float defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String shortName, String help, dataTypeDefinitions dataType, boolean defaultVal) {
+	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType, boolean defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
 	}
 	

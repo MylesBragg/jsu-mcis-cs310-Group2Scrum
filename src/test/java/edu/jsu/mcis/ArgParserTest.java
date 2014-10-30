@@ -17,7 +17,7 @@ public class ArgParserTest
 	public void testNewAddArgAndValue()
 	{
 		String myString = "7";
-		parser.addArg("length", "Enter a whole number", dataTypeDefinitions.INT);
+		parser.addArg("length", "Enter a whole number", ArgValues.Type.INT);
 		parser.parse(myString);
 		assertEquals(7, parser.getArgValue("length"));
 	}
@@ -26,9 +26,9 @@ public class ArgParserTest
 	public void testNewAddMultipleArgsAndValues()
 	{
 		String myString = "7 false 2";
-		parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
-		parser.addArg("width", "Enter a boolean value for width", dataTypeDefinitions.BOOLEAN);
-		parser.addArg("height", "Enter a float number as height", dataTypeDefinitions.FLOAT);
+		parser.addArg("length", "Enter a whole number as length", ArgValues.Type.INT);
+		parser.addArg("width", "Enter a boolean value for width", ArgValues.Type.BOOLEAN);
+		parser.addArg("height", "Enter a float number as height", ArgValues.Type.FLOAT);
 		parser.parse(myString);
 		assertEquals(7, parser.getArgValue("length"));
 		assertEquals(false, parser.getArgValue("width"));
@@ -113,9 +113,9 @@ public class ArgParserTest
 		try
 		{
 			String myString = "7 something 2";
-			parser.addArg("length", "Enter a float number as length", dataTypeDefinitions.FLOAT);
-			parser.addArg("width", "Enter a whole number as width", dataTypeDefinitions.INT);
-			parser.addArg("height", "Enter a float number as height", dataTypeDefinitions.FLOAT);
+			parser.addArg("length", "Enter a float number as length", ArgValues.Type.FLOAT);
+			parser.addArg("width", "Enter a whole number as width", ArgValues.Type.INT);
+			parser.addArg("height", "Enter a float number as height", ArgValues.Type.FLOAT);
 			parser.parse(myString);
 			assert false;
 		}
@@ -131,9 +131,9 @@ public class ArgParserTest
 		try
 		{
 			String myString = "7 something 2";
-			parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
-			parser.addArg("width", "Enter a float number as width", dataTypeDefinitions.FLOAT);
-			parser.addArg("height", "Enter a whole number as height", dataTypeDefinitions.INT);
+			parser.addArg("length", "Enter a whole number as length", ArgValues.Type.INT);
+			parser.addArg("width", "Enter a float number as width", ArgValues.Type.FLOAT);
+			parser.addArg("height", "Enter a whole number as height", ArgValues.Type.INT);
 			parser.parse(myString);
 			assert false;
 		}
@@ -149,9 +149,9 @@ public class ArgParserTest
 		try
 		{
 			String myString = "7 something 2";
-			parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
-			parser.addArg("width", "Enter a float number as width", dataTypeDefinitions.BOOLEAN);
-			parser.addArg("height", "Enter a whole number as height", dataTypeDefinitions.INT);
+			parser.addArg("length", "Enter a whole number as length", ArgValues.Type.INT);
+			parser.addArg("width", "Enter a float number as width", ArgValues.Type.BOOLEAN);
+			parser.addArg("height", "Enter a whole number as height", ArgValues.Type.INT);
 			parser.parse(myString);
 			assert false;
 		}
@@ -166,9 +166,9 @@ public class ArgParserTest
 	{
 		try
 		{
-			parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
-			parser.addArg("width", "Enter a float number as width", dataTypeDefinitions.FLOAT);
-			parser.addArg("height", "Enter a whole number as height", dataTypeDefinitions.INT);
+			parser.addArg("length", "Enter a whole number as length", ArgValues.Type.INT);
+			parser.addArg("width", "Enter a float number as width", ArgValues.Type.FLOAT);
+			parser.addArg("height", "Enter a whole number as height", ArgValues.Type.INT);
 			parser.parse("7 5.2");
 			assert false;
 		}
@@ -183,9 +183,9 @@ public class ArgParserTest
 	{
 		try
 		{
-			parser.addArg("length", "Enter a whole number as length", dataTypeDefinitions.INT);
-			parser.addArg("width", "Enter a float number as width", dataTypeDefinitions.FLOAT);
-			parser.addArg("height", "Enter a whole number as height", dataTypeDefinitions.INT);
+			parser.addArg("length", "Enter a whole number as length", ArgValues.Type.INT);
+			parser.addArg("width", "Enter a float number as width", ArgValues.Type.FLOAT);
+			parser.addArg("height", "Enter a whole number as height", ArgValues.Type.INT);
 			parser.parse("7 5 2 43");
 			assert false;
 		}
@@ -199,9 +199,9 @@ public class ArgParserTest
     public void testProgramHelp()
     {
 		parser.addProgramHelpInfo("Calculate the volume of a box.");
-        parser.addArg("length", "the length of the box", dataTypeDefinitions.INT);
-		parser.addArg("width", "the width of the box", dataTypeDefinitions.FLOAT);
-		parser.addArg("height", "the height of the box", dataTypeDefinitions.INT);
+        parser.addArg("length", "the length of the box", ArgValues.Type.INT);
+		parser.addArg("width", "the width of the box", ArgValues.Type.FLOAT);
+		parser.addArg("height", "the height of the box", ArgValues.Type.INT);
 		parser.parse("-h");
         assertEquals("usage: java VolumeCalculator length width height\n" + "\n" + "Calculate the volume of a box.\n" +
 					"\n" + "positional arguments: length the length of the box\n" + "width the width of the box\n" + 

@@ -10,24 +10,24 @@ public class InvalidValueException extends RuntimeException
 	String argDataType;
 	String currentValue;
 	
-	public InvalidValueException(String helpUsage, String prog, String argN, dataTypeDefinitions argDT, String currValue)
+	public InvalidValueException(String helpUsage, String prog, String argN, ArgValues.Type argDT, String currValue)
 	{
 		usage = helpUsage;
 		program = prog;
 		argName = argN;
-		if(argDT.equals(dataTypeDefinitions.INT))
+		if(argDT.equals(ArgValues.Type.INT))
 		{
 			argDataType = "integer";
 		}
-		if(argDT.equals(dataTypeDefinitions.FLOAT))
+		if(argDT.equals(ArgValues.Type.FLOAT))
 		{
 			argDataType = "float";
 		}
-		if(argDT.equals(dataTypeDefinitions.BOOLEAN))
+		if(argDT.equals(ArgValues.Type.BOOLEAN))
 		{
 			argDataType = "boolean";
 		}
-		if(argDT.equals(dataTypeDefinitions.STRING))
+		if(argDT.equals(ArgValues.Type.STRING))
 		{
 			argDataType = "string";
 		}
