@@ -1,10 +1,9 @@
 package edu.jsu.mcis;
 
 import java.util.*;
-
 public class HelpInfoGenerator
 {
-	public String getHelpInfo(HashMap<String, ArgValues> hash, String program, String progDesc)
+	public String getHelpInfo(LinkedHashMap<String, ArgValues> hash, String program, String progDesc)
 	{
 		String helpMessage = getUsageLine(hash, program) + "\n\n";
 		helpMessage = helpMessage + progDesc + "\n\n";
@@ -12,14 +11,14 @@ public class HelpInfoGenerator
 		return helpMessage;
 	}
 	
-	public String getUsageLine(HashMap<String, ArgValues> hash, String program)
+	public String getUsageLine(LinkedHashMap<String, ArgValues> hash, String program)
 	{
 		String helpMessage = "usage: java " + program;
 		Iterator<String> hashKeys = hash.keySet().iterator();
 		String argList = "";
 		while (hashKeys.hasNext())
 		{
-			argList = hashKeys.next() + " " + argList;
+			argList = argList + " " + hashKeys.next();
 		}
 		argList = argList.trim();
 		helpMessage = helpMessage + " " + argList;
@@ -27,7 +26,7 @@ public class HelpInfoGenerator
 		return helpMessage;
 	}
 	
-	public String getPosArgsInfo(HashMap<String, ArgValues> hash)
+	public String getPosArgsInfo(LinkedHashMap<String, ArgValues> hash)
 	{
 		String posArgsHelp = "positional arguments: ";
 		Iterator<String> hashKeys = hash.keySet().iterator();
@@ -36,7 +35,7 @@ public class HelpInfoGenerator
 		while (hashKeys.hasNext())
 		{
 			currentKey = hashKeys.next();
-			argsHelp = currentKey + " " + hash.get(currentKey).getHelpArg() + "\n" + argsHelp;
+			argsHelp = argsHelp + currentKey + " " + hash.get(currentKey).getHelpArg() + "\n";
 		}
 		argsHelp = argsHelp.trim();
 		posArgsHelp = posArgsHelp + argsHelp;

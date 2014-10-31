@@ -1,11 +1,10 @@
 package edu.jsu.mcis;
 
 import java.util.*;
-
 public class ArgParser {
 	
-	private HashMap<String, ArgValues> argValueHolder;
-	private HashMap<String, OptArgValues> optArgValueHolder;
+	private LinkedHashMap<String, ArgValues> argValueHolder;
+	private LinkedHashMap<String, OptArgValues> optArgValueHolder;
 	private List<String> posArgNames;
 	private String program;
 	private String progDesc;
@@ -15,8 +14,8 @@ public class ArgParser {
 		
 		program = progName;
 		
-		argValueHolder = new HashMap<String, ArgValues>();
-		optArgValueHolder = new HashMap<String, OptArgValues>();
+		argValueHolder = new LinkedHashMap<String, ArgValues>();
+		optArgValueHolder = new LinkedHashMap<String, OptArgValues>();
 		
 		posArgNames = new ArrayList<String>();
 		

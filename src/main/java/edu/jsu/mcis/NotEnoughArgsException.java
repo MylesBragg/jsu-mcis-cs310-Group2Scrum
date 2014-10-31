@@ -1,7 +1,6 @@
 package edu.jsu.mcis;
 
 import java.util.*;
-
 public class NotEnoughArgsException extends RuntimeException
 {
 	String usage;
@@ -9,7 +8,7 @@ public class NotEnoughArgsException extends RuntimeException
 	List<String> namesArray;
 	int index = 0;
 	
-	public NotEnoughArgsException(String helpUsage, String prog, HashMap<String, ArgValues> hash, int i)
+	public NotEnoughArgsException(String helpUsage, String prog, LinkedHashMap<String, ArgValues> hash, int i)
 	{
 		usage = helpUsage;
 		program = prog;
