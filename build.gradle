@@ -7,7 +7,7 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'GroupTwo', 
                    'Implementation-Version': version, 
-                   'Main-Class': 'edu.jsu.mcis.Controller'
+                   'Main-Class': 'edu.jsu.mcis.ArgParser'
     }
 }
 

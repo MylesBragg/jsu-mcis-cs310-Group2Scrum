@@ -82,9 +82,9 @@ public class ArgParser {
 		while (argScanner.hasNext()) {
 		
 			nextValue = argScanner.next();
-			if (nextValue.equals("-h")) {
+			if (nextValue.equals("-h") || nextValue.equals("--help")) {
 				HelpInfoGenerator h = new HelpInfoGenerator();
-				helpString = h.getHelpInfo(argValueHolder, program, progDesc);
+				helpString = h.getHelpInfo(argValueHolder, optArgValueHolder, program, progDesc);
 				System.out.println(helpString);
 			}
 			else {
@@ -110,7 +110,8 @@ public class ArgParser {
 				}
 			}
 		}
-		if (!nextValue.equals("-h") && currentPosArgIndex < argValueHolder.size()) {
+		if (!nextValue.equals("-h") && !nextValue.equals("--help") && currentPosArgIndex < argValueHolder.size())
+		{	
 			String helpUsage = getHelpUsageText();
 			throw new NotEnoughArgsException(helpUsage, program, argValueHolder, argValueHolder.size());
 		}
@@ -129,7 +130,7 @@ public class ArgParser {
 	
 	public void addOptArgValue(String optArgName, String optArgValue) {
 		try {
-			//optArgValueHolder.get(optArgName).addValueArg(optArgValue);
+			optArgValueHolder.get(optArgName).setArgDefault(optArgValue);
 		}
 		catch(NumberFormatException nfe) {
 			String helpUsage = getHelpUsageText();
@@ -139,7 +140,12 @@ public class ArgParser {
 	
 	public String getHelpUsageText() {
 		HelpInfoGenerator h = new HelpInfoGenerator();
-		return h.getUsageLine(argValueHolder, program);
+		if(optArgValueHolder.size() == 0) {
+			return h.getUsageLine(argValueHolder, program);
+		}
+		else {
+			return h.getUsageLine(argValueHolder, optArgValueHolder, program);
+		}
 	}
 	
 	public String getHelpString() {

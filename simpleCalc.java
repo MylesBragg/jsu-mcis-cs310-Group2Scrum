@@ -15,22 +15,26 @@ public class simpleCalc {
 		newParser.addArg("operand2", "Enter the second whole number", ArgValues.Type.INT);
 		newParser.addArg("operator", "Enter the operator you wish to use", ArgValues.Type.STRING);
 		
-		newParser.parser(newParser.fromArgstoString(args));
+		newParser.parse(newParser.fromArgsToString(args));
 		
-		operand1 = newParser.getArgumentValue("operand1");
-		operand2 = newParser.getArgumentValue("operand2");
-		operator = newParser.getArgumentValue("operator");
+		operand1 = newParser.getArgValue("operand1");
+		operand2 = newParser.getArgValue("operand2");
+		operator = newParser.getArgValue("operator");
 		equation = operand1 + operator + operand2 + "=";
 		
 		switch(operator) {
 			case "+":
 				System.out.println(equation + (operand1 + operand2));
+				break;
 			case "-":
 				System.out.println(equation + (operand1 - operand2));
+				break;
 			case "*":
 				System.out.println(equation + (operand1 * operand2));
+				break;
 			case "/":
 				System.out.println(equation + (operand1 / operand2));
+				break;
 			default:
 				System.out.println("You must select a proper operator.");
 		}
