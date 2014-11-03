@@ -4,6 +4,7 @@ public class OptArgValues {
 	private String argName;
 	private String argShortName;
 	private String argHelp;
+
 	private ArgValues.Type argDataType;
 	private Object argDefaultVal;
 	
@@ -69,5 +70,21 @@ public class OptArgValues {
 		argDataType = dataType;
 		argShortName = shortName;
 		argDefaultVal = defaultVal;
+	}
+	
+	public String getOptName(){
+		return argName;
+	}
+	public String getArgHelp(){
+		return argHelp;
+	}
+	public String getShortName(){
+		return argShortName;
+	}
+	public Object getArgDefault(){
+		return argDefaultVal;
+	}
+	public ArgValues.Type getDataType(){
+		return argDataType;
 	}
 }
