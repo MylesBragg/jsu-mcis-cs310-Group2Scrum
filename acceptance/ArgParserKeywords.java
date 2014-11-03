@@ -7,18 +7,19 @@ public class ArgParserKeywords {
 	
 	public void startVolumeCalculatorTest(String vars) {
 		parser = new ArgParser();
-		parser.addArg("length");
-		parser.addArg("width");
-		parser.addArg("height");
+		parser.addProgramHelpInfo("Calculate the volume of a box.");
+		parser.addArg("length", "the length of the box", ArgValues.Type.INT);
+		parser.addArg("width", "the width of the box", ArgValues.Type.FLOAT);
+		parser.addArg("height", "the height of the box", ArgValues.Type.INT);
 		parser.parse("VolumeCalculator " + vars);
 	}
 	
 	public void startPetShowTest(String vars) {
 		parser = new ArgParser();
-		parser.addArg("pet");
-		parser.addArg("number");
-		parser.addArg("rainy");
-		parser.addArg("bathrooms");
+		parser.addArg("pet", "The type of pet", ArgValues.Type.STRING);
+		parser.addArg("number", "The number of pets", ArgValues.Type.INT);
+		parser.addArg("rainy", "If it is raining", ArgValues.Type.BOOLEAN);
+		parser.addArg("bathrooms", "The number of bathrooms", ArgValues.Type.FLOAT);
 		parser.parse("GetPetNumberRainyBathrooms " + vars);
 	}
 	

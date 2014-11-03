@@ -6,15 +6,15 @@ import java.util.*;
 
 public class NotEnoughArgsExceptionTest
 {
-	private List<String> arrayOfNames;
-/*	
+	private LinkedHashMap<String, ArgValues> arrayOfNames;
+	
 	@Test
 	public void testNotEnoughArgs()
 	{
-		arrayOfNames = new ArrayList<String>();
-		arrayOfNames.add("length");
-		arrayOfNames.add("width");
-		arrayOfNames.add("height");
+		arrayOfNames = new LinkedHashMap<String, ArgValues>();
+		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
+		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
+		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
 		String program = "VolumeCalculator";
 		int loc = 1;
 		HelpInfoGenerator h = new HelpInfoGenerator();
@@ -24,5 +24,5 @@ public class NotEnoughArgsExceptionTest
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: the following arguments are required: width height", 
 					errorString);
-	}*/
+	}
 }

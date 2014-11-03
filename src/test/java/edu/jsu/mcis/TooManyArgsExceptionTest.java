@@ -6,15 +6,15 @@ import java.util.*;
 
 public class TooManyArgsExceptionTest
 {
-	private List<String> arrayOfNames;
-/*	
+	private LinkedHashMap<String, ArgValues> arrayOfNames;
+	
 	@Test
 	public void testTooManyArgs()
 	{
-		arrayOfNames = new ArrayList<String>();
-		arrayOfNames.add("length");
-		arrayOfNames.add("width");
-		arrayOfNames.add("height");
+		arrayOfNames = new LinkedHashMap<String, ArgValues>();
+		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
+		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
+		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
 		String program = "VolumeCalculator";
 		String nextValue = "43";
 		Scanner argScanner = new Scanner("99");
@@ -25,5 +25,5 @@ public class TooManyArgsExceptionTest
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: unrecognized arguments: 43 99", 
 					errorString);
-	}*/
+	}
 }

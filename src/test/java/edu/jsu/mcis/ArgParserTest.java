@@ -161,7 +161,7 @@ public class ArgParserTest
 		}
 	}
 	
-	@Test // programmer should just tell us float, int, boolean and we set the DTDef accordingly!!!
+	@Test
 	public void testTooFewArgs()
 	{
 		try

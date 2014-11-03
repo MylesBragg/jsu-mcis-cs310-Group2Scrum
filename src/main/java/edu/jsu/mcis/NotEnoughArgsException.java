@@ -20,6 +20,21 @@ public class NotEnoughArgsException extends RuntimeException
 		}
 		index = i;
 	}
+	
+	public String getUsage()
+	{
+		return usage;
+	}
+	
+	public List<String> getNamesArray()
+	{
+		return namesArray;
+	}
+	
+	public int getIndex()
+	{
+		return index;
+	}
 
 	public String toString()
 	{

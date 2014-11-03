@@ -34,6 +34,26 @@ public class InvalidValueException extends RuntimeException
 		currentValue = currValue;
 	}
 	
+	public String getUsage()
+	{
+		return usage;
+	}
+	
+	public String getArgName()
+	{
+		return argName;
+	}
+	
+	public String getArgDataType()
+	{
+		return argDataType;
+	}
+	
+	public String getCurrentValue()
+	{
+		return currentValue;
+	}
+
 	public String toString()
 	{
 		String errorMessage = usage + "\n";

@@ -6,16 +6,16 @@ import java.util.*;
 
 public class HelpInfoGeneratorTest
 {
-	private List<String> arrayOfNames;
+	private LinkedHashMap<String, ArgValues> arrayOfNames;
 	
-	/*@Test
+	@Test
 	public void testgetUsageLine()
 	{
 		String program = "VolumeCalculator";
-		arrayOfNames = new ArrayList<String>();
-		arrayOfNames.add("length");
-		arrayOfNames.add("width");
-		arrayOfNames.add("height");
+		arrayOfNames = new LinkedHashMap<String, ArgValues>();
+		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
+		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
+		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
 		HelpInfoGenerator h = new HelpInfoGenerator();
 		String usage = h.getUsageLine(arrayOfNames, program);
 		assertEquals(usage, "usage: java VolumeCalculator length width height");
@@ -24,16 +24,12 @@ public class HelpInfoGeneratorTest
 	@Test
 	public void testCreatePosArgsHelp()
 	{
-		arrayOfNames = new ArrayList<String>();
-		arrayOfNames.add("length");
-		arrayOfNames.add("width");
-		arrayOfNames.add("height");
-		ArgValues allArgVals = new ArgValues();
-		allArgVals.addHelpArg("length", "the length of the box");
-		allArgVals.addHelpArg("width", "the width of the box");
-		allArgVals.addHelpArg("height", "the height of the box");
+		arrayOfNames = new LinkedHashMap<String, ArgValues>();
+		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
+		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
+		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
 		HelpInfoGenerator h = new HelpInfoGenerator();
-		String posArgs = h.getPosArgsInfo(arrayOfNames, allArgVals);
+		String posArgs = h.getPosArgsInfo(arrayOfNames);
 		assertEquals(posArgs, "positional arguments: length the length of the box\n" + 
 								"width the width of the box\n" +							
 								"height the height of the box");
@@ -44,20 +40,16 @@ public class HelpInfoGeneratorTest
 	{
 		String program = "VolumeCalculator";
 		String progDesc = "Calculate the volume of a box.";
-		arrayOfNames = new ArrayList<String>();
-		arrayOfNames.add("length");
-		arrayOfNames.add("width");
-		arrayOfNames.add("height");
-		ArgValues allArgVals = new ArgValues();
-		allArgVals.addHelpArg("length", "the length of the box");
-		allArgVals.addHelpArg("width", "the width of the box");
-		allArgVals.addHelpArg("height", "the height of the box");
+		arrayOfNames = new LinkedHashMap<String, ArgValues>();
+		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
+		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
+		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
 		HelpInfoGenerator h = new HelpInfoGenerator();
-		String completeHelp = h.getHelpInfo(arrayOfNames, program, allArgVals, progDesc);
+		String completeHelp = h.getHelpInfo(arrayOfNames, program, progDesc);
 		assertEquals(completeHelp, "usage: java VolumeCalculator length width height\n\n" +
 									"Calculate the volume of a box.\n\n" +
 									"positional arguments: length the length of the box\n" + 
 									"width the width of the box\n" +							
 									"height the height of the box");
-	}*/
+	}
 }

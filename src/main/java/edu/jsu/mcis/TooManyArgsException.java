@@ -17,6 +17,21 @@ public class TooManyArgsException extends RuntimeException
 		args = argScanner;
 	}
 	
+	public String getUsage()
+	{
+		return usage;
+	}
+	
+	public String getNextValue()
+	{
+		return nextValue;
+	}
+	
+	public Scanner getArgs()
+	{
+		return args;
+	}
+	
 	public String toString()
 	{
 		String errorMessage = usage + "\n";
