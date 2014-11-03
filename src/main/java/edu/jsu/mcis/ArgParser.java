@@ -82,7 +82,7 @@ public class ArgParser {
 		while (argScanner.hasNext()) {
 		
 			nextValue = argScanner.next();
-			if (nextValue.equals("-h")) {			//getHelpInfo
+			if (nextValue.equals("-h")) {
 				HelpInfoGenerator h = new HelpInfoGenerator();
 				helpString = h.getHelpInfo(argValueHolder, program, progDesc);
 				System.out.println(helpString);
@@ -128,7 +128,13 @@ public class ArgParser {
 	}
 	
 	public void addOptArgValue(String optArgName, String optArgValue) {
-		
+		try {
+			optArgValueHolder.get(optArgName).addValueArg(optArgValue);
+		}
+		catch(NumberFormatException nfe) {
+			String helpUsage = getHelpUsageText();
+			throw new InvalidValueException(helpUsage, program, optArgName, OptArgValueHolder.get(OptArgName).getDataTypeArg(), optArgValue);
+		}
 	}
 	
 	public String getHelpUsageText() {
@@ -141,6 +147,15 @@ public class ArgParser {
 	}
 	
 	public <T> T getArgValue(String name) {
-		return argValueHolder.get(name).getValueArg();
+		if (argValueHolder.containsKey(name)) {
+			return argValueHolder.get(name).getValueArg();
+		}
+		else if (optArgValueHolder.containsKey(name)) {
+			return optArgValueHolder.get(name).getValueArg();
+		}
+		else {
+			return "Error key not found.";
+		}
 	}
+	
 }
