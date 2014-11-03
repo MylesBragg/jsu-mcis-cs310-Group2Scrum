@@ -14,8 +14,8 @@ public class HelpInfoGeneratorTest
 		String program = "VolumeCalculator";
 		arrayOfNames = new LinkedHashMap<String, ArgValues>();
 		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
-		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
-		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
+		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.BOOLEAN));
+		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.FLOAT));
 		HelpInfoGenerator h = new HelpInfoGenerator();
 		String usage = h.getUsageLine(arrayOfNames, program);
 		assertEquals(usage, "usage: java VolumeCalculator length width height");
@@ -26,8 +26,8 @@ public class HelpInfoGeneratorTest
 	{
 		arrayOfNames = new LinkedHashMap<String, ArgValues>();
 		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
-		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
-		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
+		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.BOOLEAN));
+		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.FLOAT));
 		HelpInfoGenerator h = new HelpInfoGenerator();
 		String posArgs = h.getPosArgsInfo(arrayOfNames);
 		assertEquals(posArgs, "positional arguments: length the length of the box\n" + 
@@ -42,8 +42,8 @@ public class HelpInfoGeneratorTest
 		String progDesc = "Calculate the volume of a box.";
 		arrayOfNames = new LinkedHashMap<String, ArgValues>();
 		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
-		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
-		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
+		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.BOOLEAN));
+		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.FLOAT));
 		HelpInfoGenerator h = new HelpInfoGenerator();
 		String completeHelp = h.getHelpInfo(arrayOfNames, program, progDesc);
 		assertEquals(completeHelp, "usage: java VolumeCalculator length width height\n\n" +
