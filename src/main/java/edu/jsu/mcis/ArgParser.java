@@ -129,11 +129,11 @@ public class ArgParser {
 	
 	public void addOptArgValue(String optArgName, String optArgValue) {
 		try {
-			optArgValueHolder.get(optArgName).addValueArg(optArgValue);
+			//optArgValueHolder.get(optArgName).addValueArg(optArgValue);
 		}
 		catch(NumberFormatException nfe) {
 			String helpUsage = getHelpUsageText();
-			throw new InvalidValueException(helpUsage, program, optArgName, OptArgValueHolder.get(OptArgName).getDataTypeArg(), optArgValue);
+			throw new InvalidValueException(helpUsage, program, optArgName, optArgValueHolder.get(optArgName).getDataType(), optArgValue);
 		}
 	}
 	
@@ -151,10 +151,10 @@ public class ArgParser {
 			return argValueHolder.get(name).getValueArg();
 		}
 		else if (optArgValueHolder.containsKey(name)) {
-			return optArgValueHolder.get(name).getValueArg();
+			return (T)optArgValueHolder.get(name).getArgDefault();
 		}
 		else {
-			return "Error key not found.";
+			return (T)"Error key not found.";
 		}
 	}
 	
