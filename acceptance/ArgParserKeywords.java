@@ -23,13 +23,23 @@ public class ArgParserKeywords {
 		parser.parse(vars);
 	}
 	
-	public String getLength()
+	public void startProgramWithOptionalArguments(String vars)
 	{
-		
-		return parser.getArgValue("length").toString();
+		parser = new ArgParser("OptionalArguments");
+		parser.addArg("length", "the length of the box", ArgValues.Type.INT);
+		parser.addArg("width", "the width of the box", ArgValues.Type.INT);
+		parser.addArg("height", "the height of the box", ArgValues.Type.INT);
+		parser.addOptionalArg("type", "Optional argument 'type' help", ArgValues.Type.STRING);
+		parser.parse(vars);
 	}
 	
-	public String getWidth()
+	public String get(String name)
+	{
+		
+		return parser.getArgValue(name).toString();
+	}
+	
+/*	public String getWidth()
 	{
 		return parser.getArgValue("width").toString();
 	}
@@ -57,5 +67,5 @@ public class ArgParserKeywords {
 	public String getBathrooms()
 	{
 		return parser.getArgValue("bathrooms").toString();
-	}
+	}*/
 }

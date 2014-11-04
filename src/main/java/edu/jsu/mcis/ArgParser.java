@@ -95,9 +95,10 @@ public class ArgParser {
 						}
 					}
 					else if (nextValue.contains("-")) {
-						if (optArgValueHolder.containsKey(nextValue.substring(1))) {
-							addOptArgValue(nextValue.substring(1), argScanner.next());
-						}
+						String optShort = nextValue.substring(1);
+						String optName = getOptArgFullName(optShort);
+						String optValue = argScanner.next();
+						addOptArgValue(optName, optValue);
 					}
 					else {
 						addArgValue(posArgNames.get(currentPosArgIndex), nextValue);
@@ -138,6 +139,21 @@ public class ArgParser {
 		}
 	}
 	
+	public String getOptArgFullName(String shortName)
+	{
+		Iterator<String> hashKeys = optArgValueHolder.keySet().iterator();
+		String name;
+		while(hashKeys.hasNext())
+		{
+			name = hashKeys.next();
+			String currentShortName = optArgValueHolder.get(name).getShortName();
+			if(currentShortName.equals(shortName))
+			{
+				return name;
+			}
+		}
+		return "";
+	}
 	public String getHelpUsageText() {
 		HelpInfoGenerator h = new HelpInfoGenerator();
 		if(optArgValueHolder.size() == 0) {

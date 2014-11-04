@@ -13,20 +13,25 @@ Start Program With Arguments dog 2 true 3.5
 
 Start Test For Volume Calculator
 	Start Program With Arguments 7 5 2
-	${length}=     Get Length
+	${length}=     Get   length
 	Should Be Equal    7    ${length}
-	${width}=     Get Width
+	${width}=     Get   width
 	Should Be Equal    5    ${width}
-	${height}=     Get Height
+	${height}=     Get   height
 	Should Be Equal    2    ${height}
 
 Start Test For Animal Show
 	Start Program With Arguments dog 2 true 3.5
-	${pet}=     Get Pet
+	${pet}=     Get   pet
 	Should Be Equal    dog    ${pet}
-	${number}=     Get Number
+	${number}=     Get   number
 	Should Be Equal    2    ${number}
-	${rainy}=     Get Rainy
+	${rainy}=     Get   rainy
 	Should Be Equal    true    ${rainy}
-	${bathrooms}=     Get Bathrooms
+	${bathrooms}=     Get   bathrooms
 	Should Be Equal    3.5    ${bathrooms}
+	
+Start Test With Optional Arguments
+	Start Program With Optional Arguments   7 --type box 5 2
+	${type}= 	Get   type
+	Should Be Equal   ${type}   box
