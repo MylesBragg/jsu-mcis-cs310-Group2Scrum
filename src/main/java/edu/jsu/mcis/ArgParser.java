@@ -40,34 +40,34 @@ public class ArgParser {
 		argValueHolder.put(name, new ArgValues(name, help, dataType));
 		posArgNames.add(name);
 	}
-	public void addOptionalArg(String name, String help, ArgValues.Type dataType) {
+	public void addOptArg(String name, String help, ArgValues.Type dataType) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType));
 	}
-	public void addOptionalArg(String name, String help, ArgValues.Type dataType, String defaultVal) {
+	public void addOptArg(String name, String help, ArgValues.Type dataType, String defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String help, ArgValues.Type dataType, int defaultVal) {
+	public void addOptArg(String name, String help, ArgValues.Type dataType, int defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String help, ArgValues.Type dataType, float defaultVal) {
+	public void addOptArg(String name, String help, ArgValues.Type dataType, float defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String help, ArgValues.Type dataType, boolean defaultVal) {
+	public void addOptArg(String name, String help, ArgValues.Type dataType, boolean defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType) {
+	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType));
 	}
-	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType, String defaultVal) {
+	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType, String defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType, int defaultVal) {
+	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType, int defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType, float defaultVal) {
+	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType, float defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
 	}
-	public void addOptionalArg(String name, String shortName, String help, ArgValues.Type dataType, boolean defaultVal) {
+	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType, boolean defaultVal) {
 		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
 	}
 	
@@ -197,5 +197,13 @@ public class ArgParser {
 			}
 		}
 	}
-	
+	public void setOptArgRequired(String name) {
+		String optFullName = getOptArgFullName(name);
+		if (optFullName.equals("")) {
+			optArgValueHolder.get(name).setRequiredBit();
+		}
+		else {
+			optArgValueHolder.get(optFullName).setRequiredBit();
+		}
+	}
 }

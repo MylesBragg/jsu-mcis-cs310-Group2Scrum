@@ -40,7 +40,7 @@ public class ArgParserTest
 	{
 		String myString = "7 --type closet";
 		parser.addArg("length", "Enter whole number", ArgValues.Type.INT);
-		parser.addOptionalArg("type", "t", "Set Type", ArgValues.Type.STRING);
+		parser.addOptArg("type", "t", "Set Type", ArgValues.Type.STRING);
 		parser.parse(myString);
 		assertEquals("closet", parser.getArgValue("type"));
 	}
@@ -50,7 +50,7 @@ public class ArgParserTest
 	{
 		String myString = "7 --type closet";
 		parser.addArg("length", "Enter whole number", ArgValues.Type.INT);
-		parser.addOptionalArg("type", "t", "Set Type", ArgValues.Type.STRING);
+		parser.addOptArg("type", "t", "Set Type", ArgValues.Type.STRING);
 		parser.parse(myString);
 		assertEquals("closet", parser.getArgValue("type"));
 	}
@@ -59,7 +59,7 @@ public class ArgParserTest
 	public void addOptValBeforePositionalVal()
 	{
 		String myString = "--type closet 7";
-		parser.addOptionalArg("type", "t", "Set Type", ArgValues.Type.STRING);
+		parser.addOptArg("type", "t", "Set Type", ArgValues.Type.STRING);
 		parser.addArg("length", "Enter whole number", ArgValues.Type.INT);
 		parser.parse(myString);
 		assertEquals("closet", parser.getArgValue("type"));
@@ -69,7 +69,7 @@ public class ArgParserTest
 	public void addOptValBetweenPositionalVals()
 	{
 		String myString = "7 --type closet 5";
-		parser.addOptionalArg("type", "t", "Set Type", ArgValues.Type.STRING);
+		parser.addOptArg("type", "t", "Set Type", ArgValues.Type.STRING);
 		parser.addArg("length", "Enter whole number", ArgValues.Type.INT);
 		parser.addArg("width", "Enter whole number", ArgValues.Type.INT);
 		parser.parse(myString);
@@ -79,76 +79,76 @@ public class ArgParserTest
 	@Test
 	public void testAddOptValDefaultVal()
 	{
-		parser.addOptionalArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, "box");
+		parser.addOptArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, "box");
 		assertEquals("box", parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameHelpDataType()
 	{
-		parser.addOptionalArg("type", "Set Calculation Type", ArgValues.Type.STRING);
+		parser.addOptArg("type", "Set Calculation Type", ArgValues.Type.STRING);
 		parser.addOptArgValue("type", "test");
 		assertEquals("test", parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameHelpDataTypeStringDefValue()
 	{
-		parser.addOptionalArg("type", "Set Calculation Type", ArgValues.Type.STRING, "box");
+		parser.addOptArg("type", "Set Calculation Type", ArgValues.Type.STRING, "box");
 		assertEquals("box", parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameHelpDataTypeIntDefValue()
 	{
-		parser.addOptionalArg("type", "Set Calculation Type", ArgValues.Type.STRING, 7);
+		parser.addOptArg("type", "Set Calculation Type", ArgValues.Type.STRING, 7);
 		assertEquals(7, parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameHelpDataTypeFloatDefValue()
 	{
-		parser.addOptionalArg("type", "Set Calculation Type", ArgValues.Type.STRING, 3.5f);
+		parser.addOptArg("type", "Set Calculation Type", ArgValues.Type.STRING, 3.5f);
 		assertEquals(3.5f, parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameHelpDataTypeBoolDefValue()
 	{
-		parser.addOptionalArg("type", "Set Calculation Type", ArgValues.Type.STRING, false);
+		parser.addOptArg("type", "Set Calculation Type", ArgValues.Type.STRING, false);
 		assertEquals(false, parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameShortHelpDataType()
 	{
-		parser.addOptionalArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING);
+		parser.addOptArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING);
 		parser.addOptArgValue("type", "test");
 		assertEquals("test", parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameShortHelpDataTypeStringDefValue()
 	{
-		parser.addOptionalArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, "box");
+		parser.addOptArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, "box");
 		assertEquals("box", parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameShortHelpDataTypeIntDefValue()
 	{
-		parser.addOptionalArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, 7);
+		parser.addOptArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, 7);
 		assertEquals(7, parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameShortHelpDataTypeFloatDefValue()
 	{
-		parser.addOptionalArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, 3.5f);
+		parser.addOptArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, 3.5f);
 		assertEquals(3.5f, parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddOptArgNameShortHelpDataTypeBoolDefValue()
 	{
-		parser.addOptionalArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, true);
+		parser.addOptArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, true);
 		assertEquals(true, parser.getArgValue("type"));
 	}
 	@Test
 	public void testAddFlagOptVal()
 	{
 	String myString = "--save";
-	parser.addOptionalArg("save", "v", "Save Calculations", ArgValues.Type.FLAG);
+	parser.addOptArg("save", "v", "Save Calculations", ArgValues.Type.FLAG);
 	parser.parse(myString);
 	assertEquals(true, parser.getArgValue("save"));
 	}
@@ -157,7 +157,7 @@ public class ArgParserTest
 	public void testShortNameOptArg()
 	{
 		String myString = "7 -t closet 5";
-		parser.addOptionalArg("type", "t", "Set Type", ArgValues.Type.STRING, "box");
+		parser.addOptArg("type", "t", "Set Type", ArgValues.Type.STRING, "box");
 		parser.addArg("length", "Enter whole number", ArgValues.Type.INT);
 		parser.addArg("width", "Enter whole number", ArgValues.Type.INT);
 		parser.parse(myString);
