@@ -4,7 +4,7 @@ import java.util.*;
 @SuppressWarnings("unchecked")
 public class ArgValues
 {
-	public enum Type{STRING, INT, BOOLEAN, FLOAT}
+	public enum Type{STRING, INT, BOOLEAN, FLOAT, FLAG}
 	private Object argValue;
 	private String name;
 	private String help;

@@ -91,14 +91,26 @@ public class ArgParser {
 				try {
 					if (nextValue.contains("--")) {
 						if (optArgValueHolder.containsKey(nextValue.substring(2))) {
-							addOptArgValue(nextValue.substring(2), argScanner.next());
+							if (optArgValueHolder.get(nextValue.substring(2)).getFlagBit()) {
+								addOptArgValue(nextValue.substring(2), "true");
+							}
+							else {
+								addOptArgValue(nextValue.substring(2), argScanner.next());
+							}
+							
 						}
 					}
 					else if (nextValue.contains("-")) {
 						String optShort = nextValue.substring(1);
 						String optName = getOptArgFullName(optShort);
-						String optValue = argScanner.next();
-						addOptArgValue(optName, optValue);
+						
+						if (optArgValueHolder.get(optName).getFlagBit()) {
+								addOptArgValue(optName, "true");
+							}
+							else {
+								String optValue = argScanner.next();
+								addOptArgValue(optName, optValue);
+							}
 					}
 					else {
 						addArgValue(posArgNames.get(currentPosArgIndex), nextValue);
@@ -176,7 +188,13 @@ public class ArgParser {
 			return (T)optArgValueHolder.get(name).getArgDefault();
 		}
 		else {
-			return (T)"Error key not found.";
+			String optFullName = getOptArgFullName(name);
+			if (optFullName.equals("")) {
+				return (T)"Error key not found";
+			}
+			else {
+				return (T)optArgValueHolder.get(optFullName).getArgDefault();
+			}
 		}
 	}
 	

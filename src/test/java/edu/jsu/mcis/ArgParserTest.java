@@ -144,14 +144,14 @@ public class ArgParserTest
 		parser.addOptionalArg("type", "t", "Set Calculation Type", ArgValues.Type.STRING, true);
 		assertEquals(true, parser.getArgValue("type"));
 	}
-/*	@Test
+	@Test
 	public void testAddFlagOptVal()
 	{
 	String myString = "--save";
-	parser.addOptionalArg("save", "v", "Save Calculations", "flag");
+	parser.addOptionalArg("save", "v", "Save Calculations", ArgValues.Type.FLAG);
 	parser.parse(myString);
 	assertEquals(true, parser.getArgValue("save"));
-	}*/
+	}
 	
 	@Test
 	public void testShortNameOptArg()
@@ -161,7 +161,7 @@ public class ArgParserTest
 		parser.addArg("length", "Enter whole number", ArgValues.Type.INT);
 		parser.addArg("width", "Enter whole number", ArgValues.Type.INT);
 		parser.parse(myString);
-		assertEquals("closet", parser.getArgValue("type"));
+		assertEquals("closet", parser.getArgValue("t"));
 	}
 	@Test
 	public void testFromArgsToString()
@@ -262,13 +262,25 @@ public class ArgParserTest
 	}
 
     @Test
-    public void testProgramHelp()
+    public void testProgramHelpShortName()
     {
 		parser.addProgramHelpInfo("Calculate the volume of a box.");
         parser.addArg("length", "the length of the box", ArgValues.Type.INT);
 		parser.addArg("width", "the width of the box", ArgValues.Type.FLOAT);
 		parser.addArg("height", "the height of the box", ArgValues.Type.INT);
 		parser.parse("-h");
+        assertEquals("usage: java VolumeCalculator length width height\n" + "\n" + "Calculate the volume of a box.\n" +
+					"\n" + "positional arguments: length the length of the box\n" + "width the width of the box\n" + 
+					"height the height of the box", parser.getHelpString());
+    }
+	@Test
+    public void testProgramHelpFullName()
+    {
+		parser.addProgramHelpInfo("Calculate the volume of a box.");
+        parser.addArg("length", "the length of the box", ArgValues.Type.INT);
+		parser.addArg("width", "the width of the box", ArgValues.Type.FLOAT);
+		parser.addArg("height", "the height of the box", ArgValues.Type.INT);
+		parser.parse("--help");
         assertEquals("usage: java VolumeCalculator length width height\n" + "\n" + "Calculate the volume of a box.\n" +
 					"\n" + "positional arguments: length the length of the box\n" + "width the width of the box\n" + 
 					"height the height of the box", parser.getHelpString());

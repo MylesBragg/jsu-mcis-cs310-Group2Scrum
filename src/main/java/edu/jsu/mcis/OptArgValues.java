@@ -4,7 +4,7 @@ public class OptArgValues {
 	private String argName;
 	private String argShortName;
 	private String argHelp;
-	private boolean required;
+	private boolean required, flagged;
 
 	private ArgValues.Type argDataType;
 	private Object argDefaultVal;
@@ -13,7 +13,8 @@ public class OptArgValues {
 		argName = name;
 		argHelp = help;
 		argDataType = dataType;
-		required = false;
+		required = false;		
+		setFlagged(dataType);
 	}
 	public OptArgValues(String name, String help, ArgValues.Type dataType, String defaultVal) {
 		argName = name;
@@ -21,6 +22,7 @@ public class OptArgValues {
 		argDataType = dataType;
 		argDefaultVal = defaultVal;
 		required = false;
+		setFlagged(dataType);
 	}
 	public OptArgValues(String name, String help, ArgValues.Type dataType, int defaultVal) {
 		argName = name;
@@ -28,6 +30,7 @@ public class OptArgValues {
 		argDataType = dataType;
 		argDefaultVal = defaultVal;
 		required = false;
+		setFlagged(dataType);
 	}
 	public OptArgValues(String name, String help, ArgValues.Type dataType, boolean defaultVal) {
 		argName = name;
@@ -35,6 +38,7 @@ public class OptArgValues {
 		argDataType = dataType;
 		argDefaultVal = defaultVal;
 		required = false;
+		setFlagged(dataType);
 	}
 	public OptArgValues(String name, String help, ArgValues.Type dataType, float defaultVal) {
 		argName = name;
@@ -42,6 +46,7 @@ public class OptArgValues {
 		argDataType = dataType;
 		argDefaultVal = defaultVal;
 		required = false;
+		setFlagged(dataType);
 	}
 	public OptArgValues(String name, String shortName, String help, ArgValues.Type dataType) {
 		argName = name;
@@ -49,6 +54,7 @@ public class OptArgValues {
 		argDataType = dataType;
 		argShortName = shortName;
 		required = false;
+		setFlagged(dataType);
 	}
 	public OptArgValues(String name, String shortName, String help, ArgValues.Type dataType, String defaultVal) {
 		argName = name;
@@ -57,6 +63,7 @@ public class OptArgValues {
 		argShortName = shortName;
 		argDefaultVal = defaultVal;
 		required = false;
+		setFlagged(dataType);
 	}
 	public OptArgValues(String name, String shortName, String help, ArgValues.Type dataType, int defaultVal) {
 		argName = name;
@@ -65,6 +72,7 @@ public class OptArgValues {
 		argShortName = shortName;
 		argDefaultVal = defaultVal;
 		required = false;
+		setFlagged(dataType);
 	}
 	public OptArgValues(String name, String shortName, String help, ArgValues.Type dataType, float defaultVal) {
 		argName = name;
@@ -73,6 +81,7 @@ public class OptArgValues {
 		argShortName = shortName;
 		argDefaultVal = defaultVal;
 		required = false;
+		setFlagged(dataType);
 	}
 	public OptArgValues(String name, String shortName, String help, ArgValues.Type dataType, boolean defaultVal) {
 		argName = name;
@@ -81,8 +90,18 @@ public class OptArgValues {
 		argShortName = shortName;
 		argDefaultVal = defaultVal;
 		required = false;
+		setFlagged(dataType);
 	}
-	
+	public void setFlagged(ArgValues.Type dataType) {
+		switch (dataType) {
+			case FLAG:
+			flagged = true;
+			break;
+			default:
+			flagged = false;
+			break;
+		}
+	}
 	public String getOptName(){
 		return argName;
 	}
@@ -104,6 +123,9 @@ public class OptArgValues {
 	public boolean getRequiredBit() {
 		return required;
 	}
+	public boolean getFlagBit() {
+		return flagged;
+	}
 	public void setArgDefault(String v) throws NumberFormatException {
 		switch(argDataType){
 		case INT:
@@ -112,7 +134,7 @@ public class OptArgValues {
 		case FLOAT:
 			argDefaultVal = Float.parseFloat(v);
 			break;
-		case BOOLEAN:
+		case BOOLEAN:case FLAG:
 			if(v.equals("true") || v.equals("false")){
 				argDefaultVal = Boolean.parseBoolean(v);
 			}
