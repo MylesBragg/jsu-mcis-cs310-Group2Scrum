@@ -2,22 +2,22 @@ package edu.jsu.mcis;
 
 import java.util.*;
 @SuppressWarnings("unchecked")
-public class Arguments 
+public class Argument
 {
 	public enum Type{STRING, INT, BOOLEAN, FLOAT, FLAG}
-	private Object value;
-	private String name;
-	private String description
-	private Type type;
+	protected Object value;
+	protected String name;
+	protected String description;
+	protected Type type;
 
-	public type(String name,String help,Type dataType) {
+	public Argument(String name, String description, Type dataType) {
 		this.name = name;
-		this.help = help;
+		this.description = description;
 		type = dataType;
 	}
 
 	public String getDescription() {
-		return help;
+		return description;
 	}
 	
 	public <T extends Object> T getValue() {
@@ -32,7 +32,7 @@ public class Arguments
 		case FLOAT:
 			value = Float.parseFloat(v);
 			break;
-		case BOOLEAN:FLAG:
+		case BOOLEAN: case FLAG:
 			if(v.equals("true") || v.equals("false")){
 				value = Boolean.parseBoolean(v);
 			}

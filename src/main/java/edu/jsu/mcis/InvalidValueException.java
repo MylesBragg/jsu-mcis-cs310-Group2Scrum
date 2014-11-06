@@ -4,32 +4,32 @@ import java.util.*;
 
 public class InvalidValueException extends RuntimeException
 {
-	String usage;
-	String program;
-	String argName;
-	String argDataType;
-	String currentValue;
+	private String usage;
+	private String program;
+	private String name;
+	private String type;
+	private String currentValue;
 	
-	public InvalidValueException(String helpUsage, String prog, String argN, ArgValues.Type argDT, String currValue)
+	public InvalidValueException(String helpUsage, String prog, String argN, Argument.Type argDT, String currValue)
 	{
 		usage = helpUsage;
 		program = prog;
-		argName = argN;
-		if(argDT.equals(ArgValues.Type.INT))
+		name = argN;
+		if(argDT.equals(Argument.Type.INT))
 		{
-			argDataType = "integer";
+			type = "integer";
 		}
-		if(argDT.equals(ArgValues.Type.FLOAT))
+		if(argDT.equals(Argument.Type.FLOAT))
 		{
-			argDataType = "float";
+			type = "float";
 		}
-		if(argDT.equals(ArgValues.Type.BOOLEAN))
+		if(argDT.equals(Argument.Type.BOOLEAN))
 		{
-			argDataType = "boolean";
+			type = "boolean";
 		}
-		if(argDT.equals(ArgValues.Type.STRING))
+		if(argDT.equals(Argument.Type.STRING))
 		{
-			argDataType = "string";
+			type = "string";
 		}
 		currentValue = currValue;
 	}
@@ -39,14 +39,14 @@ public class InvalidValueException extends RuntimeException
 		return usage;
 	}
 	
-	public String getArgName()
+	public String getName()
 	{
-		return argName;
+		return name;
 	}
 	
-	public String getArgDataType()
+	public String getType()
 	{
-		return argDataType;
+		return type;
 	}
 	
 	public String getCurrentValue()
@@ -57,8 +57,8 @@ public class InvalidValueException extends RuntimeException
 	public String toString()
 	{
 		String errorMessage = usage + "\n";
-		errorMessage = errorMessage + program + ".java: error: argument " + argName;
-		errorMessage = errorMessage + ": invalid " + argDataType + " value: " + currentValue;
+		errorMessage = errorMessage + program + ".java: error: argument " + name;
+		errorMessage = errorMessage + ": invalid " + type + " value: " + currentValue;
 		return errorMessage;
 	}
 }

@@ -3,19 +3,18 @@ package edu.jsu.mcis;
 import java.util.*;
 public class ArgParser {
 	
-	private LinkedHashMap<String, ArgValues> argValueHolder;
-	private LinkedHashMap<String, OptArgValues> optArgValueHolder;
+	private LinkedHashMap<String, Argument> argValueHolder;
+	private LinkedHashMap<String, OptionalArgument> optArgValueHolder;
 	private List<String> posArgNames;
 	private String program;
 	private String progDesc;
-	private String helpString;
 	
 	public ArgParser(String progName) {
 		
 		program = progName;
 		
-		argValueHolder = new LinkedHashMap<String, ArgValues>();
-		optArgValueHolder = new LinkedHashMap<String, OptArgValues>();
+		argValueHolder = new LinkedHashMap<String, Argument>();
+		optArgValueHolder = new LinkedHashMap<String, OptionalArgument>();
 		
 		posArgNames = new ArrayList<String>();
 		
@@ -36,39 +35,39 @@ public class ArgParser {
 		return myString;
 	}
 	
-	public void addArg(String name, String help, ArgValues.Type dataType) {
-		argValueHolder.put(name, new ArgValues(name, help, dataType));
+	public void addArg(String name, String help, Argument.Type dataType) {
+		argValueHolder.put(name, new Argument(name, help, dataType));
 		posArgNames.add(name);
 	}
-	public void addOptArg(String name, String help, ArgValues.Type dataType) {
-		optArgValueHolder.put(name, new OptArgValues(name, help, dataType));
+	public void addOptArg(String name, String help, Argument.Type dataType) {
+		optArgValueHolder.put(name, new OptionalArgument(name, help, dataType));
 	}
-	public void addOptArg(String name, String help, ArgValues.Type dataType, String defaultVal) {
-		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
+	public void addOptArg(String name, String help, Argument.Type dataType, String defaultVal) {
+		optArgValueHolder.put(name, new OptionalArgument(name, help, dataType, defaultVal));
 	}
-	public void addOptArg(String name, String help, ArgValues.Type dataType, int defaultVal) {
-		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
+	public void addOptArg(String name, String help, Argument.Type dataType, int defaultVal) {
+		optArgValueHolder.put(name, new OptionalArgument(name, help, dataType, defaultVal));
 	}
-	public void addOptArg(String name, String help, ArgValues.Type dataType, float defaultVal) {
-		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
+	public void addOptArg(String name, String help, Argument.Type dataType, float defaultVal) {
+		optArgValueHolder.put(name, new OptionalArgument(name, help, dataType, defaultVal));
 	}
-	public void addOptArg(String name, String help, ArgValues.Type dataType, boolean defaultVal) {
-		optArgValueHolder.put(name, new OptArgValues(name, help, dataType, defaultVal));
+	public void addOptArg(String name, String help, Argument.Type dataType, boolean defaultVal) {
+		optArgValueHolder.put(name, new OptionalArgument(name, help, dataType, defaultVal));
 	}
-	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType) {
-		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType));
+	public void addOptArg(String name, String shortName, String help, Argument.Type dataType) {
+		optArgValueHolder.put(name, new OptionalArgument(name, shortName, help, dataType));
 	}
-	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType, String defaultVal) {
-		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
+	public void addOptArg(String name, String shortName, String help, Argument.Type dataType, String defaultVal) {
+		optArgValueHolder.put(name, new OptionalArgument(name, shortName, help, dataType, defaultVal));
 	}
-	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType, int defaultVal) {
-		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
+	public void addOptArg(String name, String shortName, String help, Argument.Type dataType, int defaultVal) {
+		optArgValueHolder.put(name, new OptionalArgument(name, shortName, help, dataType, defaultVal));
 	}
-	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType, float defaultVal) {
-		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
+	public void addOptArg(String name, String shortName, String help, Argument.Type dataType, float defaultVal) {
+		optArgValueHolder.put(name, new OptionalArgument(name, shortName, help, dataType, defaultVal));
 	}
-	public void addOptArg(String name, String shortName, String help, ArgValues.Type dataType, boolean defaultVal) {
-		optArgValueHolder.put(name, new OptArgValues(name, shortName, help, dataType, defaultVal));
+	public void addOptArg(String name, String shortName, String help, Argument.Type dataType, boolean defaultVal) {
+		optArgValueHolder.put(name, new OptionalArgument(name, shortName, help, dataType, defaultVal));
 	}
 	
 	public void parse(String argsToParse) {
@@ -83,9 +82,7 @@ public class ArgParser {
 		
 			nextValue = argScanner.next();
 			if (nextValue.equals("-h") || nextValue.equals("--help")) {
-				HelpInfoGenerator h = new HelpInfoGenerator();
-				helpString = h.getHelpInfo(argValueHolder, optArgValueHolder, program, progDesc);
-				System.out.println(helpString);
+				System.out.println(getHelpInfo());
 			}
 			else {
 				try {
@@ -118,36 +115,36 @@ public class ArgParser {
 					}
 				}
 				catch (IndexOutOfBoundsException e) {
-					String usageLine = getHelpUsageText();
+					String usageLine = getUsageLine();
 					throw new TooManyArgsException(usageLine, program, nextValue, argScanner);
 				}
 			}
 		}
 		if (!nextValue.equals("-h") && !nextValue.equals("--help") && currentPosArgIndex < argValueHolder.size())
 		{	
-			String helpUsage = getHelpUsageText();
-			throw new NotEnoughArgsException(helpUsage, program, argValueHolder, argValueHolder.size());
+			String usageLine = getUsageLine();
+			throw new NotEnoughArgsException(usageLine, program, argValueHolder, argValueHolder.size());
 		}
 	}
 	
 	public void addArgValue(String argName, String argValue) {
 		try {
-			argValueHolder.get(argName).addValueArg(argValue);
+			argValueHolder.get(argName).setValue(argValue);
 		}
 		catch(NumberFormatException nfe)
 		{
-			String helpUsage = getHelpUsageText();
-			throw new InvalidValueException(helpUsage, program, argName, argValueHolder.get(argName).getDataTypeArg(), argValue);
+			String usageLine = getUsageLine();
+			throw new InvalidValueException(usageLine, program, argName, argValueHolder.get(argName).getType(), argValue);
 		}
 	}
 	
 	public void addOptArgValue(String optArgName, String optArgValue) {
 		try {
-			optArgValueHolder.get(optArgName).setArgDefault(optArgValue);
+			optArgValueHolder.get(optArgName).setValue(optArgValue);
 		}
 		catch(NumberFormatException nfe) {
-			String helpUsage = getHelpUsageText();
-			throw new InvalidValueException(helpUsage, program, optArgName, optArgValueHolder.get(optArgName).getDataType(), optArgValue);
+			String usageLine = getUsageLine();
+			throw new InvalidValueException(usageLine, program, optArgName, optArgValueHolder.get(optArgName).getType(), optArgValue);
 		}
 	}
 	
@@ -166,26 +163,76 @@ public class ArgParser {
 		}
 		return "";
 	}
-	public String getHelpUsageText() {
-		HelpInfoGenerator h = new HelpInfoGenerator();
-		if(optArgValueHolder.size() == 0) {
-			return h.getUsageLine(argValueHolder, program);
+	
+	private String getHelpInfo()
+	{
+		String helpMessage = this.getUsageLine() + "\n\n";
+		helpMessage = helpMessage + progDesc + "\n\n";
+		helpMessage = helpMessage + getPosArgsInfo();
+		return helpMessage;
+	}
+	
+	private String getUsageLine()
+	{
+		String usageString = "usage: java " + program;
+		Iterator<String> hashKeys = argValueHolder.keySet().iterator();
+		String argList = "";
+		while (hashKeys.hasNext())
+		{
+			argList = argList + " " + hashKeys.next();
 		}
-		else {
-			return h.getUsageLine(argValueHolder, optArgValueHolder, program);
+		hashKeys = optArgValueHolder.keySet().iterator();
+		String currentKey = "";
+		while (hashKeys.hasNext())
+		{
+			currentKey = hashKeys.next();
+			if(optArgValueHolder.get(currentKey).getRequiredBit())
+			{
+				argList = argList + " [" + currentKey + "]";
+			}
 		}
+		argList = argList.trim();
+		usageString = usageString + " " + argList;
+		usageString = usageString.trim();
+		return usageString;
+	}
+	
+	private String getPosArgsInfo()
+	{
+		String posArgsHelp = "positional arguments: ";
+		Iterator<String> hashKeys = argValueHolder.keySet().iterator();
+		String currentKey = "";
+		String argsHelp = "";
+		while (hashKeys.hasNext())
+		{
+			currentKey = hashKeys.next();
+			argsHelp = argsHelp + currentKey + " " + argValueHolder.get(currentKey).getDescription() + "\n";
+		}
+		hashKeys = optArgValueHolder.keySet().iterator();
+		while (hashKeys.hasNext())
+		{
+			currentKey = hashKeys.next();
+			if(optArgValueHolder.get(currentKey).getRequiredBit())
+			{
+				argsHelp = argsHelp + "[" + currentKey + "] " + optArgValueHolder.get(currentKey).getDescription() + "\n";
+			}
+		}
+		argsHelp = argsHelp.trim();
+		posArgsHelp = posArgsHelp + argsHelp;
+		posArgsHelp = posArgsHelp.trim();
+		return posArgsHelp;
 	}
 	
 	public String getHelpString() {
-		return helpString;
+		return getHelpInfo();
 	}
 	
 	public <T> T getArgValue(String name) {
 		if (argValueHolder.containsKey(name)) {
-			return argValueHolder.get(name).getValueArg();
+			return argValueHolder.get(name).getValue();
 		}
 		else if (optArgValueHolder.containsKey(name)) {
-			return (T)optArgValueHolder.get(name).getArgDefault();
+			return (T)optArgValueHolder.get(name).getValue();
 		}
 		else {
 			String optFullName = getOptArgFullName(name);
@@ -193,7 +240,7 @@ public class ArgParser {
 				return (T)"Error key not found";
 			}
 			else {
-				return (T)optArgValueHolder.get(optFullName).getArgDefault();
+				return (T)optArgValueHolder.get(optFullName).getValue();
 			}
 		}
 	}

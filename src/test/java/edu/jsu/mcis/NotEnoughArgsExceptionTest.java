@@ -6,19 +6,18 @@ import java.util.*;
 
 public class NotEnoughArgsExceptionTest
 {
-	private LinkedHashMap<String, ArgValues> arrayOfNames;
+	private LinkedHashMap<String, Argument> arrayOfNames;
 	
 	@Test
 	public void testNotEnoughArgs()
 	{
-		arrayOfNames = new LinkedHashMap<String, ArgValues>();
-		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
-		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
-		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
+		arrayOfNames = new LinkedHashMap<String, Argument>();
+		arrayOfNames.put("length", new Argument("length", "the length of the box", Argument.Type.INT));
+		arrayOfNames.put("width", new Argument("width", "the width of the box", Argument.Type.FLOAT));
+		arrayOfNames.put("height", new Argument("height", "the height of the box", Argument.Type.INT));
 		String program = "VolumeCalculator";
 		int loc = 1;
-		HelpInfoGenerator h = new HelpInfoGenerator();
-		String helpUsage = h.getUsageLine(arrayOfNames, program);
+		String helpUsage = "usage: java VolumeCalculator length width height";
 		NotEnoughArgsException neae = new NotEnoughArgsException(helpUsage, program, arrayOfNames, loc);
 		String errorString = neae.toString();
 		assertEquals("usage: java VolumeCalculator length width height\n" +
@@ -29,14 +28,13 @@ public class NotEnoughArgsExceptionTest
 	public void testGetters()
 	{
 		
-		arrayOfNames = new LinkedHashMap<String, ArgValues>();
-		arrayOfNames.put("length", new ArgValues("length", "the length of the box", ArgValues.Type.INT));
-		arrayOfNames.put("width", new ArgValues("width", "the width of the box", ArgValues.Type.FLOAT));
-		arrayOfNames.put("height", new ArgValues("height", "the height of the box", ArgValues.Type.INT));
+		arrayOfNames = new LinkedHashMap<String, Argument>();
+		arrayOfNames.put("length", new Argument("length", "the length of the box", Argument.Type.INT));
+		arrayOfNames.put("width", new Argument("width", "the width of the box", Argument.Type.FLOAT));
+		arrayOfNames.put("height", new Argument("height", "the height of the box", Argument.Type.INT));
 		String program = "VolumeCalculator";
 		int loc = 1;
-		HelpInfoGenerator h = new HelpInfoGenerator();
-		String helpUsage = h.getUsageLine(arrayOfNames, program);
+		String helpUsage = "usage: java VolumeCalculator length width height";
 		NotEnoughArgsException neae = new NotEnoughArgsException(helpUsage, program, arrayOfNames, loc);
 		assertEquals("usage: java VolumeCalculator length width height", neae.getUsage());
 		List<String> sentList;
