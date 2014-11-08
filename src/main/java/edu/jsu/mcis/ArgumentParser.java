@@ -215,10 +215,10 @@ public class ArgumentParser {
 					if (nextValue.contains("--")) {
 						if (namedArgumentHolder.containsKey(nextValue.substring(2))) {
 							if (namedArgumentHolder.get(nextValue.substring(2)).getType().equals(Argument.Type.BOOLEAN)) {
-								setNamedArgumentValue(nextValue.substring(2), "true");
+								setArgumentValue(nextValue.substring(2), "true");
 							}
 							else {
-								setNamedArgumentValue(nextValue.substring(2), argumentScanner.next());
+								setArgumentValue(nextValue.substring(2), argumentScanner.next());
 							}
 						}
 					}
@@ -228,12 +228,12 @@ public class ArgumentParser {
 						
 						if (namedArgumentHolder.containsKey(namedArgument)) {
 							if (namedArgumentHolder.get(namedArgument).getType().equals(Argument.Type.BOOLEAN)) {
-								setNamedArgumentValue(namedArgument, "true");
+								setArgumentValue(namedArgument, "true");
 							}
 							else {
 								String namedValue = argumentScanner.next();
 								
-								setNamedArgumentValue(namedArgument, namedValue);
+								setArgumentValue(namedArgument, namedValue);
 							}
 						}
 					}
@@ -257,24 +257,34 @@ public class ArgumentParser {
 	
 	
 	public void setArgumentValue(String argumentName, String argumentValue) {
-		try {
-			positionalArgumentHolder.get(argumentName).setValue(argumentValue);
+		String namedFullName = getNamedArgumentFullName(argumentName);
+		if (namedFullName.equals("")) {
+			if (namedArgumentHolder.containsKey(argumentName)) {
+				try{
+					namedArgumentHolder.get(argumentName).setValue(argumentValue);
+				}catch (NumberFormatException nfe) {
+					String usageLine = getUsageLine();
+					throw new InvalidValueException(usageLine, program, argumentName, namedArgumentHolder.get(argumentName).getType(), argumentValue);
+				}
+				
+			}
+			else if (positionalArgumentHolder.containsKey(argumentName)) {
+				try{
+					positionalArgumentHolder.get(argumentName).setValue(argumentValue);
+				}catch (NumberFormatException nfe) {
+					String usageLine = getUsageLine();
+					throw new InvalidValueException(usageLine, program, argumentName, positionalArgumentHolder.get(argumentName).getType(), argumentValue);
+				}
+				
+			}
 		}
-		catch(NumberFormatException nfe)
-		{
-			String usageLine = getUsageLine();
-			throw new InvalidValueException(usageLine, program, argumentName, positionalArgumentHolder.get(argumentName).getType(), argumentValue);
-		}
-	}
-	
-	
-	public void setNamedArgumentValue(String argumentName, String argumentValue) {
-		try {
-			namedArgumentHolder.get(argumentName).setValue(argumentValue);
-		}
-		catch(NumberFormatException nfe) {
-			String usageLine = getUsageLine();
-			throw new InvalidValueException(usageLine, program, argumentName, namedArgumentHolder.get(argumentName).getType(), argumentValue);
+		else {
+			try{
+				namedArgumentHolder.get(namedFullName).setValue(argumentValue);
+			}catch (NumberFormatException nfe) {
+				String usageLine = getUsageLine();
+				throw new InvalidValueException(usageLine, program, namedFullName, namedArgumentHolder.get(namedFullName).getType(), argumentValue);
+			}
 		}
 	}
 	

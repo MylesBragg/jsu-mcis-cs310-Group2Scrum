@@ -148,6 +148,20 @@ public class ArgumentParserTest
 		assertEquals("suite", parser.getArgumentValue("roomType"));
 	}
 	@Test
+	public void testParseStringArray() {
+		String[] arguments = new String[3];
+		arguments[0] = "7";
+		arguments[1] = "5";
+		arguments[2] = "2";
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addPositionalArgument("width", Argument.Type.INT);
+		parser.addPositionalArgument("height", Argument.Type.INT);
+		parser.parse(arguments);
+		assertEquals(7, parser.getArgumentValue("length"));
+		assertEquals(5, parser.getArgumentValue("width"));
+		assertEquals(2, parser.getArgumentValue("height"));
+	}
+	@Test
 	public void testAddPositionalAndNamedArgumentValues() {
 		String argumentsToParse = "7.2 --type box";
 		parser.addPositionalArgument("length", Argument.Type.FLOAT);
@@ -155,6 +169,22 @@ public class ArgumentParserTest
 		parser.parse(argumentsToParse);
 		assertEquals(7.2f, parser.getArgumentValue("length"));
 		assertEquals("box", parser.getArgumentValue("type"));
+	}
+	@Test(expected=InvalidValueException.class)
+	public void testSetPositionalArgumentValue() {
+		String argumentsToParse = "7.2 something 7";
+		parser.addPositionalArgument("length", Argument.Type.FLOAT);
+		parser.addPositionalArgument("rainy", Argument.Type.BOOLEAN);
+		parser.addPositionalArgument("const", Argument.Type.INT);
+		parser.parse(argumentsToParse);
+	}
+	@Test(expected=InvalidValueException.class)
+	public void testSetNamedArgumentValue() {
+		String argumentsToParse = "7.2 --bathCount something 7";
+		parser.addPositionalArgument("length", Argument.Type.FLOAT);
+		parser.addNamedArgument("bathCount", Argument.Type.INT);
+		parser.addPositionalArgument("const", Argument.Type.INT);
+		parser.parse(argumentsToParse);
 	}
 	@Test
     public void testProgramHelpShortName()
