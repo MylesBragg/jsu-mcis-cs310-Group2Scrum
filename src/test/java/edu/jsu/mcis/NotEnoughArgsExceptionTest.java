@@ -6,15 +6,19 @@ import java.util.*;
 
 public class NotEnoughArgsExceptionTest
 {
-	private LinkedHashMap<String, Argument> arrayOfNames;
-	
+	private LinkedHashMap<String, PositionalArgument> arrayOfNames;
+
 	@Test
 	public void testNotEnoughArgs()
 	{
-		arrayOfNames = new LinkedHashMap<String, Argument>();
-		arrayOfNames.put("length", new Argument("length", "the length of the box", Argument.Type.INT));
-		arrayOfNames.put("width", new Argument("width", "the width of the box", Argument.Type.FLOAT));
-		arrayOfNames.put("height", new Argument("height", "the height of the box", Argument.Type.INT));
+		
+		arrayOfNames = new LinkedHashMap<String, PositionalArgument>();
+		arrayOfNames.put("length", new PositionalArgument("length", Argument.Type.INT, 1));
+		arrayOfNames.put("width", new PositionalArgument("width", Argument.Type.FLOAT, 2));
+		arrayOfNames.put("height", new PositionalArgument("height", Argument.Type.INT, 3));
+		arrayOfNames.get("length").setDescription("the length of the box");
+		arrayOfNames.get("width").setDescription("the width of the box");
+		arrayOfNames.get("height").setDescription("the height of the box");
 		String program = "VolumeCalculator";
 		int loc = 1;
 		String helpUsage = "usage: java VolumeCalculator length width height";
@@ -28,10 +32,13 @@ public class NotEnoughArgsExceptionTest
 	public void testGetters()
 	{
 		
-		arrayOfNames = new LinkedHashMap<String, Argument>();
-		arrayOfNames.put("length", new Argument("length", "the length of the box", Argument.Type.INT));
-		arrayOfNames.put("width", new Argument("width", "the width of the box", Argument.Type.FLOAT));
-		arrayOfNames.put("height", new Argument("height", "the height of the box", Argument.Type.INT));
+		arrayOfNames = new LinkedHashMap<String, PositionalArgument>();
+		arrayOfNames.put("length", new PositionalArgument("length", Argument.Type.INT, 1));
+		arrayOfNames.put("width", new PositionalArgument("width", Argument.Type.FLOAT, 2));
+		arrayOfNames.put("height", new PositionalArgument("height", Argument.Type.INT, 3));
+		arrayOfNames.get("length").setDescription("the length of the box");
+		arrayOfNames.get("width").setDescription("the width of the box");
+		arrayOfNames.get("height").setDescription("the height of the box");
 		String program = "VolumeCalculator";
 		int loc = 1;
 		String helpUsage = "usage: java VolumeCalculator length width height";

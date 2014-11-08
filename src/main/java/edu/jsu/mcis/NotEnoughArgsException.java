@@ -8,7 +8,7 @@ public class NotEnoughArgsException extends RuntimeException
 	List<String> namesArray;
 	int index = 0;
 	
-	public NotEnoughArgsException(String helpUsage, String prog, LinkedHashMap<String, Argument> hash, int i)
+	public NotEnoughArgsException(String helpUsage, String prog, LinkedHashMap<String, PositionalArgument> hash, int i)
 	{
 		usage = helpUsage;
 		program = prog;

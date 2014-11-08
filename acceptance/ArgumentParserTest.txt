@@ -1,5 +1,5 @@
 *** Settings ***
-Library			ArgParserKeywords
+Library			ArgumentParserKeywords
 
 *** User Keywords ***
 Start Program With Arguments 7 5 2

@@ -1,21 +1,32 @@
 package edu.jsu.mcis;
 
 import java.util.*;
-@SuppressWarnings("unchecked")
+
 public class Argument
 {
-	public enum Type{STRING, INT, BOOLEAN, FLOAT, FLAG}
+	public enum Type{STRING, INT, BOOLEAN, FLOAT}
 	protected Object value;
 	protected String name;
 	protected String description;
 	protected Type type;
 
-	public Argument(String name, String description, Type dataType) {
+	public Argument(String name, Type dataType) {
 		this.name = name;
-		this.description = description;
+		description = "";
 		type = dataType;
+		value = null;
 	}
-
+	public String getName() {
+		return name;
+	}
+	public Type getType() {
+		return type;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
 	public String getDescription() {
 		return description;
 	}
@@ -24,26 +35,22 @@ public class Argument
 		return (T)value;
 	}
 	
-	public void setValue(String v) throws NumberFormatException {
+	public void setValue(String newValue) throws NumberFormatException {
 		switch(type){
 		case INT:
-			value = Integer.parseInt(v);
+			value = Integer.parseInt(newValue);
 			break;
 		case FLOAT:
-			value = Float.parseFloat(v);
+			value = Float.parseFloat(newValue);
 			break;
-		case BOOLEAN: case FLAG:
-			if(v.equals("true") || v.equals("false")){
-				value = Boolean.parseBoolean(v);
+		case BOOLEAN:
+			if(newValue.equals("true") || newValue.equals("false")){
+				value = Boolean.parseBoolean(newValue);
 			}
-			else throw new NumberFormatException("Invalid Argument");
+			else throw new NumberFormatException("Invalid Value");
 			break;
 		default:
-			value = v;
+			value = newValue;
 		}
-	}
-
-	public Type getType() {
-		return type;
-	}
+	}	
 }

@@ -8,9 +8,9 @@ public class InvalidValueException extends RuntimeException
 	private String program;
 	private String name;
 	private String type;
-	private String currentValue;
+	private Object currentValue;
 	
-	public InvalidValueException(String helpUsage, String prog, String argN, Argument.Type argDT, String currValue)
+	public InvalidValueException(String helpUsage, String prog, String argN, Argument.Type argDT, Object currValue)
 	{
 		usage = helpUsage;
 		program = prog;
@@ -49,9 +49,9 @@ public class InvalidValueException extends RuntimeException
 		return type;
 	}
 	
-	public String getCurrentValue()
+	public <T> T getCurrentValue()
 	{
-		return currentValue;
+		return (T)currentValue;
 	}
 
 	public String toString()
