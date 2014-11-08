@@ -1,14 +1,14 @@
 package edu.jsu.mcis;
 
 import java.util.*;
-public class NotEnoughArgsException extends RuntimeException
+public class NotEnoughArgumentsException extends RuntimeException
 {
 	String usage;
 	String program;
 	List<String> namesArray;
 	int index = 0;
 	
-	public NotEnoughArgsException(String helpUsage, String prog, LinkedHashMap<String, PositionalArgument> hash, int i)
+	public NotEnoughArgumentsException(String helpUsage, String prog, LinkedHashMap<String, PositionalArgument> hash, int i)
 	{
 		usage = helpUsage;
 		program = prog;

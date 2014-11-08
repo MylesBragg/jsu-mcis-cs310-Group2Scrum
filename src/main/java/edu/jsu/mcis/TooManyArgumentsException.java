@@ -2,14 +2,14 @@ package edu.jsu.mcis;
 
 import java.util.*;
 
-public class TooManyArgsException extends RuntimeException
+public class TooManyArgumentsException extends RuntimeException
 {
 	String usage;
 	String program;
 	String nextValue;
 	Scanner args;
 	
-	public TooManyArgsException(String helpUsage, String prog, String nextVal, Scanner argScanner)
+	public TooManyArgumentsException(String helpUsage, String prog, String nextVal, Scanner argScanner)
 	{
 		usage = helpUsage;
 		program = prog;

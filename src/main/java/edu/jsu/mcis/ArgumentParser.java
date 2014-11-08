@@ -211,52 +211,53 @@ public class ArgumentParser {
 				System.out.println(getHelpInfo());
 			}
 			else {
-				try {
-					if (nextValue.contains("--")) {
-						if (namedArgumentHolder.containsKey(nextValue.substring(2))) {
-							if (namedArgumentHolder.get(nextValue.substring(2)).getType().equals(Argument.Type.BOOLEAN)) {
-								setArgumentValue(nextValue.substring(2), "true");
-							}
-							else {
-								setArgumentValue(nextValue.substring(2), argumentScanner.next());
-							}
+				if (nextValue.contains("--")) {
+					if (namedArgumentHolder.containsKey(nextValue.substring(2))) {
+						if (namedArgumentHolder.get(nextValue.substring(2)).getType().equals(Argument.Type.BOOLEAN)) {
+							setArgumentValue(nextValue.substring(2), "true");
+						}
+						else {
+							setArgumentValue(nextValue.substring(2), argumentScanner.next());
 						}
 					}
-					else if (nextValue.contains("-")) {
-						String alternateNamedArgument = nextValue.substring(1);
-						String namedArgument = getNamedArgumentFullName(alternateNamedArgument);
-						
-						if (namedArgumentHolder.containsKey(namedArgument)) {
-							if (namedArgumentHolder.get(namedArgument).getType().equals(Argument.Type.BOOLEAN)) {
-								setArgumentValue(namedArgument, "true");
-							}
-							else {
-								String namedValue = argumentScanner.next();
-								
-								setArgumentValue(namedArgument, namedValue);
-							}
+				}
+				else if (nextValue.contains("-")) {
+					String alternateNamedArgument = nextValue.substring(1);
+					String namedArgument = getNamedArgumentFullName(alternateNamedArgument);
+					
+					if (namedArgumentHolder.containsKey(namedArgument)) {
+						if (namedArgumentHolder.get(namedArgument).getType().equals(Argument.Type.BOOLEAN)) {
+							setArgumentValue(namedArgument, "true");
+						}
+						else {
+							String namedValue = argumentScanner.next();
+							
+							setArgumentValue(namedArgument, namedValue);
 						}
 					}
-					else {
+				}
+				else {
+					if (positionalArgumentHolder.size() >= currentPosArgIndex) {
 						setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
 						currentPosArgIndex++;
 					}
-				}
-				catch (IndexOutOfBoundsException e) {
-					String usageLine = getUsageLine();
-					throw new TooManyArgsException(usageLine, program, nextValue, argumentScanner);
+					else {
+						String usageLine = getUsageLine();
+						throw new TooManyArgumentsException(usageLine, program, nextValue, argumentScanner);
+					}
+					
 				}
 			}
 		}
-		if (!nextValue.equals("-h") && !nextValue.equals("--help") && currentPosArgIndex < positionalArgumentHolder.size())
+		if (!nextValue.equals("-h") && !nextValue.equals("--help") && currentPosArgIndex <= positionalArgumentHolder.size())
 		{	
 			String usageLine = getUsageLine();
-			throw new NotEnoughArgsException(usageLine, program, positionalArgumentHolder, positionalArgumentHolder.size());
+			throw new NotEnoughArgumentsException(usageLine, program, positionalArgumentHolder, positionalArgumentHolder.size());
 		}
 	}
 	
 	
-	public void setArgumentValue(String argumentName, String argumentValue) {
+	private void setArgumentValue(String argumentName, String argumentValue) {
 		String namedFullName = getNamedArgumentFullName(argumentName);
 		if (namedFullName.equals("")) {
 			if (namedArgumentHolder.containsKey(argumentName)) {

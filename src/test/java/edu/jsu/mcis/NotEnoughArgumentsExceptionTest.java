@@ -4,7 +4,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import java.util.*;
 
-public class NotEnoughArgsExceptionTest
+public class NotEnoughArgumentsExceptionTest
 {
 	private LinkedHashMap<String, PositionalArgument> arrayOfNames;
 
@@ -22,7 +22,7 @@ public class NotEnoughArgsExceptionTest
 		String program = "VolumeCalculator";
 		int loc = 1;
 		String helpUsage = "usage: java VolumeCalculator length width height";
-		NotEnoughArgsException neae = new NotEnoughArgsException(helpUsage, program, arrayOfNames, loc);
+		NotEnoughArgumentsException neae = new NotEnoughArgumentsException(helpUsage, program, arrayOfNames, loc);
 		String errorString = neae.toString();
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: the following arguments are required: width height", 
@@ -42,7 +42,7 @@ public class NotEnoughArgsExceptionTest
 		String program = "VolumeCalculator";
 		int loc = 1;
 		String helpUsage = "usage: java VolumeCalculator length width height";
-		NotEnoughArgsException neae = new NotEnoughArgsException(helpUsage, program, arrayOfNames, loc);
+		NotEnoughArgumentsException neae = new NotEnoughArgumentsException(helpUsage, program, arrayOfNames, loc);
 		assertEquals("usage: java VolumeCalculator length width height", neae.getUsage());
 		List<String> sentList;
 		sentList = new ArrayList<String>();

@@ -187,6 +187,95 @@ public class ArgumentParserTest
 		parser.parse(argumentsToParse);
 	}
 	@Test
+	public void testGetNamedArgumentValueByShortName() {
+		String argumentsToParse = "7.2 --bathCount 2 7";
+		parser.addPositionalArgument("length", Argument.Type.FLOAT);
+		parser.addNamedArgument("bathCount", Argument.Type.INT);
+		parser.addPositionalArgument("const", Argument.Type.INT);
+		parser.setNamedArgumentAlternateName("bathCount", "b");
+		parser.parse(argumentsToParse);
+		assertEquals(2, parser.getArgumentValue("b"));
+	}
+	@Test
+	public void testGetArgumentValueFail() {
+		String argumentsToParse = "7.2 --type box 7";
+		parser.addPositionalArgument("length", Argument.Type.FLOAT);
+		parser.addNamedArgument("type", Argument.Type.STRING);
+		parser.addPositionalArgument("const", Argument.Type.INT);
+		parser.parse(argumentsToParse);
+		assertEquals("Error key not found", parser.getArgumentValue("bathCount"));
+	}
+	@Test
+	public void testSetNamedArgumentValueByShortName() {
+		String argumentsToParse = "7.2 -b 2 7";
+		parser.addPositionalArgument("length", Argument.Type.FLOAT);
+		parser.addNamedArgument("bathCount", Argument.Type.INT);
+		parser.addPositionalArgument("const", Argument.Type.INT);
+		parser.setNamedArgumentAlternateName("bathCount", "b");
+		parser.parse(argumentsToParse);
+		assertEquals(2, parser.getArgumentValue("b"));
+	}
+	
+	@Test
+	public void testSetNamedArgumentDescriptionByShortName() {
+		parser.addNamedArgument("bathCount", Argument.Type.INT);
+		parser.setNamedArgumentAlternateName("bathCount", "b");
+		parser.setArgumentDescription("b", "How many bathrooms are in the house");
+		assertEquals("How many bathrooms are in the house", parser.getArgumentDescription("b"));
+	}
+	@Test
+	public void testSetArgumentDescriptionFail() {
+		assertEquals("", parser.getArgumentDescription("b"));
+	}
+	@Test
+	public void testSetNamedArgumentDefaultValueByShortName() {
+		parser.addNamedArgument("bathCount", Argument.Type.INT);
+		parser.setNamedArgumentAlternateName("bathCount", "b");
+		parser.setNamedArgumentDefaultValue("b", 2);
+		assertEquals(2, parser.getNamedArgumentDefaultValue("b"));
+	}
+	@Test(expected=InvalidValueException.class)
+	public void testSetNamedArgumentValueByShortNameFail() {
+		String argumentsToParse = "-b something";
+		parser.addNamedArgument("bathCount", Argument.Type.INT);
+		parser.setNamedArgumentAlternateName("bathCount", "b");
+		parser.parse(argumentsToParse);
+	}
+	@Test
+	public void testSetNamedArgumentRequiredByShortName() {
+		parser.addNamedArgument("bathCount", Argument.Type.INT);
+		parser.setNamedArgumentAlternateName("bathCount", "b");
+		parser.setNamedArgumentRequired("b");
+		assertEquals(true, parser.getNamedArgumentRequired("b"));
+	}
+	@Test
+	public void testSetNamedFlaggedArguments() {
+		String argumentsToParse = "--attic -b";
+		parser.addNamedArgument("basement", Argument.Type.BOOLEAN);
+		parser.addNamedArgument("attic", Argument.Type.BOOLEAN);
+		parser.setNamedArgumentAlternateName("basement", "b");
+		parser.parse(argumentsToParse);
+		assertEquals(true, parser.getArgumentValue("basement"));
+		assertEquals(true, parser.getArgumentValue("attic"));
+		
+	}
+	@Test(expected=TooManyArgumentsException.class)
+	public void testTooManyArguments() {
+		String argumentsToParse = "7 5 2 3";
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addPositionalArgument("width", Argument.Type.FLOAT);
+		parser.addPositionalArgument("height", Argument.Type.INT);
+		parser.parse(argumentsToParse);
+	}
+	@Test(expected=NotEnoughArgumentsException.class)
+	public void testNotEnoughArguments() {
+		String argumentsToParse = "7 5";
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addPositionalArgument("width", Argument.Type.FLOAT);
+		parser.addPositionalArgument("height", Argument.Type.INT);
+		parser.parse(argumentsToParse);
+	}
+	@Test
     public void testProgramHelpShortName()
     {
 		parser.setProgramDescription("Calculate the volume of a box.");
