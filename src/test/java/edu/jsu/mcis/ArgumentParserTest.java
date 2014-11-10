@@ -171,7 +171,7 @@ public class ArgumentParserTest
 		assertEquals("box", parser.getArgumentValue("type"));
 	}
 	@Test(expected=InvalidValueException.class)
-	public void testSetPositionalArgumentValue() {
+	public void testSetPositionalArgumentValueFail() {
 		String argumentsToParse = "7.2 something 7";
 		parser.addPositionalArgument("length", Argument.Type.FLOAT);
 		parser.addPositionalArgument("rainy", Argument.Type.BOOLEAN);
@@ -179,13 +179,18 @@ public class ArgumentParserTest
 		parser.parse(argumentsToParse);
 	}
 	@Test(expected=InvalidValueException.class)
-	public void testSetNamedArgumentValue() {
+	public void testSetNamedArgumentValueFail() {
 		String argumentsToParse = "7.2 --bathCount something 7";
 		parser.addPositionalArgument("length", Argument.Type.FLOAT);
 		parser.addNamedArgument("bathCount", Argument.Type.INT);
 		parser.addPositionalArgument("const", Argument.Type.INT);
 		parser.parse(argumentsToParse);
 	}
+	@Test
+	public void testSetDescriptionInvalidArgument() {
+		parser.setArgumentDescription("length", "The length of the shape");
+	}
+	
 	@Test
 	public void testGetNamedArgumentValueByShortName() {
 		String argumentsToParse = "7.2 --bathCount 2 7";
@@ -204,6 +209,13 @@ public class ArgumentParserTest
 		parser.addPositionalArgument("const", Argument.Type.INT);
 		parser.parse(argumentsToParse);
 		assertEquals("Error key not found", parser.getArgumentValue("bathCount"));
+	}
+	@Test(expected=InvalidValueException.class)
+	public void testWrongNamedArgumentParse() {
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addPositionalArgument("width", Argument.Type.INT);
+		parser.parse("7 --type box 5");
+		
 	}
 	@Test
 	public void testSetNamedArgumentValueByShortName() {

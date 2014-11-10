@@ -79,6 +79,9 @@ public class ArgumentParser {
 			else if (positionalArgumentHolder.containsKey(name)) {
 				positionalArgumentHolder.get(name).setDescription(description);
 			}
+			else {
+				System.out.println("I need an exception handler here");
+			}
 		}
 		else {
 			namedArgumentHolder.get(namedArgumentFullName).setDescription(description);
@@ -107,7 +110,7 @@ public class ArgumentParser {
 		if (namedArgumentHolder.containsKey(name)) {
 			namedArgumentHolder.get(name).setInvalidValueExceptionProgramName(program);
 		}
-		else if (positionalArgumentHolder.containsKey(name)) {
+		if (positionalArgumentHolder.containsKey(name)) {
 			positionalArgumentHolder.get(name).setInvalidValueExceptionProgramName(program);
 		}
 		
@@ -225,22 +228,27 @@ public class ArgumentParser {
 			if (nextValue.equals("-h") || nextValue.equals("--help")) {
 				System.out.println(getHelpInfo());
 			}
-			else {
-				if (nextValue.contains("--")) {
-					if (namedArgumentHolder.containsKey(nextValue.substring(2))) {
-						if (namedArgumentHolder.get(nextValue.substring(2)).getType().equals(Argument.Type.BOOLEAN)) {
-							setArgumentValue(nextValue.substring(2), "true");
-						}
-						else {
-							setArgumentValue(nextValue.substring(2), argumentScanner.next());
-						}
-					}
-				}
-				else if (nextValue.contains("-")) {
+			else {	
+				if ((nextValue.charAt(0) == '-' && nextValue.charAt(1) == '-') || nextValue.charAt(0) == '-') {
 					String alternateNamedArgument = nextValue.substring(1);
 					String namedArgument = getNamedArgumentFullName(alternateNamedArgument);
 					
-					if (namedArgumentHolder.containsKey(namedArgument)) {
+					if (namedArgument.equals("")) {
+						if (namedArgumentHolder.containsKey(nextValue.substring(2))) {
+							if (namedArgumentHolder.get(nextValue.substring(2)).getType().equals(Argument.Type.BOOLEAN)) {
+								setArgumentValue(nextValue.substring(2), "true");
+							}
+							else {
+								String namedValue = argumentScanner.next();
+								
+								setArgumentValue(nextValue.substring(2), namedValue);
+							}
+						}
+						else {
+							System.out.println("I need an exception handler here");
+						}
+					}
+					else {
 						if (namedArgumentHolder.get(namedArgument).getType().equals(Argument.Type.BOOLEAN)) {
 							setArgumentValue(namedArgument, "true");
 						}
@@ -250,10 +258,12 @@ public class ArgumentParser {
 							setArgumentValue(namedArgument, namedValue);
 						}
 					}
+					
+					
 				}
 				else {
 					String positionalArgName = getPositionalArgumentName(currentPosArgIndex);
-					if (positionalArgumentHolder.size() >= currentPosArgIndex && !positionalArgName.equals("Position Argument Not Found Error")) {
+					if (positionalArgumentHolder.size() >= currentPosArgIndex) {
 						setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
 						currentPosArgIndex++;
 					}
@@ -288,18 +298,14 @@ public class ArgumentParser {
 		}
 	}
 	private void setArgumentValue(String argumentName, String argumentValue) {
-		String namedFullName = getNamedArgumentFullName(argumentName);
-		if (namedFullName.equals("")) {
-			if (namedArgumentHolder.containsKey(argumentName)) {
-				namedArgumentHolder.get(argumentName).setValue(argumentValue);
-			}
-			else if (positionalArgumentHolder.containsKey(argumentName)) {
-				positionalArgumentHolder.get(argumentName).setValue(argumentValue);
-			}
+		
+		if (namedArgumentHolder.containsKey(argumentName)) {
+			namedArgumentHolder.get(argumentName).setValue(argumentValue);
 		}
-		else {
-			namedArgumentHolder.get(namedFullName).setValue(argumentValue);
+		if (positionalArgumentHolder.containsKey(argumentName)) {
+			positionalArgumentHolder.get(argumentName).setValue(argumentValue);
 		}
+		
 	}
 	
 	
