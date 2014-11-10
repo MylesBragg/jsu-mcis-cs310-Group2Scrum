@@ -64,7 +64,7 @@ public class ArgumentParser {
 				return currentKey;
 			}
 		}
-		return "Positional Arugment Found Error";
+		return "Positional Arugment Not Found Error";
 	}
 	
 	
@@ -252,7 +252,8 @@ public class ArgumentParser {
 					}
 				}
 				else {
-					if (positionalArgumentHolder.size() >= currentPosArgIndex) {
+					String positionalArgName = getPositionalArgumentName(currentPosArgIndex);
+					if (positionalArgumentHolder.size() >= currentPosArgIndex && !positionalArgName.equals("Position Argument Not Found Error")) {
 						setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
 						currentPosArgIndex++;
 					}
