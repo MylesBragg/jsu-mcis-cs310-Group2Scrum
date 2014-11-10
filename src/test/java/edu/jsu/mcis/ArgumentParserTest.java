@@ -92,12 +92,12 @@ public class ArgumentParserTest
 		assertEquals(33, parser.getNamedArgumentDefaultValue("const"));
 		assertEquals(3.5f, parser.getNamedArgumentDefaultValue("bathCount"));
 	}
-	@Test(expected=NumberFormatException.class)
+	@Test(expected=InvalidValueException.class)
 	public void testSetNamedArgumenDefaultValueInvalid() {
 		parser.addNamedArgument("rainy", Argument.Type.BOOLEAN);
 		parser.setNamedArgumentDefaultValue("rainy", "yes");
 	}
-	@Test(expected=NumberFormatException.class)
+	@Test(expected=InvalidValueException.class)
 	public void testSetNamedArgumentDefaultValueInvalidMiddleValue() {
 		parser.addNamedArgument("type", Argument.Type.STRING);
 		parser.addNamedArgument("rainy", Argument.Type.BOOLEAN);

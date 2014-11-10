@@ -37,6 +37,7 @@ public class ArgumentParser {
 	
 	public void addPositionalArgument(String name, Argument.Type dataType) {
 		positionalArgumentHolder.put(name, new PositionalArgument(name, dataType, incrementCurrentPositionalArgumentCount()));
+		setInvalidExceptionProgramName(name);
 	}
 	
 	
@@ -102,10 +103,21 @@ public class ArgumentParser {
 	}
 	
 	
+	private void setInvalidExceptionProgramName(String name) {
+		if (namedArgumentHolder.containsKey(name)) {
+			namedArgumentHolder.get(name).setInvalidValueExceptionProgramName(program);
+		}
+		else if (positionalArgumentHolder.containsKey(name)) {
+			positionalArgumentHolder.get(name).setInvalidValueExceptionProgramName(program);
+		}
+		
+	}
+	
 	
 	
 	public void addNamedArgument(String name, Argument.Type dataType) {
 		namedArgumentHolder.put(name, new NamedArgument(name, dataType));
+		setInvalidExceptionProgramName(name);
 	}
 	
 	
@@ -182,6 +194,7 @@ public class ArgumentParser {
 	
 	
 	
+	
 	public void parse(String[] argumentsToParse) {
 		String myString = "";
 		for (int i = 0; i < argumentsToParse.length; i++)
@@ -203,6 +216,8 @@ public class ArgumentParser {
 		String previousValue = "";
 		Scanner argumentScanner = new Scanner(argumentsToParse);
 		int currentPosArgIndex = 1;
+		
+		setInvalidValueExceptionUsageLine();
 		
 		while (argumentScanner.hasNext()) {
 		
@@ -256,36 +271,33 @@ public class ArgumentParser {
 		}
 	}
 	
-	
+	private void setInvalidValueExceptionUsageLine(){
+		Iterator<String> positionalKeys = positionalArgumentHolder.keySet().iterator();
+		Iterator<String> namedKeys = namedArgumentHolder.keySet().iterator();
+		String currentNamedKey;
+		
+		while(positionalKeys.hasNext()) {
+			positionalArgumentHolder.get(positionalKeys.next()).setInvalidValueExceptionUsageLine(getUsageLine());
+		}
+		while(namedKeys.hasNext()) {
+			currentNamedKey = namedKeys.next();
+			if(namedArgumentHolder.get(currentNamedKey).getRequired()) {
+				namedArgumentHolder.get(currentNamedKey).setInvalidValueExceptionUsageLine(getUsageLine());
+			}
+		}
+	}
 	private void setArgumentValue(String argumentName, String argumentValue) {
 		String namedFullName = getNamedArgumentFullName(argumentName);
 		if (namedFullName.equals("")) {
 			if (namedArgumentHolder.containsKey(argumentName)) {
-				try{
-					namedArgumentHolder.get(argumentName).setValue(argumentValue);
-				}catch (NumberFormatException nfe) {
-					String usageLine = getUsageLine();
-					throw new InvalidValueException(usageLine, program, argumentName, namedArgumentHolder.get(argumentName).getType(), argumentValue);
-				}
-				
+				namedArgumentHolder.get(argumentName).setValue(argumentValue);
 			}
 			else if (positionalArgumentHolder.containsKey(argumentName)) {
-				try{
-					positionalArgumentHolder.get(argumentName).setValue(argumentValue);
-				}catch (NumberFormatException nfe) {
-					String usageLine = getUsageLine();
-					throw new InvalidValueException(usageLine, program, argumentName, positionalArgumentHolder.get(argumentName).getType(), argumentValue);
-				}
-				
+				positionalArgumentHolder.get(argumentName).setValue(argumentValue);
 			}
 		}
 		else {
-			try{
-				namedArgumentHolder.get(namedFullName).setValue(argumentValue);
-			}catch (NumberFormatException nfe) {
-				String usageLine = getUsageLine();
-				throw new InvalidValueException(usageLine, program, namedFullName, namedArgumentHolder.get(namedFullName).getType(), argumentValue);
-			}
+			namedArgumentHolder.get(namedFullName).setValue(argumentValue);
 		}
 	}
 	
@@ -373,7 +385,4 @@ public class ArgumentParser {
 	public String getHelpString() {
 		return getHelpInfo();
 	}
-	
-	
-	
 }

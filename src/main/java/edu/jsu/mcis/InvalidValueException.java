@@ -10,30 +10,29 @@ public class InvalidValueException extends RuntimeException
 	private String type;
 	private Object currentValue;
 	
-	public InvalidValueException(String helpUsage, String prog, String argN, Argument.Type argDT, Object currValue)
-	{
-		usage = helpUsage;
-		program = prog;
-		name = argN;
-		if(argDT.equals(Argument.Type.INT))
-		{
-			type = "integer";
-		}
-		if(argDT.equals(Argument.Type.FLOAT))
-		{
-			type = "float";
-		}
-		if(argDT.equals(Argument.Type.BOOLEAN))
-		{
-			type = "boolean";
-		}
-		if(argDT.equals(Argument.Type.STRING))
-		{
-			type = "string";
-		}
-		currentValue = currValue;
+	public void setProgramName(String programName) {
+		program = programName;
 	}
-	
+	public void setUsageLine(String usageLine) {
+		usage = usageLine;
+	}
+	public void setInvalidValueInformation(String name, Object value, Argument.Type type) {
+		this.name = name;
+		currentValue = value;
+		switch(type) {
+			case INT:
+				this.type = "integer";
+				break;
+			case FLOAT:
+				this.type = "float";
+				break;
+			case BOOLEAN:
+				this.type = "boolean";
+				break;
+			default:
+				this.type = "string";
+		}
+	}
 	public String getUsage()
 	{
 		return usage;

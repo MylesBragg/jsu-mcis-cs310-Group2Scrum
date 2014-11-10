@@ -9,12 +9,21 @@ public class Argument
 	protected String name;
 	protected String description;
 	protected Type type;
+	protected InvalidValueException invalidValue;
 
 	public Argument(String name, Type dataType) {
 		this.name = name;
 		description = "";
 		type = dataType;
 		value = null;
+		invalidValue = new InvalidValueException();
+	}
+	
+	public void setInvalidValueExceptionProgramName(String programName) {
+		invalidValue.setProgramName(programName);
+	}
+	public void setInvalidValueExceptionUsageLine(String usageLine) {
+		invalidValue.setUsageLine(usageLine);
 	}
 	public String getName() {
 		return name;
@@ -36,21 +45,27 @@ public class Argument
 	}
 	
 	public void setValue(String newValue) throws NumberFormatException {
-		switch(type){
-		case INT:
-			value = Integer.parseInt(newValue);
-			break;
-		case FLOAT:
-			value = Float.parseFloat(newValue);
-			break;
-		case BOOLEAN:
-			if(newValue.equals("true") || newValue.equals("false")){
-				value = Boolean.parseBoolean(newValue);
+		
+		try{
+			switch(type){
+				case INT:
+					value = Integer.parseInt(newValue);
+					break;
+				case FLOAT:
+					value = Float.parseFloat(newValue);
+					break;
+				case BOOLEAN:
+					if(newValue.equals("true") || newValue.equals("false")){
+						value = Boolean.parseBoolean(newValue);
+					}
+					else throw new NumberFormatException("Invalid Value");
+					break;
+				default:
+					value = newValue;
 			}
-			else throw new NumberFormatException("Invalid Value");
-			break;
-		default:
-			value = newValue;
+		}catch(NumberFormatException e) {
+			invalidValue.setInvalidValueInformation(name, newValue, type);
+			throw invalidValue;
 		}
 	}	
 }

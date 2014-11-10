@@ -100,7 +100,7 @@ public class PositionalArgumentTest
 		v.setValue("suite");
 		assertEquals("suite", v.getValue());
 	}
-	@Test(expected=NumberFormatException.class)
+	@Test(expected=InvalidValueException.class)
 	public void testSetInvalidPositionalArgumentValue() {
 		v = new PositionalArgument("rainy", Argument.Type.BOOLEAN, 1);
 		v.setValue("yes");
