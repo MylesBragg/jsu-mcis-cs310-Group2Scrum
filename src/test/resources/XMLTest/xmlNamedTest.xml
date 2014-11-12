@@ -1,0 +1,8 @@
+<VolumeCalculator>
+	<shape>
+		<length>7.5</length>
+		<width>5.5</width>
+		<height>2.5</height>
+		<type>box</type>
+	</shape>
+</VolumeCalculator>
