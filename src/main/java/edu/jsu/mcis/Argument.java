@@ -2,8 +2,7 @@ package edu.jsu.mcis;
 
 import java.util.*;
 
-public class Argument
-{
+public class Argument {
 	public enum Type{STRING, INT, BOOLEAN, FLOAT}
 	protected Object value;
 	protected String name;
@@ -22,12 +21,15 @@ public class Argument
 	public void setInvalidValueExceptionProgramName(String programName) {
 		invalidValue.setProgramName(programName);
 	}
+	
 	public void setInvalidValueExceptionUsageLine(String usageLine) {
 		invalidValue.setUsageLine(usageLine);
 	}
+	
 	public String getName() {
 		return name;
 	}
+	
 	public Type getType() {
 		return type;
 	}

@@ -6,6 +6,7 @@ public class PositionalArgument extends Argument{
 		super(name, type);
 		positionId = currentPositionCount;
 	}
+	
 	public int getPositionId() {
 		return positionId;
 	}
