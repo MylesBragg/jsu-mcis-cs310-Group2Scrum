@@ -134,13 +134,13 @@ public class NamedArgumentTest
 		assertEquals(33, x.getValue());
 		assertEquals(2.5f, y.getValue());	
 	}
-	@Test(expected=InvalidValueException.class)
+	@Test(expected=NumberFormatException.class)
 	public void testSetNamedArgumentsInvalidValue() {
 		v = new NamedArgument("save", Argument.Type.BOOLEAN);
 		
 		v.setValue("yes");
 	}
-	@Test(expected=InvalidValueException.class)
+	@Test(expected=NumberFormatException.class)
 	public void testSetNamedArgumentsDefaultValueInvalid() {
 		v = new NamedArgument("save", Argument.Type.BOOLEAN);
 		

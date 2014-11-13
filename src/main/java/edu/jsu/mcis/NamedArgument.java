@@ -20,33 +20,29 @@ public class NamedArgument extends Argument {
 		return alternateName;
 	}
 	
-	public void setDefaultValue(Object defaultValue) throws NumberFormatException {
-		
+	public void setDefaultValue(Object defaultValue)
+	{
 		String newDefaultValue = defaultValue.toString();
-		try {
-			switch(super.type){
-				case INT:
-					this.defaultValue = Integer.parseInt(newDefaultValue);
-					break;
-				case FLOAT:
-					this.defaultValue = Float.parseFloat(newDefaultValue);
-					break;
-				case BOOLEAN:
-					if (newDefaultValue.equals("true") || newDefaultValue.equals("false")) {
-						this.defaultValue = Boolean.parseBoolean(newDefaultValue);
-					}
-					else {
-						throw new NumberFormatException("Invalid Value");
-					}
-					break;
-				default:
-					this.defaultValue = newDefaultValue;
-			}
-		}catch(NumberFormatException e) {
-			super.invalidValue.setInvalidValueInformation(super.name, defaultValue, super.type);
-			throw super.invalidValue;
+	
+		switch(super.type)
+		{
+			case INT:
+				this.defaultValue = Integer.parseInt(newDefaultValue);
+				break;
+			case FLOAT:
+				this.defaultValue = Float.parseFloat(newDefaultValue);
+				break;
+			case BOOLEAN:
+				if (newDefaultValue.toLowerCase().equals("true") || newDefaultValue.toLowerCase().equals("false")) {
+					this.defaultValue = Boolean.parseBoolean(newDefaultValue);
+				}
+				else {
+					throw new NumberFormatException(newDefaultValue + " is not true or false.");
+				}
+				break;
+			default:
+				this.defaultValue = newDefaultValue;
 		}
-		
 	}
 	
 	public <T> T getDefaultValue() {

@@ -33,6 +33,7 @@ public class InvalidValueException extends RuntimeException
 				this.type = "string";
 		}
 	}
+	
 	public String getUsage()
 	{
 		return usage;

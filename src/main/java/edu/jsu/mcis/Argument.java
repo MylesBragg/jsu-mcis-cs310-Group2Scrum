@@ -14,7 +14,14 @@ public class Argument {
 		this.name = name;
 		description = "";
 		type = dataType;
-		value = null;
+		if(Type.BOOLEAN  == dataType)
+		{
+			value = false;
+		}
+		else
+		{
+			value = null;
+		}
 		invalidValue = new InvalidValueException();
 	}
 	
@@ -46,28 +53,25 @@ public class Argument {
 		return (T)value;
 	}
 	
-	public void setValue(String newValue) throws NumberFormatException {
-		
-		try{
-			switch(type){
-				case INT:
-					value = Integer.parseInt(newValue);
-					break;
-				case FLOAT:
-					value = Float.parseFloat(newValue);
-					break;
-				case BOOLEAN:
-					if(newValue.equals("true") || newValue.equals("false")){
-						value = Boolean.parseBoolean(newValue);
-					}
-					else throw new NumberFormatException("Invalid Value");
-					break;
-				default:
-					value = newValue;
-			}
-		}catch(NumberFormatException e) {
-			invalidValue.setInvalidValueInformation(name, newValue, type);
-			throw invalidValue;
+	public void setValue(String newValue) 
+	{
+		switch(type)
+		{
+			case INT:
+				value = Integer.parseInt(newValue);
+				break;
+			case FLOAT:
+				value = Float.parseFloat(newValue);
+				break;
+			case BOOLEAN:
+				if(newValue.toLowerCase().equals("true") || newValue.toLowerCase().equals("false")) 
+				{
+					value = Boolean.parseBoolean(newValue);
+				}
+				else throw new NumberFormatException(newValue + " is not true or false.");
+				break;
+			default:
+				value = newValue;
 		}
-	}	
+	}
 }

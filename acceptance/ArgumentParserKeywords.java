@@ -30,13 +30,55 @@ public class ArgumentParserKeywords {
 		parser.parse(vars);
 	}
 	
-	public void startProgramWithOptionalArguments(String vars)
+	public void startProgramWithNamedString(String vars)
 	{
 		parser = new ArgumentParser("OptionalArguments");
 		parser.addPositionalArgument("length", Argument.Type.INT);
 		parser.addPositionalArgument("width", Argument.Type.INT);
 		parser.addPositionalArgument("height", Argument.Type.INT);
 		parser.addNamedArgument("type", Argument.Type.STRING);
+		parser.setArgumentDescription("length", "the length of the box");
+		parser.setArgumentDescription("width", "the width of the box");
+		parser.setArgumentDescription("height", "the height of the box");
+		parser.setArgumentDescription("type", "Optional argument 'type' help");
+		parser.parse(vars);
+	}
+	
+	public void startProgramWithNamedBoolean(String vars)
+	{
+		parser = new ArgumentParser("NamedArguments");
+		parser.addPositionalArgument("length", Argument.Type.FLOAT);
+		parser.addPositionalArgument("width", Argument.Type.FLOAT);
+		parser.addPositionalArgument("height", Argument.Type.FLOAT);
+		parser.addNamedArgument("type", Argument.Type.BOOLEAN);
+		parser.setArgumentDescription("length", "the length of the box");
+		parser.setArgumentDescription("width", "the width of the box");
+		parser.setArgumentDescription("height", "the height of the box");
+		parser.setArgumentDescription("type", "Optional argument 'type' help");
+		parser.parse(vars);
+	}
+
+	public void startProgramWithNamedFloat(String vars)
+	{
+		parser = new ArgumentParser("NamedArguments");
+		parser.addPositionalArgument("length", Argument.Type.FLOAT);
+		parser.addPositionalArgument("width", Argument.Type.FLOAT);
+		parser.addPositionalArgument("height", Argument.Type.FLOAT);
+		parser.addNamedArgument("type", Argument.Type.FLOAT);
+		parser.setArgumentDescription("length", "the length of the box");
+		parser.setArgumentDescription("width", "the width of the box");
+		parser.setArgumentDescription("height", "the height of the box");
+		parser.setArgumentDescription("type", "Optional argument 'type' help");
+		parser.parse(vars);
+	}
+
+	public void startProgramWithNamedInt(String vars)
+	{
+		parser = new ArgumentParser("NamedArguments");
+		parser.addPositionalArgument("length", Argument.Type.FLOAT);
+		parser.addPositionalArgument("width", Argument.Type.FLOAT);
+		parser.addPositionalArgument("height", Argument.Type.FLOAT);
+		parser.addNamedArgument("type", Argument.Type.INT);
 		parser.setArgumentDescription("length", "the length of the box");
 		parser.setArgumentDescription("width", "the width of the box");
 		parser.setArgumentDescription("height", "the height of the box");
