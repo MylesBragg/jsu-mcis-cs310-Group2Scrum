@@ -1,8 +1,13 @@
-<VolumeCalculator>
-	<shape>
-		<length>7.5</length>
-		<width>5.5</width>
-		<height>2.5</height>
-		<t>box</t>
-	</shape>
-</VolumeCalculator>
+<arguments>
+	<argument type="positional">
+		<name>length</name>
+		<type>float</type>
+		<description>the length of the shape</description>
+	</argument>
+	<argument type="named">
+		<name>type</name>
+		<type>string</type>
+		<description>the type of the shape</description>
+		<alternatename>t</alternatename>
+	</argument>
+</arguments>

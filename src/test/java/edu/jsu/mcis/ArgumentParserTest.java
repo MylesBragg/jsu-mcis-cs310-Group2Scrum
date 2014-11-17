@@ -380,40 +380,4 @@ public class ArgumentParserTest
 					"[--type] the type of shape\n" +
 					"[--pet] my companion, he is irrelevant", parser.getHelpString());
 	}
-	@Test
-	public void testParseXML() {
-		parser.addPositionalArgument("length", Argument.Type.FLOAT);
-		parser.addPositionalArgument("width", Argument.Type.FLOAT);
-		parser.addPositionalArgument("height", Argument.Type.FLOAT);
-		parser.parse("\\XMLTest\\xmlTest.xml");
-		assertEquals(7.5f, parser.getArgumentValue("length"));
-		assertEquals(5.5f, parser.getArgumentValue("width"));
-		assertEquals(2.5f, parser.getArgumentValue("height"));
-	}
-	@Test
-	public void testParseXMLNamedArgument() {
-		parser.addPositionalArgument("length", Argument.Type.FLOAT);
-		parser.addPositionalArgument("width", Argument.Type.FLOAT);
-		parser.addPositionalArgument("height", Argument.Type.FLOAT);
-		parser.addNamedArgument("type", Argument.Type.STRING);
-		parser.parse("\\XMLTest\\xmlNamedTest.xml");
-		assertEquals("box", parser.getArgumentValue("type"));
-	}
-	@Test
-	public void testParseXMLShortNamedArgument() {
-		parser.addPositionalArgument("length", Argument.Type.FLOAT);
-		parser.addPositionalArgument("width", Argument.Type.FLOAT);
-		parser.addPositionalArgument("height", Argument.Type.FLOAT);
-		parser.addNamedArgument("type", Argument.Type.STRING);
-		parser.setNamedArgumentAlternateName("type", "t");
-		parser.parse("\\XMLTest\\xmlShortNamedTest.xml");
-		assertEquals("box", parser.getArgumentValue("t"));
-	}
-	@Test
-	public void testParseXMLInvalidNamedArgument() {
-		parser.addPositionalArgument("length", Argument.Type.FLOAT);
-		parser.addPositionalArgument("width", Argument.Type.FLOAT);
-		parser.addPositionalArgument("height", Argument.Type.FLOAT);
-		parser.parse("\\XMLTest\\xmlNamedTest.xml");
-	}
 }

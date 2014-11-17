@@ -1,10 +1,6 @@
 package edu.jsu.mcis;
 
-import java.io.*;
 import java.util.*;
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
 
 public class ArgumentParser {
 	
@@ -206,72 +202,10 @@ public class ArgumentParser {
 	
 	
 	public void parse(String argumentsToParse) {
-		if (argumentsToParse.contains(".xml")) {
-			parseXML(argumentsToParse);
-		}
-		else {
-			parseFormattedString(argumentsToParse);
-		}
-		
+		parseFormattedString(argumentsToParse);
 	}
 	
 	
-	private void parseXML(String xmlFile) {
-		try {
-			
-			DocumentBuilderFactory initializeXMLDocument = DocumentBuilderFactory.newInstance();
-			
-			DocumentBuilder buildXMLDocument = initializeXMLDocument.newDocumentBuilder();
-			
-			Document currentXMLDocument = buildXMLDocument.parse(ClassLoader.getSystemResourceAsStream(xmlFile));
-
-			NodeList nodeList = currentXMLDocument.getDocumentElement().getChildNodes();
-			
-			for (int i = 0; i < nodeList.getLength(); i++) {
- 
-			  Node node = nodeList.item(i);
-			  
-			  if (node instanceof Element) {
-				setXMLArgumentValue(node.getChildNodes());
-			  }
-			}
-		}catch(ParserConfigurationException e){
-		
-		}catch(SAXException e) {
-		
-		}catch(IOException e) {
-		
-		}
-	}
-	
-	
-	private void setXMLArgumentValue(NodeList childNodes) {
-		for (int j = 0; j < childNodes.getLength(); j++) {
-			Node currentNode = childNodes.item(j);
-			if (currentNode instanceof Element) {
-				String content = currentNode.getLastChild().getTextContent().trim();
-				
-				if (positionalArgumentHolder.containsKey(currentNode.getNodeName())) {
-					positionalArgumentHolder.get(currentNode.getNodeName()).setValue(content);
-				}
-				else {
-					String fullName = getNamedArgumentFullName(currentNode.getNodeName());
-					if (fullName.equals("")) {
-						if (namedArgumentHolder.containsKey(currentNode.getNodeName())) {
-							namedArgumentHolder.get(currentNode.getNodeName()).setValue(content);
-						}
-						else {
-							System.out.println("I need an exception here");
-						}
-					}
-					else {
-						namedArgumentHolder.get(fullName).setValue(content);
-					}
-				}
-			}
-		}
-
-	}
 	
 	
 	private void parseFormattedString(String argumentsToParse){
