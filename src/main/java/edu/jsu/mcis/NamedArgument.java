@@ -45,6 +45,16 @@ public class NamedArgument extends Argument {
 		}
 	}
 	
+	@Override
+	public <T> T getValue() {
+		if (super.value == null) {
+			return (T)defaultValue;
+		}
+		else {
+			return (T)super.value;
+		}
+	}
+	
 	public <T> T getDefaultValue() {
 		return (T)defaultValue;
 	}

@@ -23,4 +23,16 @@ public class XMLFactoryTest {
 		p.parse("7.5 -t box");
 		assertEquals("box", p.getArgumentValue("t"));
 	}
+	@Test
+	public void testParseXMLDefaultValueArgument() {
+		ArgumentParser p = XMLFactory.createArgumentParser("Volume Calculator", "\\XMLTest\\xmlNamedDefaultValueTest.xml");
+		p.parse("7.5");
+		assertEquals("box", p.getArgumentValue("type"));
+	}
+	@Test
+	public void testParseXMLRequiredArgument() {
+		ArgumentParser p = XMLFactory.createArgumentParser("Volume Calculator", "\\XMLTest\\xmlNamedRequiredTest.xml");
+		p.parse("7.5 --type box");
+		assertEquals("box", p.getArgumentValue("type"));
+	}
 }

@@ -1,0 +1,13 @@
+<arguments>
+	<argument type="positional">
+		<name>length</name>
+		<type>float</type>
+		<description>the length of the shape</description>
+	</argument>
+	<argument type="named">
+		<name>type</name>
+		<type>string</type>
+		<description>the type of the shape</description>
+		<required>true</required>
+	</argument>
+</arguments>
