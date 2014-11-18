@@ -2,7 +2,8 @@ package edu.jsu.mcis;
 
 import java.util.*;
 
-public class Argument {
+public class Argument 
+{
 	public enum Type{STRING, INT, BOOLEAN, FLOAT}
 	protected Object value;
 	protected String name;
@@ -10,7 +11,8 @@ public class Argument {
 	protected Type type;
 	protected InvalidValueException invalidValue;
 
-	public Argument(String name, Type dataType) {
+	public Argument(String name, Type dataType) 
+	{
 		this.name = name;
 		description = "";
 		type = dataType;
@@ -25,23 +27,28 @@ public class Argument {
 		invalidValue = new InvalidValueException();
 	}
 	
-	public String getName() {
+	public String getName() 
+	{
 		return name;
 	}
 	
-	public Type getType() {
+	public Type getType() 
+	{
 		return type;
 	}
 	
-	public void setDescription(String description) {
+	public void setDescription(String description) 
+	{
 		this.description = description;
 	}
 	
-	public String getDescription() {
+	public String getDescription() 
+	{
 		return description;
 	}
 	
-	public <T extends Object> T getValue() {
+	public <T extends Object> T getValue() 
+	{
 		return (T)value;
 	}
 	

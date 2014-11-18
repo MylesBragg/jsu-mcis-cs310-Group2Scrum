@@ -10,16 +10,22 @@ public class InvalidValueException extends RuntimeException
 	private String type;
 	private Object currentValue;
 	
-	public void setProgramName(String programName) {
+	public void setProgramName(String programName) 
+	{
 		program = programName;
 	}
-	public void setUsageLine(String usageLine) {
+	
+	public void setUsageLine(String usageLine) 
+	{
 		usage = usageLine;
 	}
-	public void setInvalidValueInformation(String name, Object value, Argument.Type type) {
+	
+	public void setInvalidValueInformation(String name, Object value, Argument.Type type) 
+	{
 		this.name = name;
 		currentValue = value;
-		switch(type) {
+		switch(type) 
+		{
 			case INT:
 				this.type = "integer";
 				break;

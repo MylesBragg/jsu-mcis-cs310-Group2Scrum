@@ -1,22 +1,26 @@
 package edu.jsu.mcis;
 
-public class NamedArgument extends Argument {
+public class NamedArgument extends Argument 
+{
 	private String alternateName;
 	private boolean required;
 	private Object defaultValue;
 	
-	public NamedArgument(String name, Type type) {
+	public NamedArgument(String name, Type type) 
+	{
 		super(name, type);
 		alternateName = "";
 		required = false;
 		defaultValue = null;
 	}
 	
-	public void setAlternateName(String alternateName) {
+	public void setAlternateName(String alternateName) 
+	{
 		this.alternateName = alternateName;
 	}
 	
-	public String getAlternateName() {
+	public String getAlternateName() 
+	{
 		return alternateName;
 	}
 	
@@ -33,10 +37,12 @@ public class NamedArgument extends Argument {
 				this.defaultValue = Float.parseFloat(newDefaultValue);
 				break;
 			case BOOLEAN:
-				if (newDefaultValue.toLowerCase().equals("true") || newDefaultValue.toLowerCase().equals("false")) {
+				if (newDefaultValue.toLowerCase().equals("true") || newDefaultValue.toLowerCase().equals("false")) 
+				{
 					this.defaultValue = Boolean.parseBoolean(newDefaultValue);
 				}
-				else {
+				else 
+				{
 					throw new NumberFormatException(newDefaultValue + " is not true or false.");
 				}
 				break;
@@ -46,25 +52,30 @@ public class NamedArgument extends Argument {
 	}
 	
 	@Override
-	public <T> T getValue() {
-		if (super.value == null) {
+	public <T> T getValue() 
+	{
+		if (super.value == null) 
+		{
 			return (T)defaultValue;
 		}
-		else {
+		else 
+		{
 			return (T)super.value;
 		}
 	}
 	
-	public <T> T getDefaultValue() {
+	public <T> T getDefaultValue() 
+	{
 		return (T)defaultValue;
 	}
 	
-	public void setRequired() {
+	public void setRequired() 
+	{
 		required = true;
 	}
 	
-	public boolean getRequired() {
+	public boolean getRequired() 
+	{
 		return required;
 	}
-	
 }

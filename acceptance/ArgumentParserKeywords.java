@@ -2,10 +2,12 @@ import edu.jsu.mcis.*;
 
 import java.util.*;
 
-public class ArgumentParserKeywords {
+public class ArgumentParserKeywords 
+{
 	private ArgumentParser parser;
 	
-	public void startVolumeCalculatorTest(String vars) {
+	public void startVolumeCalculatorTest(String vars) 
+	{
 		parser = new ArgumentParser("VolumeCalculator");
 		parser.setProgramDescription("Calculate the volume of a box.");
 		parser.addPositionalArgument("length", Argument.Type.INT);
@@ -17,7 +19,8 @@ public class ArgumentParserKeywords {
 		parser.parse(vars);
 	}
 	
-	public void startPetShowTest(String vars) {
+	public void startPetShowTest(String vars) 
+	{
 		parser = new ArgumentParser("PetShow");
 		parser.addPositionalArgument("pet", Argument.Type.STRING);
 		parser.addPositionalArgument("number", Argument.Type.INT);

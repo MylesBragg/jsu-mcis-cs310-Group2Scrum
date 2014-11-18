@@ -10,13 +10,15 @@ public class InvalidValueExceptionTest
 	private InvalidValueException ive;
 	
 	@Before
-	public void StartUp() {
+	public void StartUp() 
+	{
 		name = "width";
 		helpUsage = "usage: java VolumeCalculator length width height";
 		ive = new InvalidValueException();
 		ive.setProgramName("VolumeCalculator");
 		ive.setUsageLine(helpUsage);
 	}
+	
 	@Test
 	public void testInvalidFloatValueException()
 	{
@@ -31,6 +33,7 @@ public class InvalidValueExceptionTest
 		assertEquals("float", ive.getType());
 		assertEquals(currentValue, ive.getCurrentValue());
 	}
+	
 	@Test
 	public void testInvalidIntegerValueException()
 	{
@@ -45,6 +48,7 @@ public class InvalidValueExceptionTest
 		assertEquals("integer", ive.getType());
 		assertEquals(currentValue, ive.getCurrentValue());
 	}
+	
 	@Test
 	public void testInvalidBooleanValueException()
 	{
@@ -59,6 +63,7 @@ public class InvalidValueExceptionTest
 		assertEquals("boolean", ive.getType());
 		assertEquals(currentValue, ive.getCurrentValue());
 	}
+	
 	@Test
 	public void testInvalidStringValueException()
 	{
@@ -73,5 +78,4 @@ public class InvalidValueExceptionTest
 		assertEquals("string", ive.getType());
 		assertEquals(currentValue, ive.getCurrentValue());
 	}
-	
 }

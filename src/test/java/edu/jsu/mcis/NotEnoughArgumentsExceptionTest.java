@@ -28,10 +28,10 @@ public class NotEnoughArgumentsExceptionTest
 					"VolumeCalculator.java: error: the following arguments are required: width height", 
 					errorString);
 	}
+	
 	@Test
 	public void testGetters()
 	{
-		
 		arrayOfNames = new LinkedHashMap<String, PositionalArgument>();
 		arrayOfNames.put("length", new PositionalArgument("length", Argument.Type.INT, 1));
 		arrayOfNames.put("width", new PositionalArgument("width", Argument.Type.FLOAT, 2));

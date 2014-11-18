@@ -2,16 +2,16 @@ package edu.jsu.mcis;
 
 import java.util.*;
 
-public class ArgumentParser {
-	
+public class ArgumentParser 
+{
 	private Map<String, PositionalArgument> positionalArgumentHolder;
 	private Map<String, NamedArgument> namedArgumentHolder;
 	private String programName;
 	private String programDescription;
 	private int currentPositionalArgumentCount;
 	
-	public ArgumentParser(String programName){
-		
+	public ArgumentParser(String programName)
+	{
 		this.programName = programName;
 		
 		positionalArgumentHolder = new LinkedHashMap<String, PositionalArgument>();
@@ -20,104 +20,115 @@ public class ArgumentParser {
 		currentPositionalArgumentCount = 0;
 	}
 	
-	
-	public void setProgramDescription(String programDescription){
+	public void setProgramDescription(String programDescription)
+	{
 		this.programDescription = programDescription;
 	}
 	
-	
-	public String getProgramDescription(){
+	public String getProgramDescription()
+	{
 		return programDescription;
 	}
 	
-	
-	
-	
-	public void addPositionalArgument(String name, Argument.Type dataType){
+	public void addPositionalArgument(String name, Argument.Type dataType)
+	{
 		positionalArgumentHolder.put(name, new PositionalArgument(name, dataType, incrementCurrentPositionalArgumentCount()));
 	}
 	
-	
-	private int incrementCurrentPositionalArgumentCount(){
+	private int incrementCurrentPositionalArgumentCount()
+	{
 		currentPositionalArgumentCount++;
 		return currentPositionalArgumentCount;
 	}
 	
-	
-	public int getPositionId(String name){
+	public int getPositionId(String name)
+	{
 		return positionalArgumentHolder.get(name).getPositionId();
 	}
 	
-	
-	
-	
-	public void setArgumentDescription(String name, String description){
+	public void setArgumentDescription(String name, String description)
+	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
-		if (namedArgumentFullName.equals("")) {
-			if (namedArgumentHolder.containsKey(name)) {
+		if (namedArgumentFullName.equals("")) 
+		{
+			if (namedArgumentHolder.containsKey(name)) 
+			{
 				namedArgumentHolder.get(name).setDescription(description);
 			}
-			else if (positionalArgumentHolder.containsKey(name)) {
+			else if (positionalArgumentHolder.containsKey(name)) 
+			{
 				positionalArgumentHolder.get(name).setDescription(description);
 			}
-			else {
+			else 
+			{
 				System.out.println("I need an exception handler here");
 			}
 		}
-		else {
+		else 
+		{
 			namedArgumentHolder.get(namedArgumentFullName).setDescription(description);
 		}
 	}
 	
-	
-	public String getArgumentDescription(String name){
+	public String getArgumentDescription(String name)
+	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
-		if (namedArgumentFullName.equals("")) {
-			if (namedArgumentHolder.containsKey(name)) {
+		if (namedArgumentFullName.equals("")) 
+		{
+			if (namedArgumentHolder.containsKey(name)) 
+			{
 				return namedArgumentHolder.get(name).getDescription();
 			}
-			else if (positionalArgumentHolder.containsKey(name)) {
+			else if (positionalArgumentHolder.containsKey(name)) 
+			{
 				return positionalArgumentHolder.get(name).getDescription();
 			}
 		}
-		else {
+		else 
+		{
 			return namedArgumentHolder.get(namedArgumentFullName).getDescription();
 		}
 		return "";
 	}
 	
-	public Argument.Type getArgumentType(String name){
+	public Argument.Type getArgumentType(String name)
+	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
-		if (namedArgumentFullName.equals("")) {
-			if (namedArgumentHolder.containsKey(name)) {
+		if (namedArgumentFullName.equals("")) 
+		{
+			if (namedArgumentHolder.containsKey(name)) 
+			{
 				return namedArgumentHolder.get(name).getType();
 			}
-			else if (positionalArgumentHolder.containsKey(name)) {
+			else if (positionalArgumentHolder.containsKey(name)) 
+			{
 				return positionalArgumentHolder.get(name).getType();
 			}
 		}
-		else {
+		else 
+		{
 			return namedArgumentHolder.get(namedArgumentFullName).getType();
 		}
 		return Argument.Type.STRING;
 	}	
 	
-	public void addNamedArgument(String name, Argument.Type dataType){
+	public void addNamedArgument(String name, Argument.Type dataType)
+	{
 		namedArgumentHolder.put(name, new NamedArgument(name, dataType));
 	}
 	
-	
-	public void setNamedArgumentAlternateName(String name, String alternateName){
+	public void setNamedArgumentAlternateName(String name, String alternateName)
+	{
 		namedArgumentHolder.get(name).setAlternateName(alternateName);
 	}
 	
-	
-	public String getNamedArgumentAlternateName(String name){
+	public String getNamedArgumentAlternateName(String name)
+	{
 		return namedArgumentHolder.get(name).getAlternateName();
 	}
 	
-	
-	public void setNamedArgumentDefaultValue(String name, Object defaultValue){
+	public void setNamedArgumentDefaultValue(String name, Object defaultValue)
+	{
 		String fullName = getNamedArgumentFullName(name);
 		
 		if (fullName.equals("")) 
@@ -152,42 +163,48 @@ public class ArgumentParser {
 		}
 	}
 	
-	
-	public <T> T getNamedArgumentDefaultValue(String name){
+	public <T> T getNamedArgumentDefaultValue(String name)
+	{
 		String fullName = getNamedArgumentFullName(name);
 		
-		if (fullName.equals("")) {
+		if (fullName.equals("")) 
+		{
 			return namedArgumentHolder.get(name).getDefaultValue();
 		}
-		else {
+		else 
+		{
 			return namedArgumentHolder.get(fullName).getDefaultValue();
 		}
 	}
 	
-	
-	public void setNamedArgumentRequired(String name){
+	public void setNamedArgumentRequired(String name)
+	{
 		String fullName = getNamedArgumentFullName(name);
-		if (fullName.equals("")) {
+		if (fullName.equals("")) 
+		{
 			namedArgumentHolder.get(name).setRequired();
 		}
-		else {
+		else 
+		{
 			namedArgumentHolder.get(fullName).setRequired();
 		}
 	}
 	
-	
-	public boolean getNamedArgumentRequired(String name){
+	public boolean getNamedArgumentRequired(String name)
+	{
 		String fullName = getNamedArgumentFullName(name);
-		if (fullName.equals("")) {
+		if (fullName.equals("")) 
+		{
 			return namedArgumentHolder.get(name).getRequired();
 		}
-		else {
+		else 
+		{
 			return namedArgumentHolder.get(fullName).getRequired();
 		}
 	}
 	
-	
-	private String getNamedArgumentFullName(String alternateName){
+	private String getNamedArgumentFullName(String alternateName)
+	{
 		Iterator<String> hashKeys = namedArgumentHolder.keySet().iterator();
 		String name;
 		while(hashKeys.hasNext())
@@ -202,10 +219,8 @@ public class ArgumentParser {
 		return "";
 	}
 	
-	
-	
-	
-	public void parse(String[] argumentsToParse) {
+	public void parse(String[] argumentsToParse) 
+	{
 		String myString = "";
 		for (int i = 0; i < argumentsToParse.length; i++)
 		{
@@ -214,60 +229,64 @@ public class ArgumentParser {
 		parseFormattedString(myString);
 	}
 	
-	
-	public void parse(String argumentsToParse) {
+	public void parse(String argumentsToParse) 
+	{
 		parseFormattedString(argumentsToParse);
 	}
 	
-	
-	
-	
-	private void parseFormattedString(String argumentsToParse){
+	private void parseFormattedString(String argumentsToParse)
+	{
 		String nextValue = "";
 		String previousValue = "";
 		Scanner argumentScanner = new Scanner(argumentsToParse);
 		int currentPosArgIndex = 1;
 		
-		while (argumentScanner.hasNext()) {
+		while (argumentScanner.hasNext()) 
+		{
 		
 			nextValue = argumentScanner.next();
-			if (nextValue.equals("-h") || nextValue.equals("--help")) {
+			if (nextValue.equals("-h") || nextValue.equals("--help")) 
+			{
 				System.out.println(getHelpInfo());
 			}
-			else {	
-				if ((nextValue.charAt(0) == '-' && nextValue.charAt(1) == '-') || nextValue.charAt(0) == '-') {
-					
+			else 
+			{	
+				if ((nextValue.charAt(0) == '-' && nextValue.charAt(1) == '-') || nextValue.charAt(0) == '-') 
+				{
 					String namedArgument = checkCommandLineNamedArgument(nextValue);
 					
-					if (namedArgument.equals("")) {
+					if (namedArgument.equals("")) 
+					{
 						System.out.println("I need an exception handler here");
 					}
-					else {
-						if (checkNamedArgumentTypeBoolean(namedArgument)) {
+					else 
+					{
+						if (checkNamedArgumentTypeBoolean(namedArgument)) 
+						{
 							setArgumentValue(namedArgument, "true");
 						}
-						else {
+						else 
+						{
 							String namedValue = argumentScanner.next();
 							
 							setArgumentValue(namedArgument, namedValue);
 						}
 					}
-					
-					
 				}
-				else {
-				
+				else 
+				{
 					String positionalArgName = getPositionalArgumentName(currentPosArgIndex);
 					
-					if (positionalArgumentHolder.size() >= currentPosArgIndex) {
+					if (positionalArgumentHolder.size() >= currentPosArgIndex) 
+					{
 						setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
 						currentPosArgIndex++;
 					}
-					else {
+					else 
+					{
 						String usageLine = getUsageLine();
 						throw new TooManyArgumentsException(usageLine, programName, nextValue, argumentScanner);
-					}
-					
+					}	
 				}
 			}
 		}
@@ -278,65 +297,72 @@ public class ArgumentParser {
 		}
 	}
 	
-	
-	private String getPositionalArgumentName(int position){
+	private String getPositionalArgumentName(int position)
+	{
 		Iterator<String> keyIterator = positionalArgumentHolder.keySet().iterator();
 		String currentKey;
 		
-		while(keyIterator.hasNext()) {
-		
+		while(keyIterator.hasNext()) 
+		{
 			currentKey = keyIterator.next();
-			
-			if (positionalArgumentHolder.get(currentKey).getPositionId() == position) {
+			if (positionalArgumentHolder.get(currentKey).getPositionId() == position) 
+			{
 				return currentKey;
 			}
 		}
 		return "Positional Argument Not Found Error";
 	}
 	
-	public String getArgumentNames(){
+	public String getArgumentNames()
+	{
 		Iterator<String> keyIterator = positionalArgumentHolder.keySet().iterator();
 		String keyString = " ";
-		while(keyIterator.hasNext()) {
-		
+		while(keyIterator.hasNext()) 
+		{
 			keyString = keyString + keyIterator.next() + " ";
 		}
 		System.out.println(keyString);
 		keyIterator = namedArgumentHolder.keySet().iterator();
-		while(keyIterator.hasNext()) {
-		
+		while(keyIterator.hasNext()) 
+		{
 			keyString = keyString + keyIterator.next() + " ";
 		}
 		return keyString.trim();
 	}
 	
-	private String checkCommandLineNamedArgument(String name) {
+	private String checkCommandLineNamedArgument(String name) 
+	{
 		String fullName = getNamedArgumentFullName(name.substring(1));
 		
-		if (fullName.equals("")) {
-			if (namedArgumentHolder.containsKey(name.substring(2))) {
+		if (fullName.equals("")) 
+		{
+			if (namedArgumentHolder.containsKey(name.substring(2))) 
+			{
 				return name.substring(2);
 			}
-			else {
+			else 
+			{
 				return "";
 			}
 		}
-		else {
+		else 
+		{
 			return fullName;
 		}
 	}
 	
-	
-	private boolean checkNamedArgumentTypeBoolean(String name) {
-		if (namedArgumentHolder.get(name).getType().equals(Argument.Type.BOOLEAN)) {
+	private boolean checkNamedArgumentTypeBoolean(String name) 
+	{
+		if (namedArgumentHolder.get(name).getType().equals(Argument.Type.BOOLEAN))
+		{
 			return true;
 		}
-		else {
+		else 
+		{
 			return false;
 		}
 	}
-	
-	
+
 	private void setArgumentValue(String argumentName, String argumentValue)
 	{
 		if (namedArgumentHolder.containsKey(argumentName)) 
@@ -371,41 +397,45 @@ public class ArgumentParser {
 		}
 	}
 	
-	
-	public <T> T getArgumentValue(String name){
-		if (positionalArgumentHolder.containsKey(name)) {
+	public <T> T getArgumentValue(String name)
+	{
+		if (positionalArgumentHolder.containsKey(name)) 
+		{
 			return positionalArgumentHolder.get(name).getValue();
 		}
-		else if (namedArgumentHolder.containsKey(name)) {
+		else if (namedArgumentHolder.containsKey(name)) 
+		{
 			return (T)namedArgumentHolder.get(name).getValue();
 		}
-		else {
+		else 
+		{
 			String alternateFullName = getNamedArgumentFullName(name);
-			if (alternateFullName.equals("")) {
+			if (alternateFullName.equals("")) 
+			{
 				return (T)"Error key not found";
 			}
-			else {
+			else 
+			{
 				return (T)namedArgumentHolder.get(alternateFullName).getValue();
 			}
 		}
 	}
 	
-	
-	
-	
-	public String getHelpString(){
+	public String getHelpString()
+	{
 		return getHelpInfo();
 	}
 	
-	
-	private String getHelpInfo(){
+	private String getHelpInfo()
+	{
 		String helpMessage = this.getUsageLine() + "\n\n";
 		helpMessage = helpMessage + programDescription + "\n\n";
 		helpMessage = helpMessage + getPositionalArgumentsInfo();
 		return helpMessage;
 	}
 	
-	private String getUsageLine(){
+	private String getUsageLine()
+	{
 		String usageString = "usage: java " + programName;
 		Iterator<String> hashKeys = positionalArgumentHolder.keySet().iterator();
 		String argumentList = "";
@@ -429,8 +459,8 @@ public class ArgumentParser {
 		return usageString;
 	}
 	
-	
-	private String getPositionalArgumentsInfo(){
+	private String getPositionalArgumentsInfo()
+	{
 		String positionalArgumentsDescription = "positional arguments: ";
 		Iterator<String> hashKeys = positionalArgumentHolder.keySet().iterator();
 		String currentKey = "";

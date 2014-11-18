@@ -19,6 +19,7 @@ public class TooManyArgumentsExceptionTest
 					"VolumeCalculator.java: error: unrecognized arguments: 43 99", 
 					errorString);
 	}
+	
 	@Test
 	public void testGetters()
 	{
