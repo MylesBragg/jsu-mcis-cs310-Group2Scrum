@@ -138,6 +138,7 @@ public class XMLFactory
 		p.addPositionalArgument(name, type);
 		p.setArgumentDescription(name, description);
 	}
+	
 	private static void addNamedArgument() 
 	{
 		p.addNamedArgument(name, type);
@@ -159,11 +160,13 @@ public class XMLFactory
 		instantiateContentHolders();
 	}
 	
-	private static Node writePositionalArgument(Document currentDocument, String name) {
+	private static Node writePositionalArgument(Document currentDocument, String name) 
+	{
 		String type;
 		Element argument = currentDocument.createElement("argument");
 		
-		switch(getArgumentType(name)) {
+		switch(getArgumentType(name)) 
+		{
 			case INT:
 				type = "integer";
 				break;
@@ -177,7 +180,6 @@ public class XMLFactory
 				type = "string";
 				break;
 		}
-		
 		argument.setAttribute("type", "positional");
 		argument.appendChild(setChildNodeValue(currentDocument, argument, "name", name));
 		argument.appendChild(setChildNodeValue(currentDocument, argument, "type", type));
@@ -188,7 +190,9 @@ public class XMLFactory
 		
 		return argument;
 	}
-	private static Node writeNamedArgument(Document currentDocument, String name) {
+	
+	private static Node writeNamedArgument(Document currentDocument, String name) 
+	{
 		String type;
 		Element argument = currentDocument.createElement("argument");
 		
@@ -206,25 +210,29 @@ public class XMLFactory
 				type = "string";
 				break;
 		}
-		
 		argument.setAttribute("type", "named");
 		argument.appendChild(setChildNodeValue(currentDocument, argument, "name", name));
 		argument.appendChild(setChildNodeValue(currentDocument, argument, "type", type));
 		if (!getArgumentDescription(name).equals("")) {
 			argument.appendChild(setChildNodeValue(currentDocument, argument, "description", getArgumentDescription(name)));
 		}
-		if (!getNamedArgumentAlternateName(name).equals("")) {
+		if (!getNamedArgumentAlternateName(name).equals("")) 
+		{
 			argument.appendChild(setChildNodeValue(currentDocument, argument, "alternatename", getNamedArgumentAlternateName(name)));
 		}
-		if (getNamedArgumentDefaultValue(name) != null) {
+		if (getNamedArgumentDefaultValue(name) != null) 
+		{
 			argument.appendChild(setChildNodeValue(currentDocument, argument, "defaultvalue", getNamedArgumentDefaultValue(name).toString()));
 		}
-		if (getNamedArgumentRequired(name) == true) {
+		if (getNamedArgumentRequired(name) == true) 
+		{
 			argument.appendChild(setChildNodeValue(currentDocument, argument, "required", "true"));
 		}
 		return argument;
 	}
-	private static Node setChildNodeValue(Document currentDocument, Element currentElement, String name, String value) {
+	
+	private static Node setChildNodeValue(Document currentDocument, Element currentElement, String name, String value) 
+	{
 		Element node = currentDocument.createElement(name);
         node.appendChild(currentDocument.createTextNode(value));
         return node;
@@ -239,31 +247,33 @@ public class XMLFactory
 		
 		DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder icBuilder;
-        try {
+        try 
+		{
             icBuilder = icFactory.newDocumentBuilder();
             Document currentDocument = icBuilder.newDocument();
             Element mainRootElement = currentDocument.createElement("arguments");
             currentDocument.appendChild(mainRootElement);
 			int i = 1;
-            while(myScanner.hasNext()) {
-				if (i <= positionalSize) {
+            while(myScanner.hasNext()) 
+			{
+				if (i <= positionalSize)
+				{
 					mainRootElement.appendChild(writePositionalArgument(currentDocument, myScanner.next()));
 					i++;
 				}
-				else {
+				else 
+				{
 				mainRootElement.appendChild(writeNamedArgument(currentDocument, myScanner.next()));
 				}
-			}
- 
-            
+			}   
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(currentDocument);
 			int fileCount = 0;
 			File f = new File(p.getProgramName() +".xml");
 			
-			while(f.exists()) {
-        
+			while(f.exists()) 
+			{
 				fileCount++;
 				f = new File(p.getProgramName() + fileCount +".xml");
 			}
@@ -271,12 +281,12 @@ public class XMLFactory
             transformer.transform(source, console);
  
             System.out.println("\nXML DOM Created Successfully..");
+			
 			System.out.println("\nYour new file name is: " + f.getName());
- 
+			
         } catch (Exception e) {
             e.printStackTrace();
         }
-		
 	}
 
 	public static String getArgumentNames()
