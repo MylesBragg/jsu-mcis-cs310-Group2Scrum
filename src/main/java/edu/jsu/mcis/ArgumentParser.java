@@ -86,7 +86,21 @@ public class ArgumentParser {
 		return "";
 	}
 	
-		
+	public Argument.Type getArgumentType(String name){
+		String namedArgumentFullName = getNamedArgumentFullName(name);
+		if (namedArgumentFullName.equals("")) {
+			if (namedArgumentHolder.containsKey(name)) {
+				return namedArgumentHolder.get(name).getType();
+			}
+			else if (positionalArgumentHolder.containsKey(name)) {
+				return positionalArgumentHolder.get(name).getType();
+			}
+		}
+		else {
+			return namedArgumentHolder.get(namedArgumentFullName).getType();
+		}
+		return Argument.Type.STRING;
+	}	
 	
 	public void addNamedArgument(String name, Argument.Type dataType){
 		namedArgumentHolder.put(name, new NamedArgument(name, dataType));
@@ -280,6 +294,21 @@ public class ArgumentParser {
 		return "Positional Argument Not Found Error";
 	}
 	
+	public String getArgumentNames(){
+		Iterator<String> keyIterator = positionalArgumentHolder.keySet().iterator();
+		String keyString = " ";
+		while(keyIterator.hasNext()) {
+		
+			keyString = keyString + keyIterator.next() + " ";
+		}
+		System.out.println(keyString);
+		keyIterator = namedArgumentHolder.keySet().iterator();
+		while(keyIterator.hasNext()) {
+		
+			keyString = keyString + keyIterator.next() + " ";
+		}
+		return keyString.trim();
+	}
 	
 	private String checkCommandLineNamedArgument(String name) {
 		String fullName = getNamedArgumentFullName(name.substring(1));

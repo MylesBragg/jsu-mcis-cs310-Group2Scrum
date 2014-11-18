@@ -12,6 +12,7 @@ public class XMLFactory {
 	private static Argument.Type type;
 	private static Object defaultValue;
 	private static boolean required;
+	private static Scanner myScanner;
 	
 	public static ArgumentParser createArgumentParser(String programName, String xmlFile) {
 
@@ -32,10 +33,7 @@ public class XMLFactory {
 		}catch(IOException e) {
 		
 		}
-		
-		
 		return p;
-		
 	}
 	
 	private static void instantiateContentHolders() {
@@ -146,7 +144,48 @@ public class XMLFactory {
 		instantiateContentHolders();
 	}
 	
-	public static void writeArgumentParser(){
-
+	public static void writeArgumentParser(ArgumentParser currentParser){
+		p = currentParser;
+		String names = getArgumentNames();
+		myScanner = new Scanner(names);
+		int positionalSize = getPositionalArgumentHolderSize();
+		
+		
+	}
+	/*************************************************************/
+	// Saving to XML File
+	public static String getArgumentNames()
+	{
+		return p.getArgumentNames();
+	}
+	
+	public static Argument.Type getArgumentType(String name)
+	{
+		return p.getArgumentType(name);
+	}
+	
+	public static String getArgumentDescription(String name)
+	{
+		return p.getArgumentDescription(name);
+	}
+	
+	public static String getNamedArgumentAlternateName(String name)
+	{
+		return p.getNamedArgumentAlternateName(name);
+	}
+	
+	public static boolean getNamedArgumentRequired(String name)
+	{
+		return p.getNamedArgumentRequired(name);
+	}
+	
+	public static <T> T getNamedArgumentDefaultValue(String name)
+	{
+		return p.getNamedArgumentDefaultValue(name);
+	}
+	
+	public static int getPositionalArgumentHolderSize()
+	{
+		return 7;
 	}
 }

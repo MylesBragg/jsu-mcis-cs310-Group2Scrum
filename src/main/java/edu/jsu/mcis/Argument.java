@@ -25,14 +25,6 @@ public class Argument {
 		invalidValue = new InvalidValueException();
 	}
 	
-	public void setInvalidValueExceptionProgramName(String programName) {
-		invalidValue.setProgramName(programName);
-	}
-	
-	public void setInvalidValueExceptionUsageLine(String usageLine) {
-		invalidValue.setUsageLine(usageLine);
-	}
-	
 	public String getName() {
 		return name;
 	}
