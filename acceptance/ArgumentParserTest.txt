@@ -11,9 +11,6 @@ Start Program With Arguments dog 2 true 3.5
 	
 *** Test Cases ***
 
-# These tests cover the following card requirements:
-# Create ArgumentParser, Create ArgumentValues, Include Description, 
-# Include DataType, ArgumentParser automatically converts string to proper DT
 Start Test For Volume Calculator
 	Start Program With Arguments 7 5 2
 	${length}=     Get   length
@@ -33,16 +30,7 @@ Start Test For Animal Show
 	Should Be Equal    true    ${rainy}
 	${bathrooms}=     Get   bathrooms
 	Should Be Equal    3.5    ${bathrooms}
-	
-	
-# Need to find a way to test -h functionality (w/o adding methods)
-# At least I found out how to add comments to RobotFramework test files
-# This will test not only the -h call but verify its 'nice' formatting
 
-
-# These tests cover the following card requirements:
-# Single Value Optional Arguments with or without description and dataType,
-# Order does not matter with "Optional" argument, "Optional" to serve as 'flag' = BOOLEAN 
 Start Test Named String Argument
 	Start Program With Named String   7 --type box 5 2
 	${type}= 	Get   type
@@ -68,9 +56,13 @@ Start Test Named Int Argument
 	${type}= 	Get   type
 	Should Be Equal   ${type}   99
 	
-# How do we test default values and the default value reset requirement?
-
-# Add testing for 't' (shortName) to acceptance
-
-# Add test for required flag bit
-
+Start Test XML File
+	Start Program From XML   AcceptanceTest.xml   7 5 2 --type cylinder
+	${length}=     Get   length
+	Should Be Equal    7    ${length}
+	${width}=     Get   width
+	Should Be Equal    5    ${width}
+	${height}=     Get   height
+	Should Be Equal    2    ${height}
+	${type}= 	Get   type
+	Should Be Equal   ${type}   cylinder

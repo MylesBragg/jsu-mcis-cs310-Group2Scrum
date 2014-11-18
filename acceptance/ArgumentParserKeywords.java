@@ -86,6 +86,12 @@ public class ArgumentParserKeywords {
 		parser.parse(vars);
 	}
 	
+	public void startProgramFromXML(String XMLFile, String vars)
+	{
+		parser = XMLFactory.createArgumentParser("XML File Test", XMLFile);
+		parser.parse(vars);
+	}
+	
 	public String get(String name)
 	{
 		return parser.getArgumentValue(name).toString();
