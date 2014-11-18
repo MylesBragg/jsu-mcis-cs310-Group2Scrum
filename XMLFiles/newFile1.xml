@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<arguments>
-<argument type="positional">
-<name>type</name>
-<type>string</type>
-<description/>
-</argument>
-</arguments>

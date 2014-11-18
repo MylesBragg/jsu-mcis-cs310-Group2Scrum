@@ -181,7 +181,10 @@ public class XMLFactory
 		argument.setAttribute("type", "positional");
 		argument.appendChild(setChildNodeValue(currentDocument, argument, "name", name));
 		argument.appendChild(setChildNodeValue(currentDocument, argument, "type", type));
-		argument.appendChild(setChildNodeValue(currentDocument, argument, "description", getArgumentDescription(name)));
+		if (!getArgumentDescription(name).equals("")) {
+			argument.appendChild(setChildNodeValue(currentDocument, argument, "description", getArgumentDescription(name)));
+		}
+		
 		
 		return argument;
 	}
@@ -207,7 +210,9 @@ public class XMLFactory
 		argument.setAttribute("type", "named");
 		argument.appendChild(setChildNodeValue(currentDocument, argument, "name", name));
 		argument.appendChild(setChildNodeValue(currentDocument, argument, "type", type));
-		argument.appendChild(setChildNodeValue(currentDocument, argument, "description", getArgumentDescription(name)));
+		if (!getArgumentDescription(name).equals("")) {
+			argument.appendChild(setChildNodeValue(currentDocument, argument, "description", getArgumentDescription(name)));
+		}
 		if (!getNamedArgumentAlternateName(name).equals("")) {
 			argument.appendChild(setChildNodeValue(currentDocument, argument, "alternatename", getNamedArgumentAlternateName(name)));
 		}
@@ -255,17 +260,18 @@ public class XMLFactory
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(currentDocument);
 			int fileCount = 0;
-			File f = new File("\\XMLFiles\\newFile" + fileCount +".xml");
+			File f = new File(p.getProgramName() +".xml");
 			
 			while(f.exists()) {
         
 				fileCount++;
-				f = new File("\\XMLFiles\\newFile" + fileCount +".xml");
+				f = new File(p.getProgramName() + fileCount +".xml");
 			}
             StreamResult console = new StreamResult(f);
             transformer.transform(source, console);
  
             System.out.println("\nXML DOM Created Successfully..");
+			System.out.println("\nYour new file name is: " + f.getName());
  
         } catch (Exception e) {
             e.printStackTrace();
@@ -305,6 +311,6 @@ public class XMLFactory
 	
 	public static int getPositionalArgumentHolderSize()
 	{
-		return 7;
+		return p.getPositionalArgumentSize();
 	}
 }

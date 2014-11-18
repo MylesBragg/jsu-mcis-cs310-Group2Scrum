@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<arguments>
-<argument type="positional">
-<name>length</name>
-<type>float</type>
-<description>this is the text description</description>
-</argument>
-</arguments>

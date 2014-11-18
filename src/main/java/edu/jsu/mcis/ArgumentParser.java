@@ -30,6 +30,9 @@ public class ArgumentParser
 		return programDescription;
 	}
 	
+	public String getProgramName() {
+		return programName;
+	}
 	public void addPositionalArgument(String name, Argument.Type dataType)
 	{
 		positionalArgumentHolder.put(name, new PositionalArgument(name, dataType, incrementCurrentPositionalArgumentCount()));
@@ -46,6 +49,9 @@ public class ArgumentParser
 		return positionalArgumentHolder.get(name).getPositionId();
 	}
 	
+	public int getPositionalArgumentSize() {
+		return positionalArgumentHolder.size();
+	}
 	public void setArgumentDescription(String name, String description)
 	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
@@ -321,7 +327,7 @@ public class ArgumentParser
 		{
 			keyString = keyString + keyIterator.next() + " ";
 		}
-		System.out.println(keyString);
+		
 		keyIterator = namedArgumentHolder.keySet().iterator();
 		while(keyIterator.hasNext()) 
 		{
