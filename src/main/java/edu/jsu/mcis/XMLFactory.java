@@ -6,6 +6,12 @@ import javax.xml.parsers.*;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 public class XMLFactory 
 {
 	private static ArgumentParser p;
@@ -153,12 +159,118 @@ public class XMLFactory
 		instantiateContentHolders();
 	}
 	
+	private static Node writePositionalArgument(Document currentDocument, String name) {
+		String type;
+		Element argument = currentDocument.createElement("argument");
+		
+		switch(getArgumentType(name)) {
+			case INT:
+				type = "integer";
+				break;
+			case BOOLEAN:
+				type = "boolean";
+				break;
+			case FLOAT:
+				type = "float";
+				break;
+			default:
+				type = "string";
+				break;
+		}
+		
+		argument.setAttribute("type", "positional");
+		argument.appendChild(setChildNodeValue(currentDocument, argument, "name", name));
+		argument.appendChild(setChildNodeValue(currentDocument, argument, "type", type));
+		argument.appendChild(setChildNodeValue(currentDocument, argument, "description", getArgumentDescription(name)));
+		
+		return argument;
+	}
+	private static Node writeNamedArgument(Document currentDocument, String name) {
+		String type;
+		Element argument = currentDocument.createElement("argument");
+		
+		switch(getArgumentType(name)) {
+			case INT:
+				type = "integer";
+				break;
+			case BOOLEAN:
+				type = "boolean";
+				break;
+			case FLOAT:
+				type = "float";
+				break;
+			default:
+				type = "string";
+				break;
+		}
+		
+		argument.setAttribute("type", "named");
+		argument.appendChild(setChildNodeValue(currentDocument, argument, "name", name));
+		argument.appendChild(setChildNodeValue(currentDocument, argument, "type", type));
+		argument.appendChild(setChildNodeValue(currentDocument, argument, "description", getArgumentDescription(name)));
+		if (!getNamedArgumentAlternateName(name).equals("")) {
+			argument.appendChild(setChildNodeValue(currentDocument, argument, "alternatename", getNamedArgumentAlternateName(name)));
+		}
+		if (getNamedArgumentDefaultValue(name) != null) {
+			argument.appendChild(setChildNodeValue(currentDocument, argument, "defaultvalue", getNamedArgumentDefaultValue(name).toString()));
+		}
+		if (getNamedArgumentRequired(name) == true) {
+			argument.appendChild(setChildNodeValue(currentDocument, argument, "required", "true"));
+		}
+		return argument;
+	}
+	private static Node setChildNodeValue(Document currentDocument, Element currentElement, String name, String value) {
+		Element node = currentDocument.createElement(name);
+        node.appendChild(currentDocument.createTextNode(value));
+        return node;
+	}
+	
 	public static void writeArgumentParser(ArgumentParser currentParser)
 	{
 		p = currentParser;
 		String names = getArgumentNames();
 		myScanner = new Scanner(names);
 		int positionalSize = getPositionalArgumentHolderSize();
+		
+		DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder icBuilder;
+        try {
+            icBuilder = icFactory.newDocumentBuilder();
+            Document currentDocument = icBuilder.newDocument();
+            Element mainRootElement = currentDocument.createElement("arguments");
+            currentDocument.appendChild(mainRootElement);
+			int i = 1;
+            while(myScanner.hasNext()) {
+				if (i <= positionalSize) {
+					mainRootElement.appendChild(writePositionalArgument(currentDocument, myScanner.next()));
+					i++;
+				}
+				else {
+				mainRootElement.appendChild(writeNamedArgument(currentDocument, myScanner.next()));
+				}
+			}
+ 
+            
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(currentDocument);
+			int fileCount = 0;
+			File f = new File("\\XMLFiles\\newFile" + fileCount +".xml");
+			
+			while(f.exists()) {
+        
+				fileCount++;
+				f = new File("\\XMLFiles\\newFile" + fileCount +".xml");
+			}
+            StreamResult console = new StreamResult(f);
+            transformer.transform(source, console);
+ 
+            System.out.println("\nXML DOM Created Successfully..");
+ 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		
 	}
 
 	public static String getArgumentNames()
