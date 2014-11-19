@@ -15,13 +15,13 @@ import javax.xml.transform.stream.StreamResult;
 public class XMLFactory 
 {
 	private static ArgumentParser p;
-	private static String name, description, alternateName;
+	private static String name, description, alternateName, filePath, fileName;
 	private static Argument.Type type;
 	private static Object defaultValue;
 	private static boolean required;
 	private static Scanner myScanner;
 	
-	public static ArgumentParser createArgumentParser(String programName, String xmlFile) 
+	public static ArgumentParser loadArgumentParser(String programName, String xmlFile) 
 	{
 		p = new ArgumentParser(programName);
 		
@@ -238,7 +238,7 @@ public class XMLFactory
         return node;
 	}
 	
-	public static void writeArgumentParser(ArgumentParser currentParser)
+	public static void saveArgumentParser(ArgumentParser currentParser)
 	{
 		p = currentParser;
 		String names = getArgumentNames();
@@ -288,7 +288,13 @@ public class XMLFactory
             e.printStackTrace();
         }
 	}
-
+	public static void setFileLocation(String newFilePath) {
+		filePath = newFilePath + "\\";
+	}
+	
+	public static void setFileName(String newFileName) {
+		fileName = newFileName;
+	}
 	public static String getArgumentNames()
 	{
 		return p.getArgumentNames();
