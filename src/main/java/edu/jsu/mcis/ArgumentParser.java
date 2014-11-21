@@ -6,17 +6,14 @@ public class ArgumentParser
 {
 	private Map<String, PositionalArgument> positionalArgumentHolder;
 	private Map<String, NamedArgument> namedArgumentHolder;
-	private String programName;
-	private String programDescription;
-	private int currentPositionalArgumentCount;
+	private String programName, programDescription;
+	private int currentPositionalArgumentCount, currentPosArgIndex;
 	
 	public ArgumentParser(String programName)
 	{
 		this.programName = programName;
-		
 		positionalArgumentHolder = new LinkedHashMap<String, PositionalArgument>();
 		namedArgumentHolder = new LinkedHashMap<String, NamedArgument>();
-		
 		currentPositionalArgumentCount = 0;
 	}
 	
@@ -30,7 +27,8 @@ public class ArgumentParser
 		return programDescription;
 	}
 	
-	public String getProgramName() {
+	public String getProgramName()
+	{
 		return programName;
 	}
 	public void addPositionalArgument(String name, Argument.Type dataType)
@@ -49,30 +47,37 @@ public class ArgumentParser
 		return positionalArgumentHolder.get(name).getPositionId();
 	}
 	
-	public int getPositionalArgumentSize() {
+	public int getPositionalArgumentSize()
+	{
 		return positionalArgumentHolder.size();
 	}
+	
 	public void setArgumentDescription(String name, String description)
 	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
 		if (namedArgumentFullName.equals("")) 
 		{
-			if (namedArgumentHolder.containsKey(name)) 
-			{
-				namedArgumentHolder.get(name).setDescription(description);
-			}
-			else if (positionalArgumentHolder.containsKey(name)) 
-			{
-				positionalArgumentHolder.get(name).setDescription(description);
-			}
-			else 
-			{
-				System.out.println("I need an exception handler here");
-			}
+			setDescriptionForTheRightHolder(name, description);
 		}
 		else 
 		{
 			namedArgumentHolder.get(namedArgumentFullName).setDescription(description);
+		}
+	}
+	
+	private void setDescriptionForTheRightHolder(String name, String description)//needs a better name
+	{
+		if (namedArgumentHolder.containsKey(name)) 
+		{
+			namedArgumentHolder.get(name).setDescription(description);
+		}
+		else if (positionalArgumentHolder.containsKey(name)) 
+		{
+			positionalArgumentHolder.get(name).setDescription(description);
+		}
+		else 
+		{
+			System.out.println("I need an exception handler here");
 		}
 	}
 	
@@ -81,18 +86,23 @@ public class ArgumentParser
 		String namedArgumentFullName = getNamedArgumentFullName(name);
 		if (namedArgumentFullName.equals("")) 
 		{
-			if (namedArgumentHolder.containsKey(name)) 
-			{
-				return namedArgumentHolder.get(name).getDescription();
-			}
-			else if (positionalArgumentHolder.containsKey(name)) 
-			{
-				return positionalArgumentHolder.get(name).getDescription();
-			}
+			return getDescriptionFromTheRightHolder(name);
 		}
 		else 
 		{
 			return namedArgumentHolder.get(namedArgumentFullName).getDescription();
+		}
+	}
+	
+	private String getDescriptionFromTheRightHolder(String name)//needs a better name
+	{
+		if (namedArgumentHolder.containsKey(name)) 
+		{
+			return namedArgumentHolder.get(name).getDescription();
+		}
+		else if (positionalArgumentHolder.containsKey(name)) 
+		{
+			return positionalArgumentHolder.get(name).getDescription();
 		}
 		return "";
 	}
@@ -102,21 +112,26 @@ public class ArgumentParser
 		String namedArgumentFullName = getNamedArgumentFullName(name);
 		if (namedArgumentFullName.equals("")) 
 		{
-			if (namedArgumentHolder.containsKey(name)) 
-			{
-				return namedArgumentHolder.get(name).getType();
-			}
-			else if (positionalArgumentHolder.containsKey(name)) 
-			{
-				return positionalArgumentHolder.get(name).getType();
-			}
+			return getTypeFromTheRightHolder(name);
 		}
 		else 
 		{
 			return namedArgumentHolder.get(namedArgumentFullName).getType();
 		}
-		return Argument.Type.STRING;
 	}	
+	
+	private Argument.Type getTypeFromTheRightHolder(String name)//needs a better name
+	{
+		if (namedArgumentHolder.containsKey(name)) 
+		{
+			return namedArgumentHolder.get(name).getType();
+		}
+		else if (positionalArgumentHolder.containsKey(name)) 
+		{
+			return positionalArgumentHolder.get(name).getType();
+		}
+		return Argument.Type.STRING;
+	}
 	
 	public void addNamedArgument(String name, Argument.Type dataType)
 	{
@@ -136,43 +151,40 @@ public class ArgumentParser
 	public void setNamedArgumentDefaultValue(String name, Object defaultValue)
 	{
 		String fullName = getNamedArgumentFullName(name);
-		
 		if (fullName.equals("")) 
 		{
-			try
-			{
-				namedArgumentHolder.get(name).setDefaultValue(defaultValue);
-			}
-			catch (NumberFormatException e)
-			{
-				InvalidValueException x = new InvalidValueException();
-				x.setProgramName(programName);
-				x.setUsageLine(getUsageLine());
-				x.setInvalidValueInformation(name, defaultValue, namedArgumentHolder.get(name).getType());
-				throw x;
-			}
+			setDefaultValue(name, defaultValue);
 		}
 		else 
 		{
-			try
-			{
-				namedArgumentHolder.get(fullName).setDefaultValue(defaultValue);
-			}
-			catch (NumberFormatException e)
-			{
-				InvalidValueException y = new InvalidValueException();
-				y.setProgramName(programName);
-				y.setUsageLine(getUsageLine());
-				y.setInvalidValueInformation(fullName, defaultValue, namedArgumentHolder.get(fullName).getType());
-				throw y;
-			}
+			setDefaultValue(fullName, defaultValue);
 		}
+	}
+	
+	private void setDefaultValue(String name, Object defaultValue)//might need a better name
+	{
+		try
+		{
+			namedArgumentHolder.get(name).setDefaultValue(defaultValue);
+		}
+		catch (NumberFormatException e)
+		{
+			throwInvalidNamedValueException(name, defaultValue);
+		}
+	}
+	
+	private void throwInvalidNamedValueException(String name, Object defaultValue)
+	{
+		InvalidValueException x = new InvalidValueException();
+		x.setProgramName(programName);
+		x.setUsageLine(getUsageLine());
+		x.setInvalidValueInformation(name, defaultValue, namedArgumentHolder.get(name).getType());
+		throw x;
 	}
 	
 	public <T> T getNamedArgumentDefaultValue(String name)
 	{
 		String fullName = getNamedArgumentFullName(name);
-		
 		if (fullName.equals("")) 
 		{
 			return namedArgumentHolder.get(name).getDefaultValue();
@@ -217,7 +229,7 @@ public class ArgumentParser
 		{
 			name = hashKeys.next();
 			String currentAlternateName = namedArgumentHolder.get(name).getAlternateName();
-			if(currentAlternateName.equals(alternateName))
+			if(currentAlternateName.equals(alternateName))//need to move this to a separate function
 			{
 				return name;
 			}
@@ -245,61 +257,88 @@ public class ArgumentParser
 		String nextValue = "";
 		String previousValue = "";
 		Scanner argumentScanner = new Scanner(argumentsToParse);
-		int currentPosArgIndex = 1;
+		currentPosArgIndex = 1;
 		
 		while (argumentScanner.hasNext()) 
 		{
-		
 			nextValue = argumentScanner.next();
-			if (nextValue.equals("-h") || nextValue.equals("--help")) 
-			{
-				System.out.println(getHelpInfo());
-			}
-			else 
-			{	
-				if ((nextValue.charAt(0) == '-' && nextValue.charAt(1) == '-') || nextValue.charAt(0) == '-') 
-				{
-					String namedArgument = checkCommandLineNamedArgument(nextValue);
-					
-					if (namedArgument.equals("")) 
-					{
-						System.out.println("I need an exception handler here");
-					}
-					else 
-					{
-						if (checkNamedArgumentTypeBoolean(namedArgument)) 
-						{
-							setArgumentValue(namedArgument, "true");
-						}
-						else 
-						{
-							String namedValue = argumentScanner.next();
-							
-							setArgumentValue(namedArgument, namedValue);
-						}
-					}
-				}
-				else 
-				{
-					String positionalArgName = getPositionalArgumentName(currentPosArgIndex);
-					
-					if (positionalArgumentHolder.size() >= currentPosArgIndex) 
-					{
-						setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
-						currentPosArgIndex++;
-					}
-					else 
-					{
-						String usageLine = getUsageLine();
-						throw new TooManyArgumentsException(usageLine, programName, nextValue, argumentScanner);
-					}	
-				}
-			}
+			checkValue(nextValue, argumentScanner);
 		}
+		throwNotEnoughArugmentsExceptions(nextValue);
+	}
+	
+	private void throwNotEnoughArugmentsExceptions(String nextValue)
+	{
 		if (!nextValue.equals("-h") && !nextValue.equals("--help") && currentPosArgIndex <= positionalArgumentHolder.size())
 		{	
 			String usageLine = getUsageLine();
 			throw new NotEnoughArgumentsException(usageLine, programName, positionalArgumentHolder, positionalArgumentHolder.size());
+		}
+	}
+	
+	private void checkValue(String nextValue, Scanner argumentScanner)
+	{
+		if (nextValue.equals("--help") || nextValue.equals("-h")) 
+		{
+			System.out.println(getHelpInfo());
+		}
+		else 
+		{
+			checkArgumentValue(nextValue, argumentScanner);
+		}
+	}
+	
+	private void checkArgumentValue(String nextValue, Scanner argumentScanner)
+	{
+		if ((nextValue.charAt(0) == '-' && nextValue.charAt(1) == '-') || nextValue.charAt(0) == '-') 
+		{
+			checkNamedArgumentValue(nextValue, argumentScanner);
+		}
+		else 
+		{
+			checkPositionalArgumentValue(nextValue, argumentScanner);
+		}
+	}
+	
+	private void checkNamedArgumentValue(String nextValue, Scanner argumentScanner)
+	{
+		String namedArgument = checkNamedArgument(nextValue);	
+		if (namedArgument.equals("")) 
+		{
+			System.out.println("I need an exception handler here");
+		}
+		else 
+		{
+			checkNamedArgumentValueType(nextValue, argumentScanner);
+		}
+	}
+	
+	private void checkNamedArgumentValueType(String nextValue, Scanner argumentScanner)
+	{
+		String namedArgument = checkNamedArgument(nextValue);
+		if (checkNamedArgumentTypeBoolean(namedArgument)) 
+		{
+			setArgumentValue(namedArgument, "true");
+		}
+		else 
+		{
+			String namedValue = argumentScanner.next();
+			setArgumentValue(namedArgument, namedValue);
+		}
+	}
+	
+	private void checkPositionalArgumentValue(String nextValue, Scanner argumentScanner)
+	{
+		String positionalArgName = getPositionalArgumentName(currentPosArgIndex);
+		if (positionalArgumentHolder.size() >= currentPosArgIndex) 
+		{
+			setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
+			currentPosArgIndex++;
+		}
+		else 
+		{
+			String usageLine = getUsageLine();
+			throw new TooManyArgumentsException(usageLine, programName, nextValue, argumentScanner);
 		}
 	}
 	
@@ -311,7 +350,7 @@ public class ArgumentParser
 		while(keyIterator.hasNext()) 
 		{
 			currentKey = keyIterator.next();
-			if (positionalArgumentHolder.get(currentKey).getPositionId() == position) 
+			if (positionalArgumentHolder.get(currentKey).getPositionId() == position)//need to move this to a separate function
 			{
 				return currentKey;
 			}
@@ -336,20 +375,13 @@ public class ArgumentParser
 		return keyString.trim();
 	}
 	
-	private String checkCommandLineNamedArgument(String name) 
+	private String checkNamedArgument(String name) 
 	{
 		String fullName = getNamedArgumentFullName(name.substring(1));
 		
 		if (fullName.equals("")) 
 		{
-			if (namedArgumentHolder.containsKey(name.substring(2))) 
-			{
-				return name.substring(2);
-			}
-			else 
-			{
-				return "";
-			}
+			return checkFullNamedArgument(name.substring(2));
 		}
 		else 
 		{
@@ -357,6 +389,17 @@ public class ArgumentParser
 		}
 	}
 	
+	private String checkFullNamedArgument(String name)
+	{
+		if (namedArgumentHolder.containsKey(name)) 
+		{
+			return name;
+		}
+		else 
+		{
+			return "";
+		}
+	}
 	private boolean checkNamedArgumentTypeBoolean(String name) 
 	{
 		if (namedArgumentHolder.get(name).getType().equals(Argument.Type.BOOLEAN))
@@ -373,34 +416,45 @@ public class ArgumentParser
 	{
 		if (namedArgumentHolder.containsKey(argumentName)) 
 		{
-			try
-			{
-				namedArgumentHolder.get(argumentName).setValue(argumentValue);
-			}
-			catch(NumberFormatException e) 
-			{
-				InvalidValueException x = new InvalidValueException();
-				x.setProgramName(programName);
-				x.setUsageLine(getUsageLine());
-				x.setInvalidValueInformation(argumentName, argumentValue, namedArgumentHolder.get(argumentName).getType());
-				throw x;
-			}
+			setNamedValue(argumentName, argumentValue);
 		}
 		if (positionalArgumentHolder.containsKey(argumentName)) 
 		{
-			try
-			{
-				positionalArgumentHolder.get(argumentName).setValue(argumentValue);
-			}
-			catch(NumberFormatException e) 
-			{
-				InvalidValueException y = new InvalidValueException();
-				y.setProgramName(programName);
-				y.setUsageLine(getUsageLine());
-				y.setInvalidValueInformation(argumentName, argumentValue, positionalArgumentHolder.get(argumentName).getType());
-				throw y;
-			}
+			setPositionalValue(argumentName, argumentValue);
 		}
+	}
+	
+	private void setNamedValue(String argumentName, String argumentValue)
+	{
+		try
+		{
+			namedArgumentHolder.get(argumentName).setValue(argumentValue);
+		}
+		catch(NumberFormatException e) 
+		{
+			throwInvalidNamedValueException(argumentName, argumentValue);
+		}
+	}
+	
+	private void setPositionalValue(String argumentName, String argumentValue)
+	{
+		try
+		{
+			positionalArgumentHolder.get(argumentName).setValue(argumentValue);
+		}
+		catch(NumberFormatException e) 
+		{
+			throwInvalidPositionalValueException(argumentName, argumentValue);
+		}
+	}
+	
+	private void throwInvalidPositionalValueException(String argumentName, String argumentValue)
+	{
+		InvalidValueException x = new InvalidValueException();
+		x.setProgramName(programName);
+		x.setUsageLine(getUsageLine());
+		x.setInvalidValueInformation(argumentName, argumentValue, positionalArgumentHolder.get(argumentName).getType());
+		throw x;
 	}
 	
 	public <T> T getArgumentValue(String name)
@@ -415,18 +469,20 @@ public class ArgumentParser
 		}
 		else 
 		{
-			String alternateFullName = getNamedArgumentFullName(name);
-			if (alternateFullName.equals("")) 
-			{
-				return (T)"Error key not found";
-			}
-			else 
-			{
-				return (T)namedArgumentHolder.get(alternateFullName).getValue();
-			}
+			return getAlternateNamedArgumentValue(getNamedArgumentFullName(name));
 		}
 	}
-	
+	private <T> T getAlternateNamedArgumentValue(String alternateFullName)
+	{
+		if (alternateFullName.equals("")) 
+		{
+			return (T)"Error key not found";
+		}
+		else 
+		{
+			return (T)namedArgumentHolder.get(alternateFullName).getValue();
+		}
+	}
 	public String getHelpString()
 	{
 		return getHelpInfo();
