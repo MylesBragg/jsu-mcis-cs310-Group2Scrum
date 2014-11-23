@@ -45,48 +45,4 @@ public class XMLFactoryTest
 		p.parse("7.5 --type box");
 		assertEquals("box", p.getArgumentValue("type"));
 	}
-	
-	@Test
-	public void testGetArgumentNames() 
-	{
-		ArgumentParser p = new ArgumentParser("Volume Calculator");
-		p.addPositionalArgument("length", Argument.Type.FLOAT);
-		p.addPositionalArgument("width", Argument.Type.FLOAT);
-		p.addPositionalArgument("height", Argument.Type.FLOAT);
-		p.addNamedArgument("type", Argument.Type.STRING);
-		XMLFactory.saveArgumentParser(p);
-		assertEquals("length width height type", XMLFactory.getArgumentNames());
-	}
-	
-	@Test
-	public void testGetArgumentType() 
-	{
-		ArgumentParser p = new ArgumentParser("Volume Calculator");
-		p.addPositionalArgument("length", Argument.Type.FLOAT);
-		p.addPositionalArgument("width", Argument.Type.FLOAT);
-		p.addPositionalArgument("height", Argument.Type.FLOAT);
-		p.addNamedArgument("type", Argument.Type.STRING);
-		XMLFactory.saveArgumentParser(p);
-		assertEquals(Argument.Type.FLOAT, XMLFactory.getArgumentType("length"));
-	}
-	
-	@Test
-	public void testGetArgumentDescription() 
-	{
-		ArgumentParser p = new ArgumentParser("Volume Calculator");
-		p.addPositionalArgument("length", Argument.Type.FLOAT);
-		p.setArgumentDescription("length", "this is the text description");
-		XMLFactory.saveArgumentParser(p);
-		assertEquals("this is the text description", XMLFactory.getArgumentDescription("length"));
-	}
-	
-	@Test
-	public void testGetNamedArgumentAlternateName() 
-	{
-		ArgumentParser p = new ArgumentParser("Volume Calculator");
-		p.addNamedArgument("type", Argument.Type.STRING);
-		p.setNamedArgumentAlternateName("type", "t");
-		XMLFactory.saveArgumentParser(p);
-		assertEquals("t", XMLFactory.getNamedArgumentAlternateName("type"));
-	}
 }

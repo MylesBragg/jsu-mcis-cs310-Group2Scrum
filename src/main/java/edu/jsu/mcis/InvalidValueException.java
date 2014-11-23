@@ -20,10 +20,12 @@ public class InvalidValueException extends RuntimeException
 		usage = usageLine;
 	}
 	
-	public void setInvalidValueInformation(String name, Object value, Argument.Type type) 
-	{
+	public void setInvalidValueArgumentInformation(String name, Argument.Type type) {
 		this.name = name;
-		currentValue = value;
+		setInvalidValueArgumentType(type);
+	}
+	
+	private void setInvalidValueArgumentType(Argument.Type type) {
 		switch(type) 
 		{
 			case INT:
@@ -40,24 +42,8 @@ public class InvalidValueException extends RuntimeException
 		}
 	}
 	
-	public String getUsage()
-	{
-		return usage;
-	}
-	
-	public String getName()
-	{
-		return name;
-	}
-	
-	public String getType()
-	{
-		return type;
-	}
-	
-	public <T> T getCurrentValue()
-	{
-		return (T)currentValue;
+	public void setInvalidValue(Object value) {
+		currentValue = value;
 	}
 
 	public String toString()

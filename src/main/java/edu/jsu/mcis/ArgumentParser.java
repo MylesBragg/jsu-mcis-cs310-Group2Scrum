@@ -57,7 +57,7 @@ public class ArgumentParser
 		String namedArgumentFullName = getNamedArgumentFullName(name);
 		if (namedArgumentFullName.equals("")) 
 		{
-			setDescriptionForTheRightHolder(name, description);
+			setDescriptionWhenFullNameGiven(name, description);
 		}
 		else 
 		{
@@ -65,7 +65,7 @@ public class ArgumentParser
 		}
 	}
 	
-	private void setDescriptionForTheRightHolder(String name, String description)//needs a better name
+	private void setDescriptionWhenFullNameGiven(String name, String description)//needs a better name
 	{
 		if (namedArgumentHolder.containsKey(name)) 
 		{
@@ -86,7 +86,7 @@ public class ArgumentParser
 		String namedArgumentFullName = getNamedArgumentFullName(name);
 		if (namedArgumentFullName.equals("")) 
 		{
-			return getDescriptionFromTheRightHolder(name);
+			return getDescriptionWhenFullNameGiven(name);
 		}
 		else 
 		{
@@ -94,7 +94,7 @@ public class ArgumentParser
 		}
 	}
 	
-	private String getDescriptionFromTheRightHolder(String name)//needs a better name
+	private String getDescriptionWhenFullNameGiven(String name)
 	{
 		if (namedArgumentHolder.containsKey(name)) 
 		{
@@ -112,7 +112,7 @@ public class ArgumentParser
 		String namedArgumentFullName = getNamedArgumentFullName(name);
 		if (namedArgumentFullName.equals("")) 
 		{
-			return getTypeFromTheRightHolder(name);
+			return getTypeWhenFullNameGiven(name);
 		}
 		else 
 		{
@@ -120,7 +120,7 @@ public class ArgumentParser
 		}
 	}	
 	
-	private Argument.Type getTypeFromTheRightHolder(String name)//needs a better name
+	private Argument.Type getTypeWhenFullNameGiven(String name)
 	{
 		if (namedArgumentHolder.containsKey(name)) 
 		{
@@ -161,7 +161,7 @@ public class ArgumentParser
 		}
 	}
 	
-	private void setDefaultValue(String name, Object defaultValue)//might need a better name
+	private void setDefaultValue(String name, Object defaultValue)
 	{
 		try
 		{
@@ -173,12 +173,13 @@ public class ArgumentParser
 		}
 	}
 	
-	private void throwInvalidNamedValueException(String name, Object defaultValue)
+	private void throwInvalidNamedValueException(String name, Object value)
 	{
 		InvalidValueException x = new InvalidValueException();
 		x.setProgramName(programName);
 		x.setUsageLine(getUsageLine());
-		x.setInvalidValueInformation(name, defaultValue, namedArgumentHolder.get(name).getType());
+		x.setInvalidValueArgumentInformation(name, namedArgumentHolder.get(name).getType());
+		x.setInvalidValue(value);
 		throw x;
 	}
 	
@@ -267,14 +268,7 @@ public class ArgumentParser
 		throwNotEnoughArugmentsExceptions(nextValue);
 	}
 	
-	private void throwNotEnoughArugmentsExceptions(String nextValue)
-	{
-		if (!nextValue.equals("-h") && !nextValue.equals("--help") && currentPosArgIndex <= positionalArgumentHolder.size())
-		{	
-			String usageLine = getUsageLine();
-			throw new NotEnoughArgumentsException(usageLine, programName, positionalArgumentHolder, positionalArgumentHolder.size());
-		}
-	}
+	
 	
 	private void checkValue(String nextValue, Scanner argumentScanner)
 	{
@@ -327,54 +321,6 @@ public class ArgumentParser
 		}
 	}
 	
-	private void checkPositionalArgumentValue(String nextValue, Scanner argumentScanner)
-	{
-		String positionalArgName = getPositionalArgumentName(currentPosArgIndex);
-		if (positionalArgumentHolder.size() >= currentPosArgIndex) 
-		{
-			setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
-			currentPosArgIndex++;
-		}
-		else 
-		{
-			String usageLine = getUsageLine();
-			throw new TooManyArgumentsException(usageLine, programName, nextValue, argumentScanner);
-		}
-	}
-	
-	private String getPositionalArgumentName(int position)
-	{
-		Iterator<String> keyIterator = positionalArgumentHolder.keySet().iterator();
-		String currentKey;
-		
-		while(keyIterator.hasNext()) 
-		{
-			currentKey = keyIterator.next();
-			if (positionalArgumentHolder.get(currentKey).getPositionId() == position)//need to move this to a separate function
-			{
-				return currentKey;
-			}
-		}
-		return "Positional Argument Not Found Error";
-	}
-	
-	public String getArgumentNames()
-	{
-		Iterator<String> keyIterator = positionalArgumentHolder.keySet().iterator();
-		String keyString = " ";
-		while(keyIterator.hasNext()) 
-		{
-			keyString = keyString + keyIterator.next() + " ";
-		}
-		
-		keyIterator = namedArgumentHolder.keySet().iterator();
-		while(keyIterator.hasNext()) 
-		{
-			keyString = keyString + keyIterator.next() + " ";
-		}
-		return keyString.trim();
-	}
-	
 	private String checkNamedArgument(String name) 
 	{
 		String fullName = getNamedArgumentFullName(name.substring(1));
@@ -400,6 +346,7 @@ public class ArgumentParser
 			return "";
 		}
 	}
+	
 	private boolean checkNamedArgumentTypeBoolean(String name) 
 	{
 		if (namedArgumentHolder.get(name).getType().equals(Argument.Type.BOOLEAN))
@@ -410,6 +357,71 @@ public class ArgumentParser
 		{
 			return false;
 		}
+	}
+	
+	private void checkPositionalArgumentValue(String nextValue, Scanner argumentScanner)
+	{
+		String positionalArgName = getPositionalArgumentName(currentPosArgIndex);
+		if (positionalArgumentHolder.size() >= currentPosArgIndex) 
+		{
+			setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
+			currentPosArgIndex++;
+		}
+		else 
+		{
+			throwTooManyArgumentException(nextValue, argumentScanner);
+		}
+	}
+	
+	private void throwTooManyArgumentException(String nextValue, Scanner argumentScanner) {
+		TooManyArgumentsException currentException = new TooManyArgumentsException(getUsageLine(), programName);
+		currentException.setNextValue(nextValue);
+		currentException.setArgumentScanner(argumentScanner);
+		throw currentException;
+	}
+	
+	private String getPositionalArgumentName(int position)
+	{
+		Iterator<String> keyIterator = positionalArgumentHolder.keySet().iterator();
+		String currentKey;
+		
+		while(keyIterator.hasNext()) 
+		{
+			currentKey = keyIterator.next();
+			if (positionalArgumentHolder.get(currentKey).getPositionId() == position)//need to move this to a separate function
+			{
+				return currentKey;
+			}
+		}
+		return "Positional Argument Not Found Error";
+	}
+	
+	private void throwNotEnoughArugmentsExceptions(String nextValue)
+	{
+		if (!nextValue.equals("-h") && !nextValue.equals("--help") && currentPosArgIndex <= positionalArgumentHolder.size())
+		{
+			NotEnoughArgumentsException currentException = new NotEnoughArgumentsException(getUsageLine(), programName);
+			currentException.setArgumentsRequired(positionalArgumentHolder);
+			currentException.setCurrentIndex(currentPosArgIndex - 1);
+			throw currentException;
+		}
+	}
+	
+	public String getArgumentNames()
+	{
+		Iterator<String> keyIterator = positionalArgumentHolder.keySet().iterator();
+		String keyString = " ";
+		while(keyIterator.hasNext()) 
+		{
+			keyString = keyString + keyIterator.next() + " ";
+		}
+		
+		keyIterator = namedArgumentHolder.keySet().iterator();
+		while(keyIterator.hasNext()) 
+		{
+			keyString = keyString + keyIterator.next() + " ";
+		}
+		return keyString.trim();
 	}
 
 	private void setArgumentValue(String argumentName, String argumentValue)
@@ -453,7 +465,8 @@ public class ArgumentParser
 		InvalidValueException x = new InvalidValueException();
 		x.setProgramName(programName);
 		x.setUsageLine(getUsageLine());
-		x.setInvalidValueInformation(argumentName, argumentValue, positionalArgumentHolder.get(argumentName).getType());
+		x.setInvalidValueArgumentInformation(argumentName, positionalArgumentHolder.get(argumentName).getType());
+		x.setInvalidValue(argumentValue);
 		throw x;
 	}
 	
@@ -510,17 +523,24 @@ public class ArgumentParser
 		while (hashKeys.hasNext())
 		{
 			currentKey = hashKeys.next();
-			if(namedArgumentHolder.get(currentKey).getRequired())
-			{
-				argumentList = argumentList + " [--" + currentKey + "]";
-			}
+			argumentList = argumentList + getRequiredNamedArgument(currentKey);
 		}
 		argumentList = argumentList.trim();
 		usageString = usageString + " " + argumentList;
 		usageString = usageString.trim();
 		return usageString;
 	}
-	
+	private String getRequiredNamedArgument(String currentKey)
+	{
+		if(namedArgumentHolder.get(currentKey).getRequired())
+		{
+			return " [--" + currentKey + "]";
+		}
+		else
+		{
+			return "";
+		}
+	}
 	private String getPositionalArgumentsInfo()
 	{
 		String positionalArgumentsDescription = "positional arguments: ";
@@ -536,14 +556,23 @@ public class ArgumentParser
 		while (hashKeys.hasNext())
 		{
 			currentKey = hashKeys.next();
-			if(namedArgumentHolder.get(currentKey).getRequired())
-			{
-				argumentsDescription = argumentsDescription + "[--" + currentKey + "] " + namedArgumentHolder.get(currentKey).getDescription() + "\n";
-			}
+			argumentsDescription = argumentsDescription + getRequiredNamedArgumentDescription(currentKey);
+			
 		}
 		argumentsDescription = argumentsDescription.trim();
 		positionalArgumentsDescription = positionalArgumentsDescription + argumentsDescription;
 		positionalArgumentsDescription = positionalArgumentsDescription.trim();
 		return positionalArgumentsDescription;
-	}	
+	}
+	private String getRequiredNamedArgumentDescription(String currentKey)
+	{
+		if(namedArgumentHolder.get(currentKey).getRequired())
+		{
+			return "[--" + currentKey + "] " + namedArgumentHolder.get(currentKey).getDescription() + "\n";
+		}
+		else
+		{
+			return "";
+		}
+	}
 }

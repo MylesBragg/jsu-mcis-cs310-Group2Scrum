@@ -37,18 +37,19 @@ public class NamedArgument extends Argument
 				this.defaultValue = Float.parseFloat(newDefaultValue);
 				break;
 			case BOOLEAN:
-				if (newDefaultValue.toLowerCase().equals("true") || newDefaultValue.toLowerCase().equals("false")) 
-				{
-					this.defaultValue = Boolean.parseBoolean(newDefaultValue);
-				}
-				else 
-				{
-					throw new NumberFormatException(newDefaultValue + " is not true or false.");
-				}
+				setBooleanDefaultValue(newDefaultValue);
 				break;
 			default:
 				this.defaultValue = newDefaultValue;
 		}
+	}
+	private void setBooleanDefaultValue(String newDefaultValue)
+	{
+		if (newDefaultValue.toLowerCase().equals("true") || newDefaultValue.toLowerCase().equals("false")) 
+		{
+			this.defaultValue = Boolean.parseBoolean(newDefaultValue);
+		}
+		else throw new NumberFormatException(newDefaultValue + " is not true or false.");
 	}
 	
 	@Override

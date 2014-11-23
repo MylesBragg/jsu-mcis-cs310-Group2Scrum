@@ -32,7 +32,8 @@ public class XMLFactory
 			Document document = builder.parse(ClassLoader.getSystemResourceAsStream(xmlFile));
 			NodeList nodeList = document.getDocumentElement().getChildNodes();
 		
-		getDataFromXML(nodeList);
+			getDataFromXML(nodeList);
+			
 		}catch(ParserConfigurationException e) {
 		}catch(SAXException e) {
 		}catch(IOException e) {
@@ -102,21 +103,7 @@ public class XMLFactory
 				name = content;
 				break;
 			case "type":
-				switch(content.toLowerCase()) 
-				{
-					case "integer":
-						type = Argument.Type.INT;
-						break;
-					case "boolean":
-						type = Argument.Type.BOOLEAN;
-						break;
-					case "float":
-						type = Argument.Type.FLOAT;
-						break;
-					default:
-						type = Argument.Type.STRING;
-						break;
-				}
+				setType(content);
 				break;
 			case "description":
 				description = content;
@@ -132,7 +119,24 @@ public class XMLFactory
 				break;
 		}
 	}
-	
+	private static void setType(String content)
+	{
+		switch(content.toLowerCase()) 
+		{
+			case "integer":
+				type = Argument.Type.INT;
+				break;
+			case "boolean":
+				type = Argument.Type.BOOLEAN;
+				break;
+			case "float":
+				type = Argument.Type.FLOAT;
+				break;
+			default:
+				type = Argument.Type.STRING;
+				break;
+		}
+	}
 	private static void addPositionalArgument() 
 	{
 		p.addPositionalArgument(name, type);
@@ -295,37 +299,37 @@ public class XMLFactory
 	public static void setFileName(String newFileName) {
 		fileName = newFileName;
 	}
-	public static String getArgumentNames()
+	private static String getArgumentNames()
 	{
 		return p.getArgumentNames();
 	}
 	
-	public static Argument.Type getArgumentType(String name)
+	private static Argument.Type getArgumentType(String name)
 	{
 		return p.getArgumentType(name);
 	}
 	
-	public static String getArgumentDescription(String name)
+	private static String getArgumentDescription(String name)
 	{
 		return p.getArgumentDescription(name);
 	}
 	
-	public static String getNamedArgumentAlternateName(String name)
+	private static String getNamedArgumentAlternateName(String name)
 	{
 		return p.getNamedArgumentAlternateName(name);
 	}
 	
-	public static boolean getNamedArgumentRequired(String name)
+	private static boolean getNamedArgumentRequired(String name)
 	{
 		return p.getNamedArgumentRequired(name);
 	}
 	
-	public static <T> T getNamedArgumentDefaultValue(String name)
+	private static <T> T getNamedArgumentDefaultValue(String name)
 	{
 		return p.getNamedArgumentDefaultValue(name);
 	}
 	
-	public static int getPositionalArgumentHolderSize()
+	private static int getPositionalArgumentHolderSize()
 	{
 		return p.getPositionalArgumentSize();
 	}

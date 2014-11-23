@@ -4,41 +4,32 @@ import java.util.*;
 
 public class TooManyArgumentsException extends RuntimeException
 {
-	String usage;
-	String program;
-	String nextValue;
-	Scanner args;
+	private String usage;
+	private String program;
+	private String nextValue;
+	private Scanner argumentScanner;
 	
-	public TooManyArgumentsException(String helpUsage, String prog, String nextVal, Scanner argScanner)
+	public TooManyArgumentsException(String helpUsage, String prog)
 	{
 		usage = helpUsage;
 		program = prog;
-		nextValue = nextVal;
-		args = argScanner;
 	}
-	
-	public String getUsage()
+	public void setNextValue(String nextValue)
 	{
-		return usage;
+		this.nextValue = nextValue;
 	}
 	
-	public String getNextValue()
+	public void setArgumentScanner(Scanner argumentScanner)
 	{
-		return nextValue;
+		this.argumentScanner = argumentScanner;
 	}
-	
-	public Scanner getArgs()
-	{
-		return args;
-	}
-	
 	public String toString()
 	{
 		String errorMessage = usage + "\n";
 		errorMessage = errorMessage + program + ".java: error: unrecognized arguments: " + nextValue;
-		while(args.hasNext())
+		while(argumentScanner.hasNext())
 		{
-			nextValue = args.next();
+			nextValue = argumentScanner.next();
 			errorMessage = errorMessage + " " + nextValue;
 		}
 		return errorMessage;

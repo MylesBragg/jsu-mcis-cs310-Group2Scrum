@@ -23,59 +23,47 @@ public class InvalidValueExceptionTest
 	public void testInvalidFloatValueException()
 	{
 		String currentValue = "something";
-		ive.setInvalidValueInformation(name, currentValue, Argument.Type.FLOAT);
+		ive.setInvalidValueArgumentInformation(name, Argument.Type.FLOAT);
+		ive.setInvalidValue(currentValue);
 		String errorString = ive.toString();
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: argument width: invalid float value: something", 
 					errorString);
-		assertEquals(helpUsage, ive.getUsage());
-		assertEquals(name, ive.getName());
-		assertEquals("float", ive.getType());
-		assertEquals(currentValue, ive.getCurrentValue());
 	}
 	
 	@Test
 	public void testInvalidIntegerValueException()
 	{
 		String currentValue = "something";
-		ive.setInvalidValueInformation(name, currentValue, Argument.Type.INT);
+		ive.setInvalidValueArgumentInformation(name, Argument.Type.INT);
+		ive.setInvalidValue(currentValue);
 		String errorString = ive.toString();
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: argument width: invalid integer value: something", 
 					errorString);
-		assertEquals(helpUsage, ive.getUsage());
-		assertEquals(name, ive.getName());
-		assertEquals("integer", ive.getType());
-		assertEquals(currentValue, ive.getCurrentValue());
 	}
 	
 	@Test
 	public void testInvalidBooleanValueException()
 	{
 		String currentValue = "something";
-		ive.setInvalidValueInformation(name, currentValue, Argument.Type.BOOLEAN);
+		ive.setInvalidValueArgumentInformation(name, Argument.Type.BOOLEAN);
+		ive.setInvalidValue(currentValue);
 		String errorString = ive.toString();
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: argument width: invalid boolean value: something", 
 					errorString);
-		assertEquals(helpUsage, ive.getUsage());
-		assertEquals(name, ive.getName());
-		assertEquals("boolean", ive.getType());
-		assertEquals(currentValue, ive.getCurrentValue());
 	}
 	
 	@Test
 	public void testInvalidStringValueException()
 	{
 		int currentValue = 7;
-		ive.setInvalidValueInformation(name, currentValue, Argument.Type.STRING);
+		ive.setInvalidValueArgumentInformation(name, Argument.Type.STRING);
+		ive.setInvalidValue(currentValue);
 		String errorString = ive.toString();
 		assertEquals("usage: java VolumeCalculator length width height\n" +
 					"VolumeCalculator.java: error: argument width: invalid string value: 7", 
 					errorString);
-		assertEquals(helpUsage, ive.getUsage());
-		assertEquals(name, ive.getName());
-		assertEquals("string", ive.getType());
-		assertEquals(currentValue, ive.getCurrentValue());
 	}
 }

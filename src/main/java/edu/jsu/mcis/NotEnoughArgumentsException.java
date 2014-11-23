@@ -3,43 +3,36 @@ package edu.jsu.mcis;
 import java.util.*;
 public class NotEnoughArgumentsException extends RuntimeException
 {
-	String usage;
-	String program;
-	List<String> namesArray;
-	int index = 0;
+	private String usage;
+	private String programName;
+	private List<String> namesArray;
+	private int index = 0;
 	
-	public NotEnoughArgumentsException(String helpUsage, String prog, Map<String, PositionalArgument> hash, int i)
+	public NotEnoughArgumentsException(String helpUsage, String programName)
 	{
 		usage = helpUsage;
-		program = prog;
+		this.programName = programName;
+	}
+	
+	public void setArgumentsRequired(Map<String, PositionalArgument> hash)
+	{
 		Iterator<String> hashKeys = hash.keySet().iterator();
 		namesArray = new ArrayList<String>();
 		while (hashKeys.hasNext())
 		{
 			namesArray.add(hashKeys.next());
 		}
-		index = i;
 	}
 	
-	public String getUsage()
+	public void setCurrentIndex(int currentIndex)
 	{
-		return usage;
+		index = currentIndex;
 	}
 	
-	public List<String> getNamesArray()
-	{
-		return namesArray;
-	}
-	
-	public int getIndex()
-	{
-		return index;
-	}
-
 	public String toString()
 	{
 		String errorMessage = usage + "\n";
-		errorMessage = errorMessage + program + ".java: error: the following arguments are required:";
+		errorMessage = errorMessage + programName + ".java: error: the following arguments are required:";
 		for(int j = index; j < namesArray.size(); j++)
 		{
 			errorMessage = errorMessage + " " + namesArray.get(j);

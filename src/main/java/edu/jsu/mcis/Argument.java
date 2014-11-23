@@ -9,7 +9,6 @@ public class Argument
 	protected String name;
 	protected String description;
 	protected Type type;
-	protected InvalidValueException invalidValue;
 
 	public Argument(String name, Type dataType) 
 	{
@@ -24,7 +23,6 @@ public class Argument
 		{
 			value = null;
 		}
-		invalidValue = new InvalidValueException();
 	}
 	
 	public String getName() 
@@ -63,14 +61,18 @@ public class Argument
 				value = Float.parseFloat(newValue);
 				break;
 			case BOOLEAN:
-				if(newValue.toLowerCase().equals("true") || newValue.toLowerCase().equals("false")) 
-				{
-					value = Boolean.parseBoolean(newValue);
-				}
-				else throw new NumberFormatException(newValue + " is not true or false.");
+				setBooleanValue(newValue);
 				break;
 			default:
 				value = newValue;
 		}
+	}
+	private void setBooleanValue(String newValue)
+	{
+		if(newValue.toLowerCase().equals("true") || newValue.toLowerCase().equals("false")) 
+		{
+			value = Boolean.parseBoolean(newValue);
+		}
+		else throw new NumberFormatException(newValue + " is not true or false.");
 	}
 }
