@@ -5,21 +5,18 @@ public class NamedArgumentGroup
 {
 	private String groupHeader;
 	private List<String> group;
+	private int groupCount;
 	
 	public NamedArgumentGroup(String name)
 	{
 		groupHeader = name;
 		group = new ArrayList<String>();
+		groupCount = 1;
 	}
 	
 	public void appendGroupMember(String name)
 	{
 		group.add(name);
-	}
-	
-	public void removeGroupMember(String name)
-	{
-		group.remove(name);
 	}
 	
 	public boolean checkGroupHeader(String name)
@@ -37,11 +34,21 @@ public class NamedArgumentGroup
 	{
 		if (group.contains(name))
 		{
+			groupCount++;
 			return true;
 		}
 		else
 		{
-			return true;
+			return false;
 		}
+	}
+	
+	public int getCurrentGroupSize()
+	{
+		return groupCount;
+	}
+	public int getOverallGroupSize()
+	{
+		return group.size();
 	}
 }

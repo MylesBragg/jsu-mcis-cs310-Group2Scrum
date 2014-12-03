@@ -6,7 +6,8 @@ public class ArgumentParser
 {
 	private Map<String, PositionalArgument> positionalArgumentHolder;
 	private Map<String, NamedArgument> namedArgumentHolder;
-	private String programName, programDescription;
+	private Map<String, NamedArgumentGroup> namedArgumentGroupHolder;
+	private String programName, programDescription, currentGroupHeader;
 	private int currentPositionalArgumentCount, currentPosArgIndex;
 	
 	public ArgumentParser(String programName)
@@ -14,7 +15,9 @@ public class ArgumentParser
 		this.programName = programName;
 		positionalArgumentHolder = new LinkedHashMap<String, PositionalArgument>();
 		namedArgumentHolder = new LinkedHashMap<String, NamedArgument>();
+		namedArgumentGroupHolder = new LinkedHashMap<String, NamedArgumentGroup>();
 		currentPositionalArgumentCount = 0;
+		currentGroupHeader = "";
 	}
 	
 	public void setProgramDescription(String programDescription)
@@ -133,6 +136,54 @@ public class ArgumentParser
 		return Argument.Type.STRING;
 	}
 	
+	public void appendRestrictedValues(String name, List<Object> values)
+	{
+		String namedArgumentFullName = getNamedArgumentFullName(name);
+		if (namedArgumentFullName.equals("")) 
+		{
+			appendRestrictedValuesWhenFullNameGiven(name, values);
+		}
+		else 
+		{
+			namedArgumentHolder.get(namedArgumentFullName).appendRestrictedValues(values);
+		}
+	}
+	
+	private void appendRestrictedValuesWhenFullNameGiven(String name, List<Object> values)
+	{
+		if (namedArgumentHolder.containsKey(name)) 
+		{
+			namedArgumentHolder.get(name).appendRestrictedValues(values);
+		}
+		else if (positionalArgumentHolder.containsKey(name)) 
+		{
+			positionalArgumentHolder.get(name).appendRestrictedValues(values);
+		}
+	}
+	
+	public void setMultipleValuesListSize(String name, int size)
+	{
+		String namedArgumentFullName = getNamedArgumentFullName(name);
+		if (namedArgumentFullName.equals("")) 
+		{
+			setMultipleValuesListSizeWhenFullNameGiven(name, size);
+		}
+		else 
+		{
+			namedArgumentHolder.get(namedArgumentFullName).setMultipleValuesListSize(size);
+		}
+	}
+	private void setMultipleValuesListSizeWhenFullNameGiven(String name, int size)
+	{
+		if (namedArgumentHolder.containsKey(name)) 
+		{
+			namedArgumentHolder.get(name).setMultipleValuesListSize(size);
+		}
+		else if (positionalArgumentHolder.containsKey(name)) 
+		{
+			positionalArgumentHolder.get(name).setMultipleValuesListSize(size);
+		}
+	}
 	public void addNamedArgument(String name, Argument.Type dataType)
 	{
 		namedArgumentHolder.put(name, new NamedArgument(name, dataType));
@@ -148,6 +199,37 @@ public class ArgumentParser
 		return namedArgumentHolder.get(name).getAlternateName();
 	}
 	
+	public void setNamedArgumentGroupHeader(String name)
+	{
+		String namedArgumentFullName = getNamedArgumentFullName(name);
+		if (namedArgumentFullName.equals("")) 
+		{
+			if (namedArgumentHolder.containsKey(name))
+			{
+				namedArgumentGroupHolder.put(name, new NamedArgumentGroup(name));
+			}
+		}
+		else 
+		{
+			namedArgumentGroupHolder.put(namedArgumentFullName, new NamedArgumentGroup(namedArgumentFullName));
+		}
+	}
+	
+	public void appendNamedArgumentGroupMember(String groupHeader, String newGroupMember)
+	{
+		String namedArgumentFullName = getNamedArgumentFullName(newGroupMember);
+		if (namedArgumentFullName.equals("")) 
+		{
+			if (namedArgumentHolder.containsKey(newGroupMember))
+			{
+				namedArgumentGroupHolder.get(groupHeader).appendGroupMember(newGroupMember);
+			}
+		}
+		else 
+		{
+			namedArgumentGroupHolder.get(groupHeader).appendGroupMember(namedArgumentFullName);
+		}
+	}
 	public void setNamedArgumentDefaultValue(String name, Object defaultValue)
 	{
 		String fullName = getNamedArgumentFullName(name);
@@ -263,7 +345,23 @@ public class ArgumentParser
 		while (argumentScanner.hasNext()) 
 		{
 			nextValue = argumentScanner.next();
-			checkValue(nextValue, argumentScanner);
+			//checkValue(nextValue, argumentScanner);
+			if (nextValue.equals("--help") || nextValue.equals("-h")) 
+			{
+				System.out.println(getHelpInfo());
+				return;
+			}
+			else
+			{
+				checkValue(nextValue, argumentScanner);
+			}
+		}
+		if (!currentGroupHeader.equals(""))
+		{
+			if (namedArgumentGroupHolder.get(currentGroupHeader).getCurrentGroupSize() != namedArgumentGroupHolder.get(currentGroupHeader).getOverallGroupSize())
+			{
+			//toofew
+			}
 		}
 		throwNotEnoughArugmentsExceptions(nextValue);
 	}
@@ -272,14 +370,16 @@ public class ArgumentParser
 	
 	private void checkValue(String nextValue, Scanner argumentScanner)
 	{
-		if (nextValue.equals("--help") || nextValue.equals("-h")) 
+		/*if (nextValue.equals("--help") || nextValue.equals("-h")) 
 		{
 			System.out.println(getHelpInfo());
-		}
-		else 
-		{
+			break; 
+		}*/
+		//else 
+		//{
 			checkArgumentValue(nextValue, argumentScanner);
-		}
+		//}
+		
 	}
 	
 	private void checkArgumentValue(String nextValue, Scanner argumentScanner)
@@ -310,17 +410,59 @@ public class ArgumentParser
 	private void checkNamedArgumentValueType(String nextValue, Scanner argumentScanner)
 	{
 		String namedArgument = checkNamedArgument(nextValue);
+		if(checkGroupHeader(namedArgument))
+		{
+			currentGroupHeader = namedArgument;
+		}
+		else if (!currentGroupHeader.equals(""))
+		{
+			if (namedArgumentGroupHolder.get(currentGroupHeader).getCurrentGroupSize() <= namedArgumentGroupHolder.get(currentGroupHeader).getOverallGroupSize())
+			{
+				if (!namedArgumentGroupHolder.get(currentGroupHeader).checkGroup(namedArgument))
+				{
+				//invalid
+				}
+			}
+		}
 		if (checkNamedArgumentTypeBoolean(namedArgument)) 
 		{
 			setArgumentValue(namedArgument, "true");
 		}
 		else 
 		{
-			String namedValue = argumentScanner.next();
-			setArgumentValue(namedArgument, namedValue);
+			int multipleValuesListSize = namedArgumentHolder.get(namedArgument).getMultipleValuesListSize();
+			
+			if (multipleValuesListSize == 0)
+			{
+				String namedValue = argumentScanner.next();
+				setArgumentValue(namedArgument, namedValue);
+			}
+			else
+			{
+				for (int i = 0; i < multipleValuesListSize; i++)
+				{
+					String namedValue = argumentScanner.next();
+					setArgumentValue(namedArgument, namedValue);
+				}
+				
+			}
+			
 		}
+		
 	}
 	
+	private boolean checkGroupHeader(String name)
+	{
+		Iterator<String> keyList = namedArgumentGroupHolder.keySet().iterator();
+		while (keyList.hasNext())
+		{
+			if (name.equals(keyList.next()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	private String checkNamedArgument(String name) 
 	{
 		String fullName = getNamedArgumentFullName(name.substring(1));
@@ -364,7 +506,22 @@ public class ArgumentParser
 		String positionalArgName = getPositionalArgumentName(currentPosArgIndex);
 		if (positionalArgumentHolder.size() >= currentPosArgIndex) 
 		{
-			setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
+			int multipleValuesListSize = positionalArgumentHolder.get(getPositionalArgumentName(currentPosArgIndex)).getMultipleValuesListSize();
+			
+			if (multipleValuesListSize == 0)
+			{
+				setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
+			}
+			else
+			{
+				setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
+				for (int i = 0; i < multipleValuesListSize; i++)
+				{
+					String newValue = argumentScanner.next();
+					setArgumentValue(getPositionalArgumentName(currentPosArgIndex), newValue);
+				}
+			}
+			
 			currentPosArgIndex++;
 		}
 		else 
@@ -440,7 +597,15 @@ public class ArgumentParser
 	{
 		try
 		{
-			namedArgumentHolder.get(argumentName).setValue(argumentValue);
+			if (namedArgumentHolder.get(argumentName).checkIfRestrictedValue(argumentValue))
+			{
+				namedArgumentHolder.get(argumentName).setValue(argumentValue);
+			}
+			else
+			{
+			
+			}
+			
 		}
 		catch(NumberFormatException e) 
 		{
@@ -452,7 +617,15 @@ public class ArgumentParser
 	{
 		try
 		{
-			positionalArgumentHolder.get(argumentName).setValue(argumentValue);
+			if (positionalArgumentHolder.get(argumentName).checkIfRestrictedValue(argumentValue))
+			{
+				positionalArgumentHolder.get(argumentName).setValue(argumentValue);
+			}
+			else
+			{
+			
+			}
+			
 		}
 		catch(NumberFormatException e) 
 		{
@@ -485,6 +658,7 @@ public class ArgumentParser
 			return getAlternateNamedArgumentValue(getNamedArgumentFullName(name));
 		}
 	}
+	
 	private <T> T getAlternateNamedArgumentValue(String alternateFullName)
 	{
 		if (alternateFullName.equals("")) 
@@ -496,6 +670,36 @@ public class ArgumentParser
 			return (T)namedArgumentHolder.get(alternateFullName).getValue();
 		}
 	}
+	
+	public <T> List<T> getArgumentValues(String name)
+	{
+		if (positionalArgumentHolder.containsKey(name)) 
+		{
+			return positionalArgumentHolder.get(name).getMultipleValuesList();
+		}
+		else if (namedArgumentHolder.containsKey(name)) 
+		{
+			return namedArgumentHolder.get(name).getMultipleValuesList();
+		}
+		else 
+		{
+			return getAlternateNamedArgumentValues(getNamedArgumentFullName(name));
+		}
+	}
+	
+	private <T> List<T> getAlternateNamedArgumentValues(String alternateFullName)
+	{
+		if (alternateFullName.equals("")) 
+		{
+			List<T> errorList = new ArrayList<T>();
+			return errorList;
+		}
+		else 
+		{
+			return namedArgumentHolder.get(alternateFullName).getMultipleValuesList();
+		}
+	}
+	
 	public String getHelpString()
 	{
 		return getHelpInfo();

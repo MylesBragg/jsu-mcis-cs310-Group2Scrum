@@ -16,7 +16,7 @@ public class ArgumentParserTest
 	{
 		parser = new ArgumentParser("VolumeCalculator");
 	}
-	
+	/*
 	@Test
 	public void testSetProgramDescription() 
 	{
@@ -359,7 +359,7 @@ public class ArgumentParserTest
 		parser.addPositionalArgument("height", Argument.Type.INT);
 		parser.parse(argumentsToParse);
 	}
-	
+	*/
 	@Test
     public void testProgramHelpShortName()
     {
@@ -446,5 +446,23 @@ public class ArgumentParserTest
 					"height the height of the box\n" +
 					"[--type] the type of shape\n" +
 					"[--pet] my companion, he is irrelevant", parser.getHelpString());
+	}
+	
+	@Test 
+	public void testAppendRestrictedValues()
+	{
+		List<Object> temp = new ArrayList<>();
+		temp.add(7);
+		temp.add(3);
+		temp.add(6);
+	
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addPositionalArgument("width", Argument.Type.BOOLEAN);
+		parser.addPositionalArgument("height", Argument.Type.FLOAT);
+		parser.addNamedArgument("type", Argument.Type.STRING);
+		parser.addNamedArgument("pet", Argument.Type.STRING);
+		parser.appendRestrictedValues("length",temp);
+		assertEquals(parser.getArgumentValues("length"), temp);
+	
 	}
 }
