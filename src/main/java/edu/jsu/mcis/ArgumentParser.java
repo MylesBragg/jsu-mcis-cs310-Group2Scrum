@@ -345,7 +345,16 @@ public class ArgumentParser
 		while (argumentScanner.hasNext()) 
 		{
 			nextValue = argumentScanner.next();
-			checkValue(nextValue, argumentScanner);
+			//checkValue(nextValue, argumentScanner);
+			if (nextValue.equals("--help") || nextValue.equals("-h")) 
+			{
+				System.out.println(getHelpInfo());
+				return;
+			}
+			else
+			{
+				checkValue(nextValue, argumentScanner);
+			}
 		}
 		if (!currentGroupHeader.equals(""))
 		{
@@ -361,15 +370,16 @@ public class ArgumentParser
 	
 	private void checkValue(String nextValue, Scanner argumentScanner)
 	{
-		if (nextValue.equals("--help") || nextValue.equals("-h")) 
+		/*if (nextValue.equals("--help") || nextValue.equals("-h")) 
 		{
 			System.out.println(getHelpInfo());
-			System.exit(0);
-		}
-		else 
-		{
+			break; 
+		}*/
+		//else 
+		//{
 			checkArgumentValue(nextValue, argumentScanner);
-		}
+		//}
+		
 	}
 	
 	private void checkArgumentValue(String nextValue, Scanner argumentScanner)
