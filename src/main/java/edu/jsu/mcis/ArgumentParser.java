@@ -612,6 +612,7 @@ public class ArgumentParser
 			return getAlternateNamedArgumentValue(getNamedArgumentFullName(name));
 		}
 	}
+	
 	private <T> T getAlternateNamedArgumentValue(String alternateFullName)
 	{
 		if (alternateFullName.equals("")) 
@@ -623,6 +624,36 @@ public class ArgumentParser
 			return (T)namedArgumentHolder.get(alternateFullName).getValue();
 		}
 	}
+	
+	public <T> List<T> getArgumentValues(String name)
+	{
+		if (positionalArgumentHolder.containsKey(name)) 
+		{
+			return positionalArgumentHolder.get(name).getMultipleValuesList();
+		}
+		else if (namedArgumentHolder.containsKey(name)) 
+		{
+			return namedArgumentHolder.get(name).getMultipleValuesList();
+		}
+		else 
+		{
+			return getAlternateNamedArgumentValues(getNamedArgumentFullName(name));
+		}
+	}
+	
+	private <T> List<T> getAlternateNamedArgumentValues(String alternateFullName)
+	{
+		if (alternateFullName.equals("")) 
+		{
+			List<T> errorList = new ArrayList<T>();
+			return errorList;
+		}
+		else 
+		{
+			return namedArgumentHolder.get(alternateFullName).getMultipleValuesList();
+		}
+	}
+	
 	public String getHelpString()
 	{
 		return getHelpInfo();

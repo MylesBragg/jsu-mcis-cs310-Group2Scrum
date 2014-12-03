@@ -178,7 +178,19 @@ public class Argument
 	{
 		return multipleValuesListSize;
 	}
-	
+	public <T> List<T> getMultipleValuesList()
+	{
+		return parseToGenericList();
+	}
+	private <T> List<T> parseToGenericList()
+	{
+		List<T> newList = new ArrayList<T>();
+		for (int i = 0; i < multipleValues.size(); i++)
+		{
+			newList.add((T)multipleValues.get(i));
+		}
+		return newList;
+	}
 	private void appendMultipleValue(Object value)
 	{
 		multipleValues.add(value);
