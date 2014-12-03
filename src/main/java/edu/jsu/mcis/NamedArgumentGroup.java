@@ -22,17 +22,6 @@ public class NamedArgumentGroup
 		group.remove(name);
 	}
 	
-	public boolean checkGroupHeader(String name)
-	{
-		if (name.equals(groupHeader))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
 	public boolean checkGroup(String name)
 	{
 		if (group.contains(name))
@@ -41,7 +30,7 @@ public class NamedArgumentGroup
 		}
 		else
 		{
-			return true;
+			return false;
 		}
 	}
 }
