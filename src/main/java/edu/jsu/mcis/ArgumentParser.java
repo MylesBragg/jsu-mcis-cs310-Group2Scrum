@@ -7,7 +7,7 @@ public class ArgumentParser
 	private Map<String, PositionalArgument> positionalArgumentHolder;
 	private Map<String, NamedArgument> namedArgumentHolder;
 	private Map<String, NamedArgumentGroup> namedArgumentGroupHolder;
-	private String programName, programDescription;
+	private String programName, programDescription, currentGroupHeader;
 	private int currentPositionalArgumentCount, currentPosArgIndex;
 	
 	public ArgumentParser(String programName)
@@ -17,6 +17,7 @@ public class ArgumentParser
 		namedArgumentHolder = new LinkedHashMap<String, NamedArgument>();
 		namedArgumentGroupHolder = new LinkedHashMap<String, NamedArgumentGroup>();
 		currentPositionalArgumentCount = 0;
+		currentGroupHeader = "";
 	}
 	
 	public void setProgramDescription(String programDescription)
@@ -346,6 +347,13 @@ public class ArgumentParser
 			nextValue = argumentScanner.next();
 			checkValue(nextValue, argumentScanner);
 		}
+		if (!currentGroupHeader.equals(""))
+		{
+			if (namedArgumentGroupHolder.get(currentGroupHeader).getCurrentGroupSize() != namedArgumentGroupHolder.get(currentGroupHeader).getOverallGroupSize())
+			{
+			//toofew
+			}
+		}
 		throwNotEnoughArugmentsExceptions(nextValue);
 	}
 	
@@ -356,6 +364,7 @@ public class ArgumentParser
 		if (nextValue.equals("--help") || nextValue.equals("-h")) 
 		{
 			System.out.println(getHelpInfo());
+			System.exit(0);
 		}
 		else 
 		{
@@ -391,6 +400,20 @@ public class ArgumentParser
 	private void checkNamedArgumentValueType(String nextValue, Scanner argumentScanner)
 	{
 		String namedArgument = checkNamedArgument(nextValue);
+		if(checkGroupHeader(namedArgument))
+		{
+			currentGroupHeader = namedArgument;
+		}
+		else if (!currentGroupHeader.equals(""))
+		{
+			if (namedArgumentGroupHolder.get(currentGroupHeader).getCurrentGroupSize() <= namedArgumentGroupHolder.get(currentGroupHeader).getOverallGroupSize())
+			{
+				if (!namedArgumentGroupHolder.get(currentGroupHeader).checkGroup(namedArgument))
+				{
+				//invalid
+				}
+			}
+		}
 		if (checkNamedArgumentTypeBoolean(namedArgument)) 
 		{
 			setArgumentValue(namedArgument, "true");
@@ -415,8 +438,21 @@ public class ArgumentParser
 			}
 			
 		}
+		
 	}
 	
+	private boolean checkGroupHeader(String name)
+	{
+		Iterator<String> keyList = namedArgumentGroupHolder.keySet().iterator();
+		while (keyList.hasNext())
+		{
+			if (name.equals(keyList.next()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 	private String checkNamedArgument(String name) 
 	{
 		String fullName = getNamedArgumentFullName(name.substring(1));
