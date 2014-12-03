@@ -91,7 +91,7 @@ public class ArgumentParserKeywords
 	
 	public void startProgramFromXML(String XMLFile, String vars)
 	{
-		parser = XMLFactory.createArgumentParser("XML File Test", XMLFile);
+		parser = XMLFactory.loadArgumentParser("XML File Test", XMLFile);
 		parser.parse(vars);
 	}
 	
