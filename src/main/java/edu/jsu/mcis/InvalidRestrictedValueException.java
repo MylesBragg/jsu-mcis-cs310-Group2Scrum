@@ -24,15 +24,16 @@ public class InvalidRestrictedValueException extends RuntimeException
 	}
 	public void setRestrictedValuesList (List<Object> list)
 	{
-		list = new ArrayList<Object>();
 		this.list = list;
+		setSelectionSet();
 	}
 	
 	private void setSelectionSet()
 	{
+		selectionSet = "";
 		for (int i = 0; i < list.size(); i++)
 		{
-			selectionSet = list.get(i) + " ";
+			selectionSet = selectionSet + list.get(i).toString() + " ";
 		}
 		selectionSet = selectionSet.trim();
 	}

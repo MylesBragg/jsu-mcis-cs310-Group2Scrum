@@ -45,4 +45,22 @@ public class XMLFactoryTest
 		p.parse("7.5 --type box");
 		assertEquals("box", p.getArgumentValue("type"));
 	}
+	@Test
+	public void testSaveArgumentParser()
+	{
+		ArgumentParser p = new ArgumentParser("Volume Calculator");
+		p.addPositionalArgument("length", Argument.Type.INT);
+		p.addPositionalArgument("width", Argument.Type.FLOAT);
+		p.addPositionalArgument("height", Argument.Type.BOOLEAN);
+		p.addPositionalArgument("stuff", Argument.Type.STRING);
+		p.addNamedArgument("type", Argument.Type.STRING);
+		p.addNamedArgument("word", Argument.Type.BOOLEAN);
+		p.addNamedArgument("integer", Argument.Type.INT);
+		p.addNamedArgument("float", Argument.Type.FLOAT);
+		p.setArgumentDescription("length", "The length of the shape");
+		p.setArgumentDescription("width", "The length of the shape");
+		p.setArgumentDescription("height", "The length of the shape");
+		p.setArgumentDescription("type", "The type of the shape");
+		XMLFactory.saveArgumentParser(p);
+	}
 }

@@ -351,7 +351,8 @@ public class ArgumentParser
 		}
 		if (!currentGroupHeader.equals(""))
 		{
-			if (namedArgumentGroupHolder.get(currentGroupHeader).getCurrentGroupSize() != namedArgumentGroupHolder.get(currentGroupHeader).getOverallGroupSize())
+			
+			if (namedArgumentGroupHolder.get(currentGroupHeader).getCurrentGroupSize() != (namedArgumentGroupHolder.get(currentGroupHeader).getOverallGroupSize() + 1))
 			{
 				throwNotEnoughGroupArgumentsExceptions();
 			}
@@ -507,7 +508,7 @@ public class ArgumentParser
 			else
 			{
 				setArgumentValue(getPositionalArgumentName(currentPosArgIndex), nextValue);
-				for (int i = 0; i < multipleValuesListSize; i++)
+				for (int i = 0; i < multipleValuesListSize - 1; i++)
 				{
 					String newValue = argumentScanner.next();
 					setArgumentValue(getPositionalArgumentName(currentPosArgIndex), newValue);
@@ -560,8 +561,8 @@ public class ArgumentParser
 	private void throwNotEnoughGroupArgumentsExceptions()
 	{
 		NotEnoughGroupArgumentsException currentException = new NotEnoughGroupArgumentsException(getUsageLine(), programName);
-		currentException.setArgumentsRequired(namedArgumentGroupHolder);
 		currentException.setCurrentGroupHeader(currentGroupHeader);
+		currentException.setArgumentsRequired(namedArgumentGroupHolder);
 		currentException.setCurrentIndex((namedArgumentGroupHolder.get(currentGroupHeader).getCurrentGroupSize()) - 1);
 		throw currentException;
 	}

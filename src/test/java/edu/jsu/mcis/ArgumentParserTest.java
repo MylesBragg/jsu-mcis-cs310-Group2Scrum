@@ -472,4 +472,85 @@ public class ArgumentParserTest
 		argumentsToParse = "5 true 2";
 		parser.parse(argumentsToParse);
 	}
+	@Test
+	public void testAddMultipleValues()
+	{
+		List<Integer> currentList = new ArrayList<Integer>();
+		currentList.add(5);
+		currentList.add(7);
+		currentList.add(9);
+		currentList.add(1);
+		currentList.add(2);
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addPositionalArgument("width", Argument.Type.INT);
+		parser.setMultipleValuesListSize("length", 5);
+		parser.parse("5 7 9 1 2 4");
+		List<Integer> newList = parser.getArgumentValues("length");
+		assertEquals(newList, currentList);
+	}
+	@Test
+	public void testSetGroupNamedArguments()
+	{
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addNamedArgument("transport", Argument.Type.STRING);
+		parser.addNamedArgument("transportType", Argument.Type.STRING);
+		parser.setNamedArgumentGroupHeader("transport");
+		parser.appendNamedArgumentGroupMember("transport", "transportType");
+		parser.parse("7 --transport fly --transportType jet");
+		assertEquals(parser.getArgumentValue("transport"), "fly");
+		assertEquals(parser.getArgumentValue("transportType"), "jet");
+	}
+	@Test(expected=InvalidGroupMemberException.class)
+	public void testSetGroupNamedArgumentsFail()
+	{
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addNamedArgument("transport", Argument.Type.STRING);
+		parser.addNamedArgument("transportType", Argument.Type.STRING);
+		parser.addNamedArgument("type", Argument.Type.STRING);
+		parser.setNamedArgumentGroupHeader("transport");
+		parser.appendNamedArgumentGroupMember("transport", "transportType");
+		parser.parse("7 --transport fly --type box --transportType jet");
+	}
+	@Test(expected=NotEnoughGroupArgumentsException.class)
+	public void testSetGroupNamedArgumentsNotEnough()
+	{
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addNamedArgument("transport", Argument.Type.STRING);
+		parser.addNamedArgument("transportType", Argument.Type.STRING);
+		parser.addNamedArgument("type", Argument.Type.STRING);
+		parser.setNamedArgumentGroupHeader("transport");
+		parser.appendNamedArgumentGroupMember("transport", "transportType");
+		parser.parse("7 --transport fly");
+	}
+	public void testAddMultipleNamedValues()
+	{
+		List<Integer> currentList = new ArrayList<Integer>();
+		currentList.add(5);
+		currentList.add(7);
+		currentList.add(9);
+		currentList.add(1);
+		currentList.add(2);
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addNamedArgument("bathCount", Argument.Type.INT);
+		parser.setMultipleValuesListSize("bathCount", 5);
+		parser.parse("-bathCount 5 7 9 1 2 4");
+		List<Integer> newList = parser.getArgumentValues("bathCount");
+		assertEquals(newList, currentList);
+	}
+	public void testAddMultipleShortNamedValues()
+	{
+		List<Integer> currentList = new ArrayList<Integer>();
+		currentList.add(5);
+		currentList.add(7);
+		currentList.add(9);
+		currentList.add(1);
+		currentList.add(2);
+		parser.addPositionalArgument("length", Argument.Type.INT);
+		parser.addNamedArgument("bathCount", Argument.Type.INT);
+		parser.setNamedArgumentAlternateName("bathCount", "b");
+		parser.setMultipleValuesListSize("bathCount", 5);
+		parser.parse("-b 5 7 9 1 2 4");
+		List<Integer> newList = parser.getArgumentValues("b");
+		assertEquals(newList, currentList);
+	}
 }

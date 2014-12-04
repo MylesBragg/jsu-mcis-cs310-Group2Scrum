@@ -131,4 +131,14 @@ public class PositionalArgumentTest
 		v = new PositionalArgument("rainy", Argument.Type.BOOLEAN, 1);
 		v.setValue("yes");
 	}
+	
+	@Test
+	public void testMultipleBooleanValue()
+	{
+		v = new PositionalArgument("type", Argument.Type.BOOLEAN, 1);
+		v.setMultipleValuesListSize(3);
+		v.setValue("true");
+		v.setValue("false");
+		v.setValue("true");
+	}
 }

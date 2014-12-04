@@ -172,11 +172,7 @@ public class Argument
 	
 	public void setMultipleValuesListSize(int size)
 	{
-		if (type != Type.BOOLEAN) 
-		{
-			multipleValuesListSize = size;
-		}
-		
+		multipleValuesListSize = size;
 	}
 	
 	public int getMultipleValuesListSize()
