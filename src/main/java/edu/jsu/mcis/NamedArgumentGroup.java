@@ -30,6 +30,10 @@ public class NamedArgumentGroup
 			return false;
 		}
 	}
+	public String getGroupMember(int index)
+	{
+		return group.get(index);
+	}
 	public boolean checkGroup(String name)
 	{
 		if (group.contains(name))

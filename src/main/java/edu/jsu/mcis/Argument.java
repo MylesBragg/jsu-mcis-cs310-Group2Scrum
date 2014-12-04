@@ -127,6 +127,11 @@ public class Argument
 		restrictedValues = values;
 	}
 	
+	public List<Object> getRestrictedValues()
+	{
+		return restrictedValues;
+	}
+	
 	public boolean checkIfRestrictedValue(String value)
 	{
 		if (restrictedValues.isEmpty())
@@ -137,8 +142,8 @@ public class Argument
 		{
 			return checkValue(value);
 		}
-		
 	}
+	
 	private boolean checkValue(String value)
 	{
 		Object tempValue;
@@ -178,10 +183,12 @@ public class Argument
 	{
 		return multipleValuesListSize;
 	}
+	
 	public <T> List<T> getMultipleValuesList()
 	{
 		return parseToGenericList();
 	}
+	
 	private <T> List<T> parseToGenericList()
 	{
 		List<T> newList = new ArrayList<T>();
@@ -191,6 +198,7 @@ public class Argument
 		}
 		return newList;
 	}
+	
 	private void appendMultipleValue(Object value)
 	{
 		multipleValues.add(value);

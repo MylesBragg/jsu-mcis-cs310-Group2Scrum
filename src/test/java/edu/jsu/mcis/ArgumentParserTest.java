@@ -16,7 +16,7 @@ public class ArgumentParserTest
 	{
 		parser = new ArgumentParser("VolumeCalculator");
 	}
-	/*
+	
 	@Test
 	public void testSetProgramDescription() 
 	{
@@ -359,7 +359,7 @@ public class ArgumentParserTest
 		parser.addPositionalArgument("height", Argument.Type.INT);
 		parser.parse(argumentsToParse);
 	}
-	*/
+	
 	@Test
     public void testProgramHelpShortName()
     {
@@ -372,6 +372,7 @@ public class ArgumentParserTest
 		parser.setArgumentDescription("width", "the width of the box");
 		parser.setArgumentDescription("height", "the height of the box");
 		parser.setArgumentDescription("type", "the type of shape");
+		parser.setHelpSystemExit(false);
 		parser.parse("-h");
         assertEquals("usage: java VolumeCalculator length width height\n" + "\n" + "Calculate the volume of a box.\n" +
 					"\n" + "positional arguments: length the length of the box\n" + "width the width of the box\n" + 
@@ -388,6 +389,7 @@ public class ArgumentParserTest
 		parser.setArgumentDescription("length", "the length of the box");
 		parser.setArgumentDescription("width", "the width of the box");
 		parser.setArgumentDescription("height", "the height of the box");
+		parser.setHelpSystemExit(false);
 		parser.parse("--help");
         assertEquals("usage: java VolumeCalculator length width height\n" + "\n" + "Calculate the volume of a box.\n" +
 					"\n" + "positional arguments: length the length of the box\n" + "width the width of the box\n" + 
@@ -416,6 +418,7 @@ public class ArgumentParserTest
 					"width the width of the box\n" + 
 					"height the height of the box\n" +
 					"[--type] the type of shape", parser.getHelpString());
+					
 	}
 	
 	@Test
@@ -446,9 +449,10 @@ public class ArgumentParserTest
 					"height the height of the box\n" +
 					"[--type] the type of shape\n" +
 					"[--pet] my companion, he is irrelevant", parser.getHelpString());
+					
 	}
 	
-	@Test 
+	@Test(expected=InvalidRestrictedValueException.class) 
 	public void testAppendRestrictedValues()
 	{
 		List<Object> temp = new ArrayList<>();
@@ -462,7 +466,10 @@ public class ArgumentParserTest
 		parser.addNamedArgument("type", Argument.Type.STRING);
 		parser.addNamedArgument("pet", Argument.Type.STRING);
 		parser.appendRestrictedValues("length",temp);
-		assertEquals(parser.getArgumentValues("length"), temp);
-	
+		String argumentsToParse = "7 true 2";
+		parser.parse(argumentsToParse);
+		assertEquals(parser.getArgumentValue("length"), 7);
+		argumentsToParse = "5 true 2";
+		parser.parse(argumentsToParse);
 	}
 }
