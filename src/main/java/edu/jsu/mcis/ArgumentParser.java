@@ -1,7 +1,11 @@
 package edu.jsu.mcis;
 
 import java.util.*;
-
+/**
+  * Class that parses through the given information from the command line
+  * and translates it into the proper format by assigning it to a specific HashMap
+  * based on its type of argument. 
+  */
 public class ArgumentParser 
 {
 	private Map<String, PositionalArgument> positionalArgumentHolder;
@@ -11,6 +15,11 @@ public class ArgumentParser
 	private int currentPositionalArgumentCount, currentPosArgIndex;
 	private boolean helpSystemExit;
 	
+	/**
+     * Creates a LinkedHashMap for PositionalArguments,NamedArguments, & NamedArgumentGroups with
+     * the addition to setting the current argument positional count to 0.
+     * @param programName Sets the program name field.
+     */
 	public ArgumentParser(String programName)
 	{
 		this.programName = programName;
@@ -21,22 +30,35 @@ public class ArgumentParser
 		currentGroupHeader = "";
 		helpSystemExit = true;
 	}
-	
+	    /**
+     * Sets the programs description. 
+     * @param programDescription Sets the program description field.
+     */
 	public void setProgramDescription(String programDescription)
 	{
 		this.programDescription = programDescription;
 	}
-	
+	    /**
+     * Returns the current program description.
+     * @return Gives the program description.
+     */
 	public String getProgramDescription()
 	{
 		return programDescription;
 	}
-	
+	/** 
+     * Returns the current program name.
+     */
 	public String getProgramName()
 	{
 		return programName;
 	}
-	
+	    /**
+     * Adds a positional argument to the HashMap based on the String name 
+     * and Argument type.
+     * @param name Sets the name field.
+     * @param dataType Sets the data type field.
+     */
 	public void addPositionalArgument(String name, Argument.Type dataType)
 	{
 		positionalArgumentHolder.put(name, new PositionalArgument(name, dataType, incrementCurrentPositionalArgumentCount()));
@@ -47,17 +69,30 @@ public class ArgumentParser
 		currentPositionalArgumentCount++;
 		return currentPositionalArgumentCount;
 	}
-	
+	    /**
+     * Returns the position ID based on the arguments name in the HashMap.
+     * @param name Uses the name field.
+     * @return Gives the current position ID.
+     */
 	public int getPositionId(String name)
 	{
 		return positionalArgumentHolder.get(name).getPositionId();
 	}
-	
+	    /**
+     * Return the current size of the PositionalArguments HashMap.
+     * @return Gives a numeric value of the current size. 
+     */
 	public int getPositionalArgumentSize()
 	{
 		return positionalArgumentHolder.size();
 	}
-	
+	    /**
+     * Sets a description to the current holder if the argument name is equal 
+     * to " ".Otherwise it will set the description in the NamedArgument HashMap
+     * if the name matches the key.
+     * @param name Uses the name field.
+     * @param description Uses the description field.
+     */
 	public void setArgumentDescription(String name, String description)
 	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
@@ -82,7 +117,13 @@ public class ArgumentParser
 			positionalArgumentHolder.get(name).setDescription(description);
 		}
 	}
-	
+	    /**
+     * Returns the argument description by searching the NamedArgument HashMap. 
+     * If the name parameter is " ", then it will return the current description
+     * holder.
+     * @param name Uses the name field. 
+     * @return Gives the description of the argument.
+     */
 	public String getArgumentDescription(String name)
 	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
@@ -108,7 +149,13 @@ public class ArgumentParser
 		}
 		return "";
 	}
-	
+	    /**
+     * Returns the enumerated value based on whether the name is contained in 
+     * the NamedArgument HashMap. If the name parameter is " ", then it will return
+     * the current type holder.
+     * @param name Uses the name field.
+     * @return Gives an enumeration of the argument type.
+     */
 	public Argument.Type getArgumentType(String name)
 	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
@@ -134,7 +181,11 @@ public class ArgumentParser
 		}
 		return Argument.Type.STRING;
 	}
-	
+	/**
+     * Sets restricted values based on the given list based on a given name. 
+     * @param name Used to set the restricted name values.
+	 * @param values Uses a given list to append restricted values.
+     */
 	public void appendRestrictedValues(String name, List<Object> values)
 	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
@@ -159,7 +210,11 @@ public class ArgumentParser
 			positionalArgumentHolder.get(name).appendRestrictedValues(values);
 		}
 	}
-	
+	/**
+     * Creates a list of multiple values based on the name given while also allowing the ability to set its size. 
+     * @param name Sets the list if given a name.
+	 * @param size Sets the size of the values list. 
+     */
 	public void setMultipleValuesListSize(String name, int size)
 	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
@@ -184,22 +239,38 @@ public class ArgumentParser
 			positionalArgumentHolder.get(name).setMultipleValuesListSize(size);
 		}
 	}
-	
+	    /**
+     * Adds a named argument in its corresponding HashMap.
+     * @param name Uses the name field.
+     * @param dataType Uses the data type field.
+     */
 	public void addNamedArgument(String name, Argument.Type dataType)
 	{
 		namedArgumentHolder.put(name, new NamedArgument(name, dataType));
 	}
-	
+	    /**
+     * Sets an alternate name that can be used for named arguments that can be 
+     * accessed from the HashMap.
+     * @param name Uses the name field.
+     * @param alternateName Uses the alternate name field.
+     */
 	public void setNamedArgumentAlternateName(String name, String alternateName)
 	{
 		namedArgumentHolder.get(name).setAlternateName(alternateName);
 	}
-	
+	    /**
+     * Returns the current alternate name argument from the HashMap.
+     * @param name Uses the name field.
+     * @return Gives the alternate name of the argument.
+     */
 	public String getNamedArgumentAlternateName(String name)
 	{
 		return namedArgumentHolder.get(name).getAlternateName();
 	}
-	
+	/**
+     * Creates a new argument group header with the given String name value.
+     * @param name Sets the named group argument header.
+     */
 	public void setNamedArgumentGroupHeader(String name)
 	{
 		String namedArgumentFullName = getNamedArgumentFullName(name);
@@ -215,7 +286,12 @@ public class ArgumentParser
 			namedArgumentGroupHolder.put(namedArgumentFullName, new NamedArgumentGroup(namedArgumentFullName));
 		}
 	}
-	
+	/**
+     * Appends the group member with an assigned group header to the NamedArgument HashMap.
+	 * However if the name is left " " it will instead append just the group member and not include the full argument name.  
+     * @param groupHeader Used to set the group header.
+	 * @param newGroupMember Used to add a new group member.
+     */
 	public void appendNamedArgumentGroupMember(String groupHeader, String newGroupMember)
 	{
 		String namedArgumentFullName = getNamedArgumentFullName(newGroupMember);
@@ -231,7 +307,12 @@ public class ArgumentParser
 			namedArgumentGroupHolder.get(groupHeader).appendGroupMember(namedArgumentFullName);
 		}
 	}
-	
+	    /**
+     * Sets a default value for named arguments based on whether the String 
+     * is " " or contains information.
+     * @param name Uses the name field 
+     * @param defaultValue Uses the default value field 
+     */
 	public void setNamedArgumentDefaultValue(String name, Object defaultValue)
 	{
 		String fullName = getNamedArgumentFullName(name);
@@ -266,7 +347,13 @@ public class ArgumentParser
 		x.setInvalidValue(value);
 		throw x;
 	}
-	
+	    /**
+     * Returns the current named arguments default value based on whether the 
+     * String is " " or contains information.
+     * @param <T> Gives any data type.
+     * @param name Uses the name field.
+     * @return Shows a default value from the named argument HashMap.
+     */
 	public <T> T getNamedArgumentDefaultValue(String name)
 	{
 		String fullName = getNamedArgumentFullName(name);
@@ -279,7 +366,11 @@ public class ArgumentParser
 			return namedArgumentHolder.get(fullName).getDefaultValue();
 		}
 	}
-	
+	    /**
+     * Sets the named arguments required field based on whether the String is 
+     * " " or contains information. 
+     * @param name Uses the name field. 
+     */
 	public void setNamedArgumentRequired(String name)
 	{
 		String fullName = getNamedArgumentFullName(name);
@@ -292,7 +383,12 @@ public class ArgumentParser
 			namedArgumentHolder.get(fullName).setRequired();
 		}
 	}
-	
+	    /**
+     * Returns the named arguments required attribute based on whether the 
+     * String is " " or contains information. 
+     * @param name Uses the name field.
+     * @return Gives a required response based on the name.
+     */
 	public boolean getNamedArgumentRequired(String name)
 	{
 		String fullName = getNamedArgumentFullName(name);
@@ -321,7 +417,10 @@ public class ArgumentParser
 		}
 		return "";
 	}
-	
+	    /**
+     * Creates a blank String in order to parse the data appropriately. 
+     * @param argumentsToParse Sets the String data if given an Array.
+     */
 	public void parse(String[] argumentsToParse) 
 	{
 		String myString = "";
@@ -331,7 +430,11 @@ public class ArgumentParser
 		}
 		parseFormattedString(myString);
 	}
-	
+	    /**
+     * Formats the parsed information by setting the String appropriately. 
+     * @param argumentsToParse Sets the String data if given a normal String 
+     * value.
+     */
 	public void parse(String argumentsToParse) 
 	{
 		parseFormattedString(argumentsToParse);
@@ -566,7 +669,11 @@ public class ArgumentParser
 		currentException.setCurrentIndex((namedArgumentGroupHolder.get(currentGroupHeader).getCurrentGroupSize()) - 1);
 		throw currentException;
 	}
-	
+	    /**
+     * Searches through both the NamedArguments & PositionalArguments by iterating
+     * over the HashMaps. 
+     * @return Gives a argument of each name of the above HashMaps.
+     */
 	public String getArgumentNames()
 	{
 		Iterator<String> keyIterator = positionalArgumentHolder.keySet().iterator();
@@ -657,7 +764,13 @@ public class ArgumentParser
 		x.setInvalidValue(argumentValue);
 		throw x;
 	}
-	
+	    /**
+     * Returns the argument value based on the name in either the NamedArgument 
+     * or PositionalArgument HashMap.
+     * @param <T> Gives any data type. 
+     * @param name Uses current name.
+     * @return Shows the argument based on the name given.
+     */
 	public <T> T getArgumentValue(String name)
 	{
 		if (positionalArgumentHolder.containsKey(name)) 
@@ -685,7 +798,13 @@ public class ArgumentParser
 			return (T)namedArgumentHolder.get(alternateFullName).getValue();
 		}
 	}
-	
+	/**
+     * Returns the list argument value based on the name in either the NamedArgument 
+     * or PositionalArgument HashMap.
+     * @param <T> Gives any data type. 
+     * @param name Uses current name.
+     * @return Shows the argument based on the name given.
+     */
 	public <T> List<T> getArgumentValues(String name)
 	{
 		if (positionalArgumentHolder.containsKey(name)) 
@@ -714,7 +833,10 @@ public class ArgumentParser
 			return namedArgumentHolder.get(alternateFullName).getMultipleValuesList();
 		}
 	}
-	
+	    /**
+     * Returns the current help information.
+     * @return Displays the proper help message.
+     */
 	public String getHelpString()
 	{
 		return getHelpInfo();
@@ -798,6 +920,9 @@ public class ArgumentParser
 		}
 	}
 	
+	/**
+     * Sets the help system exit to either true or false.
+     */
 	public void setHelpSystemExit(boolean b)
 	{
 		helpSystemExit = b;

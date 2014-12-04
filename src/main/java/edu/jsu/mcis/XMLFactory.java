@@ -12,6 +12,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+
+ /**
+   * Class specifically used to create XML files in a format representing argument information. Its 
+   * main purpose is to save & load the information being given from ArgumentParser in XML form.
+   */
 public class XMLFactory 
 {
 	private static ArgumentParser p;
@@ -21,6 +26,12 @@ public class XMLFactory
 	private static boolean required;
 	private static Scanner myScanner;
 	
+	    /**
+     * Loads the ArgumentParser class in order to be used in XML. 
+     * @param programName Uses the program name field to instantiate ArgumentParser.
+     * @param xmlFile Uses the XML file field to build the file.
+     * @return Gives back a class in a loaded format. 
+     */
 	public static ArgumentParser loadArgumentParser(String programName, String xmlFile) 
 	{
 		p = new ArgumentParser(programName);
@@ -241,7 +252,10 @@ public class XMLFactory
         node.appendChild(currentDocument.createTextNode(value));
         return node;
 	}
-	
+	    /**
+     * Attempts to save the ArgumentParser in an XML form.
+     * @param currentParser Uses the current parser field.
+     */
 	public static void saveArgumentParser(ArgumentParser currentParser)
 	{
 		p = currentParser;
@@ -292,10 +306,17 @@ public class XMLFactory
             e.printStackTrace();
         }
 	}
+	    /**
+     * Sets the file path that can be used to save or load the XML file.
+     * @param newFilePath Takes the string value and adds it to the file path.
+     */
 	public static void setFileLocation(String newFilePath) {
 		filePath = newFilePath + "\\";
 	}
-	
+	    /**
+     * Creates a name for the XML file to be used.
+     * @param newFileName Gives a name for the XML file.
+     */
 	public static void setFileName(String newFileName) {
 		fileName = newFileName;
 	}
