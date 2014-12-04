@@ -17,7 +17,7 @@ public class SimpleCalc {
 		
 		p.addNamedArgument("exponent", Argument.Type.INT);
 		p.setNamedArgumentRequired("exponent");
-		p.setNamedArgumentAlternateName("exponent", "exp");
+		p.setNamedArgumentAlternateName("exponent", "p");
 		
 		p.setArgumentDescription("operand1", "Enter the first whole number");
 		p.setArgumentDescription("operand2", "Enter the second whole number");

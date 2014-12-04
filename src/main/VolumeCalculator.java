@@ -7,7 +7,7 @@ public class VolumeCalculator
 {
 	public static void main(String[] args)
 	{
-		p = new ArgumentParser("VolumeCalculator");
+		ArgumentParser p = new ArgumentParser("VolumeCalculator");
 		
 		p.addNamedArgument("box", Argument.Type.BOOLEAN);
 		p.addNamedArgument("cylinder", Argument.Type.BOOLEAN);
@@ -73,7 +73,7 @@ public class VolumeCalculator
 			shape = "sphere";
 			float radius = p.getArgumentValue("radius1");
 			
-			volume = (4/3) * Math.PI * Math.POW(radius, 3);
+			volume = (4/3) * Math.PI * Math.pow(radius, 3);
 		}
 		if(p.getArgumentValue("hollowSphere"))
 		{
@@ -83,8 +83,8 @@ public class VolumeCalculator
 			
 			double vol1 = 0.3;
 			double vol2 = 0.3;
-			vol1 = (4/3) * Math.PI * Math.POW(radius, 3);
-			vol2 = (4/3) * Math.PI * Math.POW(radius, 3);
+			vol1 = (4/3) * Math.PI * Math.pow(radius1, 3);
+			vol2 = (4/3) * Math.PI * Math.pow(radius2, 3);
 			
 			if(vol1 > vol2)
 			{
